@@ -38,7 +38,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
 
-echo "Upgrading Moodle Process... NOT IMPLEMENTED!!"
+echo "Upgrading Moodle... NOT IMPLEMENTED!!"
 sleep 30 # wait 30 secs
 
 echo "disable the maintenance mode..."
