@@ -18,7 +18,7 @@ git submodule update --init --recursive
 cd ..
 mv moodle-plugins/moodle moodle
 
-echo "Extract Moodle 37..."
+echo "Extract moodle-latest-37.tgz..."
 tar xzf moodle-latest-37.tgz
 
 echo "Clean files..."
@@ -56,7 +56,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
-echo "compress moddle backup directory ..."
+echo "compress moodle backup directory ..."
 sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
 sudo rm -rf $MOODLE_HOME.bkp
 
