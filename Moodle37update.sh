@@ -19,7 +19,7 @@ cd ..
 mv moodle-plugins/moodle moodle
 
 echo "Extract Moodle 37..."
-tar xvzf moodle-latest-37.tgz
+tar xzf moodle-latest-37.tgz
 
 echo "Clean files..."
 rm -rf moodle-latest-37.tgz moodle-plugins
@@ -57,7 +57,7 @@ echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
 echo "compress moddle backup directory ..."
-sudo tar -zcvf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
+sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
 sudo rm -rf $MOODLE_HOME.bkp
 
 
