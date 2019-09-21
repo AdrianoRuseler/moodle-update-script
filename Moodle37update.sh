@@ -11,16 +11,16 @@ if [[ $? -ne 0 ]] ; then
 fi
 echo "Download OK..."
 
-#echo "Download Plugins..."
-#wget https://github.com/AdrianoRuseler/moodle-plugins/archive/MOODLE_37_STABLE.zip -O MOODLE_37_PLUGINS_STABLE.zip
-#if [[ $? -ne 0 ]] ; then
-#    exit 1
-#fi
-#echo "Download OK..."
+echo "Download Plugins..."
+wget https://github.com/AdrianoRuseler/moodle-plugins/archive/MOODLE_37_STABLE.zip -O MOODLE_37_PLUGINS_STABLE.zip
+if [[ $? -ne 0 ]] ; then
+    exit 1
+fi
+echo "Download OK..."
 
-#echo "Extract and move Plugins..."
-#unzip MOODLE_37_PLUGINS_STABLE.zip
-#mv moodle-plugins-MOODLE_37_STABLE/moodle moodle
+echo "Extract and move Plugins..."
+unzip MOODLE_37_PLUGINS_STABLE.zip
+mv moodle-plugins-MOODLE_37_STABLE/moodle moodle
 
 echo "Extract Moodle 37..."
 tar xvzf moodle-latest-37.tgz
