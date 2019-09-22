@@ -1,15 +1,30 @@
+#!/bin/bash
+
 HTML_HOME="/var/www/html"
 MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
 TMP_DIR="/tmp"
 
 cd $TMP_DIR
-echo "Download Moodle..."
+echo "Download moodle-latest-37.tgz..."
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
 if [[ $? -ne 0 ]] ; then
     exit 1
 fi
 echo "Download OK..."
+
+echo "Download moodle-latest-37.tgz.md5..."
+wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
+if [[ $? -ne 0 ]] ; then
+    exit 1
+fi
+echo "OK!"
+
+echo "Check MD5 (128-bit) checksums..."
+md5sum -c moodle-latest-37.tgz.md5
+if [[ $? -ne 0 ]] ; then
+    exit 1    
+fi
 
 echo "Download Plugins..."
 git clone https://github.com/AdrianoRuseler/moodle-plugins.git
