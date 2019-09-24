@@ -16,3 +16,5 @@ $CFG->disableupdateautodeploy = true;
 // Disabling update notifications
 $CFG->disableupdatenotifications = true;
 ```
+## crontab
+https://crontab.guru/
