@@ -33,6 +33,13 @@ git submodule update --init --recursive
 cd ..
 mv moodle-plugins/moodle moodle
 
+echo "Check MD5 (128-bit) checksums, same version tested?"
+md5sum -c moodle-plugins/moodle-latest-37.tgz.md5
+if [[ $? -ne 0 ]] ; then
+    exit 1    
+fi
+echo "OK!"
+
 echo "Extract moodle-latest-37.tgz..."
 tar xzf moodle-latest-37.tgz
 
