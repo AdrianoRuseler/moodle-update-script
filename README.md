@@ -1,16 +1,4 @@
 # moodle-update-script
-## Add locales pt_BR, en_US, es_ES, de_DE, fr_FR, pt_PT
-```bash
-sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* es_ES.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* de_DE.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* fr_FR.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
-sudo locale-gen
-```
-
-
 ## Script for Debian/Ubuntu Update
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh -O DebianSystemUpdate.sh
