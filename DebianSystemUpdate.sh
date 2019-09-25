@@ -1,10 +1,12 @@
 #!/bin/bash
 
+echo "Update and Upgrade System..."
 sudo apt-get update && sudo apt-get upgrade -y
 
+echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
-echo "Instal some sys utils..."
+echo "Install some sys utils..."
 sudo apt-get install -y git gcc
 
 echo "To use spell-checking within the editor, you MUST have aspell 0.50 or later installed on your server..."
