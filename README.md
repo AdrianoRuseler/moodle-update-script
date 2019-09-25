@@ -38,3 +38,10 @@ $CFG->disableupdatenotifications = true;
 ```
 ## crontab
 https://crontab.guru/
+```bash
+crontab -u www-data -e
+```
+Adicione a linha:
+```bash
+*/1 * * * * /usr/bin/php  /var/www/html/moodle/admin/cli/cron.php >/dev/null
+```
