@@ -1,5 +1,5 @@
 # moodle-update-script
-## Add locales
+## Add locales pt_BR, en_US, es_ES, de_DE, fr_FR, pt_PT
 ```bash
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
