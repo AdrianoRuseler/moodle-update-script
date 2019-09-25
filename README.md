@@ -13,7 +13,7 @@ sudo locale-gen
 
 ## Script for Debian/Ubuntu Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh -O DebianSystemUpdate.sh
 chmod u+x DebianSystemUpdate.sh
 
 ./DebianSystemUpdate.sh
@@ -21,7 +21,7 @@ chmod u+x DebianSystemUpdate.sh
 
 ## Script for Moodle Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh -O Moodle37update.sh
 chmod u+x Moodle37update.sh
 
 ./Moodle37update.sh
