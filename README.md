@@ -1,5 +1,5 @@
 # moodle-update-script
-## Add locales (not tested)
+## Add locales
 ```bash
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
@@ -9,6 +9,7 @@ sudo sed -i '/^#.* fr_FR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 ```
+
 
 ## Script for Debian/Ubuntu Update
 ```bash
