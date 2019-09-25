@@ -1,4 +1,10 @@
 # moodle-update-script
+## Add locales (not tested)
+```bash
+sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
+sudo locale-gen
+```
+
 ## Script for Debian/Ubuntu Update
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh
