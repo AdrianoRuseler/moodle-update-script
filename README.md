@@ -39,7 +39,7 @@ $CFG->disableupdatenotifications = true;
 ## crontab
 https://crontab.guru/
 ```bash
-crontab -u www-data -e
+sudo crontab -u www-data -e
 ```
 Adicione a linha:
 ```bash
