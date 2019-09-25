@@ -26,7 +26,7 @@ chmod u+x Moodle37update.sh
 
 ./Moodle37update.sh
 ```
-
+## 
 ```php
 // Use the following flag to completely disable the installation of plugins
 // (new plugins, available updates and missing dependencies) and related
