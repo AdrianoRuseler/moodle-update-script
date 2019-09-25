@@ -5,6 +5,26 @@ MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
 TMP_DIR="/tmp"
 
+echo "Check if Moodle folder exists.."
+if [ -d "$MOODLE_HOME" ]; then
+  ### Take action if $MOODLE_HOME exists ###
+  echo "Found Moodle folder: ${MOODLE_HOME}"
+else
+  ###  Control will jump here if $DIR does NOT exists ###
+  echo "Error: ${MOODLE_HOME} not found. Can not continue, script for Update only!"
+  exit 1
+fi
+
+echo "Check if Moodle data folder exists.."
+if [ -d "$MOODLE_DATA" ]; then
+  ### Take action if $MOODLE_DATA exists ###
+  echo "Found Moodle folder: ${MOODLE_DATA}"
+else
+  ###  Control will jump here if $DIR does NOT exists ###
+  echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
+  exit 1
+fi
+
 cd $TMP_DIR
 echo "Download moodle-latest-37.tgz..."
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
