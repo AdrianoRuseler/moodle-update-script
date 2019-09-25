@@ -1,5 +1,5 @@
 # moodle-update-script
-## Script for Debia/Ubuntu Update
+## Script for Debian/Ubuntu Update
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh
 chmod u+x DebianSystemUpdate.sh
