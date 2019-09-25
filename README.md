@@ -6,6 +6,9 @@ chmod u+x DebianSystemUpdate.sh
 
 ./DebianSystemUpdate.sh
 ```
+```bash
+ ./DebianSystemUpdate.sh | tee DebianSystemUpdate.log
+ ```
 
 ## Script for Moodle Update
 ```bash
@@ -14,6 +17,10 @@ chmod u+x Moodle37update.sh
 
 ./Moodle37update.sh
 ```
+```bash
+ ./Moodle37update.sh | tee Moodle37update.log
+ ```
+ 
 ## 
 ```php
 // Use the following flag to completely disable the installation of plugins
