@@ -20,3 +20,6 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-
 
 echo "Install maxima (Stack question type for Moodle) ..."
 sudo apt-get install -y maxima
+
+echo "Install gnuplot (Stack question type for Moodle) ..."
+sudo apt-get install -y gnuplot
