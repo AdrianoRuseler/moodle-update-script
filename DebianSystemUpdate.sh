@@ -7,7 +7,7 @@ echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
 echo "Install some sys utils..."
-sudo apt-get install -y git
+sudo apt-get install -y git gcc
 
 echo "Install python..."
 sudo apt-get install -y python2 python3
