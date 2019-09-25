@@ -37,11 +37,12 @@ $CFG->disableupdateautodeploy = true;
 $CFG->disableupdatenotifications = true;
 ```
 ## crontab
+https://docs.moodle.org/37/en/Cron
 https://crontab.guru/
 ```bash
 sudo crontab -u www-data -e
 ```
-Adicione a linha:
+Add the line:
 ```bash
 */1 * * * * /usr/bin/php  /var/www/html/moodle/admin/cli/cron.php >/dev/null
 ```
