@@ -1,6 +1,5 @@
 #!/bin/bash
 
-HTML_HOME="/var/www/html"
 MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
 TMP_DIR="/tmp"
