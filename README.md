@@ -1,13 +1,13 @@
 # moodle-update-script
 ## Script for Debian/Ubuntu Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemUpdate.sh -O DebianSystemUpdate.sh
-chmod u+x DebianSystemUpdate.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemConfig.sh -O DebianSystemConfig.sh
+chmod u+x DebianSystemConfig.sh
 
-./DebianSystemUpdate.sh
+./DebianSystemConfig.sh
 ```
 ```bash
- ./DebianSystemUpdate.sh | tee DebianSystemUpdate.log
+ ./DebianSystemConfig.sh | tee DebianSystemConfig.log
  ```
 
 ## Script for Moodle Update
