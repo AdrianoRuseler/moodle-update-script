@@ -49,8 +49,18 @@ fi
 
 echo "Download Plugins..."
 git clone https://github.com/AdrianoRuseler/moodle-plugins.git
+if [[ $? -ne 0 ]] ; then
+    exit 1
+fi
+echo "OK!"
+
 cd moodle-plugins
 git submodule update --init --recursive
+if [[ $? -ne 0 ]] ; then
+    exit 1
+fi
+echo "OK!"
+
 cd ..
 mv moodle-plugins/moodle moodle
 
