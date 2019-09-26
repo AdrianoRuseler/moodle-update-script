@@ -3,6 +3,7 @@
 MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
 TMP_DIR="/tmp"
+REQSPACE=524288 # Required free space: 512 Mb in kB
 
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
@@ -24,6 +25,18 @@ else
   echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
   echo "Is ${MOODLE_DATA} your Moodle Data directory?"
   exit 1
+fi
+
+echo "Check for free space in $MOODLE_HOME ..."
+FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
+echo "Free space: $FREESPACE"
+echo "Req. space: $REQSPACE"
+
+if [[ $FREESPACE -le REQSPACE ]]; then
+    echo "NOT enough Space!!"
+    exit 1
+else
+    echo "Enough Space!!"
 fi
 
 cd $TMP_DIR
