@@ -81,7 +81,7 @@ echo "Moodle Maintenance Mode Activated...";
 cd $MOODLE_DATA
 echo "Download page to display under maintenance... "
 sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
-
+cd $TMP_DIR
 
 echo "moving old files ..."
 sudo mv $MOODLE_HOME $MOODLE_HOME.bkp
