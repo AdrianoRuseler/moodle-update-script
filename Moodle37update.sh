@@ -48,9 +48,9 @@ if [[ $? -ne 0 ]] ; then
 fi
 
 echo "Download Plugins..."
-git clone https://github.com/AdrianoRuseler/moodle-plugins.git --verbose
+git clone https://github.com/AdrianoRuseler/moodle-plugins.git
 cd moodle-plugins
-git submodule update --init --recursive --verbose
+git submodule update --init --recursive
 cd ..
 mv moodle-plugins/moodle moodle
 
