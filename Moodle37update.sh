@@ -11,6 +11,7 @@ if [ -d "$MOODLE_HOME" ]; then
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_HOME} not found. Can not continue, script for Update only!"
+  echo "Is ${MOODLE_HOME} your Moodle Home directory?"
   exit 1
 fi
 
@@ -21,6 +22,7 @@ if [ -d "$MOODLE_DATA" ]; then
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
+  echo "Is ${MOODLE_DATA} your Moodle Data directory?"
   exit 1
 fi
 
