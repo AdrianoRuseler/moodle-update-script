@@ -50,6 +50,7 @@ fi
 echo "Download Plugins..."
 git clone https://github.com/AdrianoRuseler/moodle-plugins.git
 if [[ $? -ne 0 ]] ; then
+    echo "Error: git clone https://github.com/AdrianoRuseler/moodle-plugins.git"
     exit 1
 fi
 echo "OK!"
@@ -57,6 +58,7 @@ echo "OK!"
 cd moodle-plugins
 git submodule update --init --recursive
 if [[ $? -ne 0 ]] ; then
+    echo "Error: git submodule update --init --recursive"
     exit 1
 fi
 echo "OK!"
@@ -74,6 +76,7 @@ echo "OK!"
 echo "Extract moodle-latest-37.tgz..."
 tar xzf moodle-latest-37.tgz
 if [[ $? -ne 0 ]] ; then
+    echo "Error: tar xzf moodle-latest-37.tgz"
     exit 1    
 fi
 
