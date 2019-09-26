@@ -1,4 +1,5 @@
 # moodle-update-script
+https://docs.moodle.org/37/en/Administration_via_command_line
 ## Script for Debian/Ubuntu Update
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemConfig.sh -O DebianSystemConfig.sh
