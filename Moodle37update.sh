@@ -61,6 +61,9 @@ echo "OK!"
 
 echo "Extract moodle-latest-37.tgz..."
 tar xzf moodle-latest-37.tgz
+if [[ $? -ne 0 ]] ; then
+    exit 1    
+fi
 
 echo "Clean files..."
 rm -rf moodle-latest-37.tgz moodle-plugins
