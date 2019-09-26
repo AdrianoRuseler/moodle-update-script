@@ -4,7 +4,7 @@ MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
 TMP_DIR="/tmp"
 
-echo "Check if Moodle Home folder exists.."
+echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
   echo "Found Moodle Home folder: ${MOODLE_HOME}"
@@ -14,7 +14,7 @@ else
   exit 1
 fi
 
-echo "Check if Moodle Data folder exists.."
+echo "Check if Moodle Data folder exists..."
 if [ -d "$MOODLE_DATA" ]; then
   ### Take action if $MOODLE_DATA exists ###
   echo "Found Moodle Data folder: ${MOODLE_DATA}"
@@ -23,6 +23,11 @@ else
   echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
   exit 1
 fi
+
+cd $MOODLE_DATA
+echo "Download page to display under maintenance... "
+sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
+
 
 cd $TMP_DIR
 echo "Download moodle-latest-37.tgz..."
