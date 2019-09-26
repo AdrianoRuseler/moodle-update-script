@@ -24,11 +24,6 @@ else
   exit 1
 fi
 
-cd $MOODLE_DATA
-echo "Download page to display under maintenance... "
-sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
-
-
 cd $TMP_DIR
 echo "Download moodle-latest-37.tgz..."
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
@@ -82,6 +77,11 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated...";
+
+cd $MOODLE_DATA
+echo "Download page to display under maintenance... "
+sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
+
 
 echo "moving old files ..."
 sudo mv $MOODLE_HOME $MOODLE_HOME.bkp
