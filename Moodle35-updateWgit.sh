@@ -80,7 +80,7 @@ fi
 
 cd $GIT_DIR
 if [ -d "moodle35-plugins" ]; then
-   cd moodle35-plugins/moodle
+   cd $GIT_DIR/moodle35-plugins/moodle
    git submodule foreach git pull
    git status
 else
@@ -96,7 +96,7 @@ fi
 # git clone -b MOODLE_35_STABLE https://github.com/moodle/moodle.git
 cd $GIT_DIR
 if [ -d "moodle" ]; then
-   cd moodle
+   cd $GIT_DIR/moodle
    git pull
    git status
 else
@@ -109,16 +109,11 @@ else
 fi
 
 
-# TODO
-exit 0
-cd ..
-echo "Copy moodle folder from moodle-plugins repo..."
-cp $GIT_DIR/moodle35-plugins/moodle $TMP_DIR/moodle
+echo "Rsync moodle folder from moodle-plugins repo..."
+rsync -a $GIT_DIR/moodle35-plugins/moodle/ $TMP_DIR/moodle
 
-
-
-echo "Clean files..."
-rm -rf moodle-latest-35.tgz moodle35-plugins moodle-latest-35.tgz.md5
+echo "Rsync moodle folder..."
+rsync -a $GIT_DIR/moodle/ $TMP_DIR/moodle --exclude .git
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
