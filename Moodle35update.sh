@@ -124,6 +124,11 @@ rm -rf moodle-latest-35.tgz
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Activating Moodle Maintenance Mode!"
+    rm -rf $TMP_DIR/moodle
+    exit 1
+fi
 sleep 30 # wait 30 secs
 
 echo "Kill all user sessions...";
@@ -145,6 +150,10 @@ sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
 echo "Copying config file ..."
 sudo cp $MOODLE_HOME.tmpbkp/config.php $MOODLE_HOME
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Copying config file!"
+    exit 1
+fi
 
 echo "Fixing file permissions ..."
 sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
