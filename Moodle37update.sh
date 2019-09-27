@@ -39,6 +39,18 @@ else
     echo "Enough Space!!"
 fi
 
+echo "Check for free space in $TMP_DIR ..."
+FREESPACE=$(df "$TMP_DIR" | awk 'NR==2 { print $4 }')
+echo "Free space: $FREESPACE"
+echo "Req. space: $REQSPACE"
+
+if [[ $FREESPACE -le REQSPACE ]]; then
+    echo "NOT enough Space!!"
+    exit 1
+else
+    echo "Enough Space!!"
+fi
+
 cd $TMP_DIR
 
 echo "Download Plugins..."
@@ -116,24 +128,27 @@ echo "Download page to display under maintenance... "
 sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
 cd $TMP_DIR
 
-echo "moving old files ..."
+echo "moving old files..."
 sudo mv $MOODLE_HOME $MOODLE_HOME.bkp
 
-echo "moving new files ..."
+echo "moving new files..."
 sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
-echo "copying config file ..."
+echo "copying config file..."
 sudo cp $MOODLE_HOME.bkp/config.php $MOODLE_HOME
 
-echo "fixing file permissions ..."
+echo "fixing file permissions..."
 sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME 
 
 echo "Upgrading Moodle Core started..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive
 
-echo "purge Moodle cache ..."
+echo "purge Moodle cache..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
+
+echo "fix courses..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
 
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable

@@ -105,6 +105,9 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interacti
 echo "purge Moodle cache ..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
 
+echo "fix courses..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
+
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
