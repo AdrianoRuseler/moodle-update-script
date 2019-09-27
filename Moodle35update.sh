@@ -61,7 +61,7 @@ if [[ $? -ne 0 ]] ; then
 fi
 echo "OK!"
 
-cd moodle-plugins
+cd moodle35-plugins
 git submodule update --init --recursive
 if [[ $? -ne 0 ]] ; then
     echo "Error: git submodule update --init --recursive"
