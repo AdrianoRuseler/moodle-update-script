@@ -120,7 +120,7 @@ if [[ $? -ne 0 ]] ; then
 fi
 
 echo "Clean files..."
-rm -rf moodle-latest-35.tgz
+rm -rf moodle-latest-35.tgz moodle35-plugins moodle-latest-35.tgz.md5
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
