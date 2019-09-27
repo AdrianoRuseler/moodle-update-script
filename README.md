@@ -5,9 +5,6 @@ https://docs.moodle.org/37/en/Administration_via_command_line
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemConfig.sh -O DebianSystemConfig.sh
 chmod u+x DebianSystemConfig.sh
 
-./DebianSystemConfig.sh
-```
-```bash
  ./DebianSystemConfig.sh | tee DebianSystemConfig.log
  ```
 
@@ -16,11 +13,8 @@ chmod u+x DebianSystemConfig.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh -O Moodle37update.sh
 chmod u+x Moodle37update.sh
 
-./Moodle37update.sh
+./Moodle37update.sh | tee Moodle37update.log
 ```
-```bash
- ./Moodle37update.sh | tee Moodle37update.log
- ```
  
  ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35update.sh -O Moodle35update.sh
@@ -28,7 +22,6 @@ chmod u+x Moodle35update.sh
 
 ./Moodle35update.sh | tee Moodle35update.log
 ```
-
  
  
 ## 

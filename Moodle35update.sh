@@ -108,6 +108,8 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
+# Test is all is OK! (TODO)
+
 #echo "compress moodle backup directory ..."
 #sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
 sudo rm -rf $MOODLE_HOME.bkp
