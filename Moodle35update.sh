@@ -98,12 +98,16 @@ echo "MD5 download OK!"
 echo "Check MD5 (128-bit) checksums..."
 md5sum -c moodle-latest-35.tgz.md5
 if [[ $? -ne 0 ]] ; then
+    echo "Delete downloaded files..."
+    rm -rf moodle-latest-35.tgz moodle35-plugins moodle moodle-latest-35.tgz.md5
     exit 1    
 fi
 
 echo "Check MD5 (128-bit) checksums, same version tested?"
 md5sum -c moodle35-plugins/moodle-latest-35.tgz.md5
 if [[ $? -ne 0 ]] ; then
+    echo "Delete downloaded files..."
+    rm -rf moodle-latest-35.tgz moodle35-plugins moodle moodle-latest-35.tgz.md5
     exit 1    
 fi
 echo "OK!"
