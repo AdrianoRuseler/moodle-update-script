@@ -89,7 +89,7 @@ else
       echo "Error: git clone https://github.com/AdrianoRuseler/moodle35-plugins.git"
       exit 1
   fi
-  cd moodle35-plugins
+  cd $GIT_DIR/moodle35-plugins
   git submodule update --init --recursive
 fi
 
