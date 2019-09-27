@@ -39,6 +39,18 @@ else
     echo "Enough Space!!"
 fi
 
+echo "Check for free space in $TMP_DIR ..."
+FREESPACE=$(df "$TMP_DIR" | awk 'NR==2 { print $4 }')
+echo "Free space: $FREESPACE"
+echo "Req. space: $REQSPACE"
+
+if [[ $FREESPACE -le REQSPACE ]]; then
+    echo "NOT enough Space!!"
+    exit 1
+else
+    echo "Enough Space!!"
+fi
+
 cd $TMP_DIR
 
 echo "Download moodle-latest-35.tgz..."
@@ -46,14 +58,14 @@ wget https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.t
 if [[ $? -ne 0 ]] ; then
     exit 1
 fi
-echo "Download OK..."
+echo "Download OK!"
 
 echo "Download moodle-latest-35.tgz.md5..."
 wget https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.tgz.md5 -O moodle-latest-35.tgz.md5
 if [[ $? -ne 0 ]] ; then
     exit 1
 fi
-echo "OK!"
+echo "MD5 download OK!"
 
 echo "Check MD5 (128-bit) checksums..."
 md5sum -c moodle-latest-35.tgz.md5
@@ -86,33 +98,43 @@ echo "Download page to display under maintenance... "
 sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
 cd $TMP_DIR
 
-echo "moving old files ..."
-sudo mv $MOODLE_HOME $MOODLE_HOME.bkp
+echo "Moving old files ..."
+sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp
 
-echo "moving new files ..."
+echo "Moving new files ..."
 sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
-echo "copying config file ..."
-sudo cp $MOODLE_HOME.bkp/config.php $MOODLE_HOME
+echo "Copying config file ..."
+sudo cp $MOODLE_HOME.tmpbkp/config.php $MOODLE_HOME
 
-echo "fixing file permissions ..."
+echo "Fixing file permissions ..."
 sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME 
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en 
+if [[ $? -ne 0 ]] ; then # Error in upgrade script
+    echo "Error in upgrade script..."
+    if [ -d "$MOODLE_HOME.tmpbkp" ]; then # If exists
+    echo "restoring old files..."
+       sudo rm -rf $MOODLE_HOME # Remove new files
+       sudo mv $MOODLE_HOME.tmpbkp $MOODLE_HOME # restore old files
+    fi
+    echo "Disable the maintenance mode..."
+    sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
+    exit 1    
+fi
 
-echo "purge Moodle cache ..."
+echo "Purge Moodle cache ..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
 
-echo "fix courses..."
+echo "Fix courses..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
 
-echo "disable the maintenance mode..."
+echo "Disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
-# Test is all is OK! (TODO)
-
 #echo "compress moodle backup directory ..."
-#sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
-sudo rm -rf $MOODLE_HOME.bkp
+#sudo tar -zcf $MOODLE_HOME.tmpbkp.tar.gz $MOODLE_HOME.tmpbkp
+echo "Removing temporary backup files..."
+sudo rm -rf $MOODLE_HOME.tmpbkp

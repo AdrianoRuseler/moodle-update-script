@@ -142,7 +142,18 @@ sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME 
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en
+if [[ $? -ne 0 ]] ; then # Error in upgrade script
+    echo "Error in upgrade script..."
+    if [ -d "$MOODLE_HOME.bkp" ]; then # If exists
+    echo "restoring old files..."
+       sudo rm -rf $MOODLE_HOME # Remove new files
+       sudo mv $MOODLE_HOME.bkp $MOODLE_HOME # restore old files
+    fi
+    echo "Disable the maintenance mode..."
+    sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
+    exit 1    
+fi
 
 echo "purge Moodle cache..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
@@ -156,8 +167,3 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 #echo "compress moodle backup directory ..."
 #sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
 sudo rm -rf $MOODLE_HOME.bkp
-
-
-
-
-
