@@ -53,6 +53,29 @@ fi
 
 cd $TMP_DIR
 
+echo "Download Plugins..."
+git clone https://github.com/AdrianoRuseler/moodle35-plugins.git
+if [[ $? -ne 0 ]] ; then
+    echo "Error: git clone https://github.com/AdrianoRuseler/moodle35-plugins.git"
+    exit 1
+fi
+echo "OK!"
+
+cd moodle-plugins
+git submodule update --init --recursive
+if [[ $? -ne 0 ]] ; then
+    echo "Error: git submodule update --init --recursive"
+    exit 1
+fi
+echo "OK!"
+
+cd ..
+echo "Move moodle folder from moodle-plugins repo..."
+mv moodle35-plugins/moodle moodle
+
+echo "Remove moodle-plugins repo..."
+rm -rf moodle35-plugins/.git
+
 echo "Download moodle-latest-35.tgz..."
 wget https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.tgz -O moodle-latest-35.tgz
 if [[ $? -ne 0 ]] ; then
