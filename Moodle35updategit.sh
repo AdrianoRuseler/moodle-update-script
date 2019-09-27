@@ -80,7 +80,7 @@ fi
 
 cd $GIT_DIR
 if [ -d "moodle35-plugins" ]; then
-   cd $GIT_DIR/moodle35-plugins/moodle
+   cd $GIT_DIR/moodle35-plugins
    git submodule foreach git pull
    git status
 else
