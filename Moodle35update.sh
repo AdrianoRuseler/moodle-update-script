@@ -54,7 +54,7 @@ fi
 cd $TMP_DIR
 if [ -d "moodle35-plugins" ]; then
   ### Take action if moodle35-plugins exists ###
-  echo "Found Moodle Data folder: ${MOODLE_DATA}"
+  echo "Found moodle35-plugins!"
   sudo rm -rf moodle35-plugins
 fi
 
