@@ -82,6 +82,7 @@ cd $GIT_DIR
 if [ -d "moodle35-plugins" ]; then
    cd moodle35-plugins/moodle
    git submodule foreach git pull
+   git status
 else
    git clone https://github.com/AdrianoRuseler/moodle35-plugins.git
     if [[ $? -ne 0 ]] ; then
@@ -97,12 +98,14 @@ cd $GIT_DIR
 if [ -d "moodle" ]; then
    cd moodle
    git pull
+   git status
 else
    git clone -b MOODLE_35_STABLE https://github.com/moodle/moodle.git
     if [[ $? -ne 0 ]] ; then
-      echo "Error: git clone -b MOODLE_35_STABLE https://github.com/moodle/moodle.git"
-      exit 1
-  fi
+        echo "Error: git clone -b MOODLE_35_STABLE https://github.com/moodle/moodle.git"
+        exit 1
+    fi
+    git status
 fi
 
 
