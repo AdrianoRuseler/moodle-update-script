@@ -23,6 +23,12 @@ chmod u+x Moodle35update.sh
 ./Moodle35update.sh | tee Moodle35update.log
 ```
  
+  ```bash
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35-updateWgit.sh -O Moodle35gitUpdate.sh
+chmod u+x Moodle35gitUpdate.sh
+
+./Moodle35gitUpdate.sh | tee Moodle35gitUpdate.log
+```
  
 ## 
 ```php
