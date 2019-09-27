@@ -24,7 +24,7 @@ chmod u+x Moodle37update.sh
  
  ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35update.sh -O Moodle35update.sh
-chmod u+x Moodle37update.sh
+chmod u+x Moodle35update.sh
 
 ./Moodle35update.sh | tee Moodle35update.log
 ```
