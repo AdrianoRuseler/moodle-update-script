@@ -96,6 +96,13 @@ if [[ $? -ne 0 ]] ; then
     exit 1    
 fi
 
+echo "Check MD5 (128-bit) checksums, same version tested?"
+md5sum -c moodle35-plugins/moodle-latest-35.tgz.md5
+if [[ $? -ne 0 ]] ; then
+    exit 1    
+fi
+echo "OK!"
+
 echo "Extract moodle-latest-35.tgz..."
 tar xzf moodle-latest-35.tgz
 if [[ $? -ne 0 ]] ; then
