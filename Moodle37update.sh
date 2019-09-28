@@ -35,7 +35,7 @@ if [ -d "$GIT_DIR" ]; then
   echo "Found git folder: ${GIT_DIR}"
 else
   ###  Control will jump here if $DIR does NOT exists ###
-  echo "Error: ${GIT_DIR} not found. 
+  echo "Error: ${GIT_DIR} not found."
   echo "Is ${GIT_DIR} your GIT directory?"
   exit 1
 fi
