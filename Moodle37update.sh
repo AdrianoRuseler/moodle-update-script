@@ -55,23 +55,14 @@ fi
 
 cd $TMP_DIR
 
-echo "Download Plugins..."
-git clone https://github.com/AdrianoRuseler/moodle-plugins.git
+echo "Clone moodle-plugins..."
+git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git
 if [[ $? -ne 0 ]] ; then
-    echo "Error: git clone https://github.com/AdrianoRuseler/moodle-plugins.git"
+    echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git"
     exit 1
 fi
 echo "OK!"
 
-cd moodle-plugins
-git submodule update --init --recursive
-if [[ $? -ne 0 ]] ; then
-    echo "Error: git submodule update --init --recursive"
-    exit 1
-fi
-echo "OK!"
-
-cd ..
 echo "Move moodle folder from moodle-plugins repo..."
 mv moodle-plugins/moodle moodle
 
