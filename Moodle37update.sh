@@ -2,7 +2,9 @@
 
 MOODLE_HOME="/var/www/html/moodle37"
 MOODLE_DATA="/var/www/moodle37data"
+GIT_DIR="/home/moodle/gitrepo"
 TMP_DIR="/tmp"
+
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
 echo "Check if Moodle Home folder exists..."
