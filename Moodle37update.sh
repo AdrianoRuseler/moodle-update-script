@@ -29,8 +29,31 @@ else
   exit 1
 fi
 
+echo "Check if git folder exists..."
+if [ -d "$GIT_DIR" ]; then
+  ### Take action if $GIT_DIR exists ###
+  echo "Found git folder: ${GIT_DIR}"
+else
+  ###  Control will jump here if $DIR does NOT exists ###
+  echo "Error: ${GIT_DIR} not found. 
+  echo "Is ${GIT_DIR} your GIT directory?"
+  exit 1
+fi
+
 echo "Check for free space in $MOODLE_HOME ..."
 FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
+echo "Free space: $FREESPACE"
+echo "Req. space: $REQSPACE"
+
+if [[ $FREESPACE -le REQSPACE ]]; then
+    echo "NOT enough Space!!"
+    exit 1
+else
+    echo "Enough Space!!"
+fi
+
+echo "Check for free space in $GIT_DIR ..."
+FREESPACE=$(df "$GIT_DIR" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 
@@ -53,58 +76,31 @@ else
     echo "Enough Space!!"
 fi
 
-cd $TMP_DIR
-
-echo "Clone moodle-plugins..."
-git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git
-if [[ $? -ne 0 ]] ; then
-    echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git"
-    exit 1
-fi
-echo "OK!"
-
-echo "Move moodle folder from moodle-plugins repo..."
-mv moodle-plugins/moodle moodle
-
-echo "Remove moodle-plugins repo..."
-rm -rf moodle-plugins/.git
-
-echo "Download moodle-latest-37.tgz..."
-wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
-if [[ $? -ne 0 ]] ; then
-    exit 1
-fi
-echo "Download OK..."
-
-echo "Download moodle-latest-37.tgz.md5..."
-wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1
-fi
-echo "OK!"
-
-echo "Check MD5 (128-bit) checksums..."
-md5sum -c moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1    
+cd $GIT_DIR
+if [ -d "moodle-plugins" ]; then
+    cd $GIT_DIR/moodle-plugins
+    git pull --recurse-submodules
+    git status
+else
+    git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git
+    if [[ $? -ne 0 ]] ; then
+      echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git"
+      exit 1
+    fi
+    cd $GIT_DIR/moodle-plugins
+    git pull --recurse-submodules
 fi
 
-echo "Check MD5 (128-bit) checksums, same version tested?"
-md5sum -c moodle-plugins/moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1    
-fi
-echo "OK!"
+echo "Rsync moodle folder from moodle-plugins repo..."
+rsync -a $GIT_DIR/moodle-plugins/moodle/ $TMP_DIR/moodle
 
 echo "Extract moodle-latest-37.tgz..."
-tar xzf moodle-latest-37.tgz
+tar xzf moodle-latest-37.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-37.tgz"
     exit 1    
 fi
 
-echo "Clean files..."
-rm -rf moodle-latest-37.tgz moodle-plugins
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
