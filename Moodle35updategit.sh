@@ -30,10 +30,10 @@ else
   exit 1
 fi
 
-echo "Check if Moodle Home folder exists..."
+echo "Check if git folder exists..."
 if [ -d "$GIT_DIR" ]; then
   ### Take action if $GIT_DIR exists ###
-  echo "Found Moodle Home folder: ${GIT_DIR}"
+  echo "Found git folder: ${GIT_DIR}"
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${GIT_DIR} not found. Can not continue, script for Update only!"
