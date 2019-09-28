@@ -81,16 +81,16 @@ fi
 cd $GIT_DIR
 if [ -d "moodle35-plugins" ]; then
    cd $GIT_DIR/moodle35-plugins
-   git submodule foreach git pull
+    git pull --recurse-submodules
    git status
 else
-   git clone https://github.com/AdrianoRuseler/moodle35-plugins.git
+   git clone --recursive https://github.com/AdrianoRuseler/moodle35-plugins.git
     if [[ $? -ne 0 ]] ; then
       echo "Error: git clone https://github.com/AdrianoRuseler/moodle35-plugins.git"
       exit 1
   fi
   cd $GIT_DIR/moodle35-plugins
-  git submodule update --init --recursive
+   git pull --recurse-submodules
 fi
 
 # git clone -b MOODLE_35_STABLE https://github.com/moodle/moodle.git
