@@ -118,7 +118,7 @@ echo "Rsync moodle folder from moodle35-plugins repo..."
 sudo rsync -a $GIT_DIR/moodle35-plugins/moodle/ $MOODLE_HOME
 
 echo "Extract moodle-latest-35.tgz..."
-sudo tar xzf $GIT_DIR/moodle-latest-35.tgz -C $MOODLE_HOME
+sudo tar xzf $GIT_DIR/moodle35-plugins/moodle-latest-35.tgz -C $MOODLE_HOME
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-35.tgz"
     exit 1    
