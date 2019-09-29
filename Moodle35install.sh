@@ -1,19 +1,25 @@
 #!/bin/bash
 
 # LAMP is assumed to be installed (Apache+PHP+MariaDB)
-MOODLE_HOME="/var/www/html/moodle35"
-MOODLE_DATA="/var/www/moodle35data"
-GIT_DIR="${HOME}/gitrepo"
-TMP_DIR="/tmp"
+MOODLE_HOME="/var/www/html/moodle35" # moodle core folder
+MOODLE_DATA="/var/www/moodle35data" # moodle data folder
+GIT_DIR="${HOME}/gitrepo" # git folder
+BKP_DIR="${HOME}/MDLBKPS" # moodle backup folder
+TMP_DIR="/tmp" # temp folder
 REQSPACE=524288 # Required free space: 512 Mb in kB
-
+DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
   echo "Found Moodle Home folder: ${MOODLE_HOME}"
-  echo "Moving existing files ..."
-  sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp  
+  echo "BackingUp existing files ..."
+  sudo tar -zcf $BKP_DIR.$DAY.tar.gz $MOODLE_HOME
+  if [[ $? -ne 0 ]] ; then
+      echo "Error: Could not BackUp folder!"
+      exit 1
+   fi
+   sudo rm -rf $MOODLE_HOME   
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Not Found: ${MOODLE_HOME}. Creating folder!"
@@ -30,15 +36,20 @@ echo "Check if Moodle Data folder exists..."
 if [ -d "$MOODLE_DATA" ]; then
   ### Take action if $MOODLE_DATA exists ###
   echo "Found Moodle Data folder: ${MOODLE_DATA}"
-else
-  ###  Control will jump here if $DIR does NOT exists ###
-  echo "Not Found: ${MOODLE_DATA}. Creating folder!"
-  sudo mkdir $MOODLE_DATA
+  sudo tar -zcf $BKP_DIR.$DAY.tar.gz $MOODLE_DATA
+  if [[ $? -ne 0 ]] ; then
+      echo "Error: Could not BackUp folder!"
+      exit 1
+   fi
+   sudo rm -rf $MOODLE_DATA
+fi
+
+echo "Creating folder ${MOODLE_DATA}...!"
+sudo mkdir $MOODLE_DATA
     if [[ $? -ne 0 ]] ; then
       echo "Error: Could not create folder!"
       exit 1
     fi
-fi
 
 echo "Check if git folder exists..."
 if [ -d "$GIT_DIR" ]; then
