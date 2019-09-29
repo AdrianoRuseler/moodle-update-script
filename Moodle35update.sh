@@ -3,22 +3,11 @@
 MOODLE_HOME="/var/www/html/moodle35" # moodle core folder
 MOODLE_DATA="/var/www/moodle35data" # moodle data folder
 GIT_DIR="${HOME}/gitrepo" # git folder
-BKP_DIR="${HOME}/MDLBKPS" # moodle backup (core+data) folder 
 TMP_DIR="/tmp" # temp folder
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
-echo "Check if Backup folder exists..."
-if [ -d "$BKP_DIR" ]; then
-echo "Found Backup folder: ${BKP_DIR}"
-else
-   sudo mkdir $BKP_DIR
-   if [[ $? -ne 0 ]] ; then
-      echo "Error: Could not create folder!"
-       exit 1
-   fi
-fi
 
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
@@ -117,26 +106,19 @@ echo "Kill all user sessions...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
-echo "Moodle Maintenance Mode Activated...";
+echo "Moodle Maintenance Mode Activated!!";
 
 echo "Rsync page to display under maintenance... "
 sudo rsync -a $GIT_DIR/moodle35-plugins/climaintenance.html  $MOODLE_DATA/climaintenance.html
 
-echo "Backup moodle core files..."
-sudo tar -zcf $BKP_DIR/moodle35home.$DAY.tar.gz $MOODLE_HOME
-  if [[ $? -ne 0 ]] ; then
-      echo "Error: Could not BackUp folder!"
-      exit 1
-   fi
-
 echo "Moving old files ..."
-sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp
+sudo mv $MOODLE_HOME $MOODLE_HOME.$DAY.tmpbkp
 
 echo "Moving new files ..."
 sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
 echo "Copying config file ..."
-sudo cp $MOODLE_HOME.tmpbkp/config.php $MOODLE_HOME
+sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
 if [[ $? -ne 0 ]] ; then
     echo "Error: Copying config file!"
     exit 1
@@ -150,10 +132,10 @@ echo "Upgrading Moodle Core started..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en 
 if [[ $? -ne 0 ]] ; then # Error in upgrade script
     echo "Error in upgrade script..."
-    if [ -d "$MOODLE_HOME.tmpbkp" ]; then # If exists
+    if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
     echo "restoring old files..."
        sudo rm -rf $MOODLE_HOME # Remove new files
-       sudo mv $MOODLE_HOME.tmpbkp $MOODLE_HOME # restore old files
+       sudo mv $MOODLE_HOME.$DAY.tmpbkp $MOODLE_HOME # restore old files
     fi
     echo "Disable the maintenance mode..."
     sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
@@ -170,4 +152,4 @@ echo "Disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
 echo "Removing temporary backup files..."
-sudo rm -rf $MOODLE_HOME.tmpbkp
+sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
