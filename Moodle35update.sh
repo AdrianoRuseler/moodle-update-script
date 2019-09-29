@@ -59,8 +59,8 @@ fi
 if [ -d "${GIT_DIR}/moodle35-plugins" ]; then
     cd $GIT_DIR/moodle35-plugins
     git clean -ffdx   # This gets you in same state as fresh clone.
+    git pull --recurse-submodules
     git submodule update --init
-    git pull --recurse-submodules     
 else
     git clone --recursive https://github.com/AdrianoRuseler/moodle35-plugins.git
     if [[ $? -ne 0 ]] ; then
