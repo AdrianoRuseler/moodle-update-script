@@ -83,6 +83,12 @@ fi
 echo "Get git status..."
 git status
 
+
+if [ -d "$TMP_DIR/moodle" ]; then
+   echo "Remove moodle tmp folder!"
+   sudo rm -rf $TMP_DIR/moodle      
+fi
+
 echo "Rsync moodle folder from moodle-plugins repo..."
 sudo rsync -a $GIT_DIR/moodle35-plugins/moodle/ $TMP_DIR/moodle
 if [[ $? -ne 0 ]] ; then
