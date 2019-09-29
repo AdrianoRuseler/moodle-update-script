@@ -13,15 +13,17 @@ if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
   echo "Found Moodle Home folder: ${MOODLE_HOME}"
   echo "Moving existing files ..."
-  sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp
+  sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp  
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Not Found: ${MOODLE_HOME}. Creating folder!"
-  sudo mkdir $MOODLE_HOME
-    if [[ $? -ne 0 ]] ; then
+fi
+
+echo "Create Moodle Home folder..."
+sudo mkdir $MOODLE_HOME
+if [[ $? -ne 0 ]] ; then
       echo "Error: Could not create folder!"
       exit 1
-    fi
 fi
 
 echo "Check if Moodle Data folder exists..."
