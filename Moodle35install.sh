@@ -9,12 +9,25 @@ TMP_DIR="/tmp" # temp folder
 REQSPACE=524288 # Required free space: 512 Mb in kB
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
+
+echo "Check if Backup folder exists..."
+if [ -d "$BKP_DIR" ]; then
+echo "Found Backup folder: ${BKP_DIR}"
+else
+   sudo mkdir $BKP_DIR
+   if [[ $? -ne 0 ]] ; then
+      echo "Error: Could not create folder!"
+       exit 1
+   fi
+fi
+
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
   echo "Found Moodle Home folder: ${MOODLE_HOME}"
   echo "BackingUp existing files ..."
-  sudo tar -zcf $BKP_DIR.$DAY.tar.gz $MOODLE_HOME
+
+  sudo tar -zcf $BKP_DIR/moodlehome.$DAY.tar.gz $MOODLE_HOME
   if [[ $? -ne 0 ]] ; then
       echo "Error: Could not BackUp folder!"
       exit 1
@@ -36,7 +49,7 @@ echo "Check if Moodle Data folder exists..."
 if [ -d "$MOODLE_DATA" ]; then
   ### Take action if $MOODLE_DATA exists ###
   echo "Found Moodle Data folder: ${MOODLE_DATA}"
-  sudo tar -zcf $BKP_DIR.$DAY.tar.gz $MOODLE_DATA
+  sudo tar -zcf $BKP_DIR/moodledata.$DAY.tar.gz $MOODLE_DATA #
   if [[ $? -ne 0 ]] ; then
       echo "Error: Could not BackUp folder!"
       exit 1
@@ -125,13 +138,20 @@ fi
 echo "Get git status..."
 git status
 
-echo "Rsync moodle folder from moodle35-plugins repo..."
-sudo rsync -a $GIT_DIR/moodle35-plugins/moodle/ $MOODLE_HOME
+echo "Rsync moodle folder from moodle-plugins repo..."
+rsync -a $GIT_DIR/moodle-plugins/moodle/ $TMP_DIR/moodle
 
 echo "Extract moodle-latest-35.tgz..."
-sudo tar xzf $GIT_DIR/moodle35-plugins/moodle-latest-35.tgz -C $MOODLE_HOME
+tar xzf $GIT_DIR/moodle-latest-35.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-35.tgz"
+    exit 1    
+fi
+
+echo "moving moodle core files..."
+sudo mv $TMP_DIR/moodle $MOODLE_HOME
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Cloud not move moodle core files"
     exit 1    
 fi
 
@@ -178,6 +198,7 @@ sudo apt-get install -y maxima gcc gnuplot
 
 echo "Install Moodle Core..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/install.php
+
 
 
 
