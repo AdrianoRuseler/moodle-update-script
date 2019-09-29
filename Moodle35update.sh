@@ -55,8 +55,8 @@ else
     echo "Enough Space!!"
 fi
 
-cd $GIT_DIR
-if [ -d "moodle35-plugins" ]; then
+# cd $GIT_DIR
+if [ -d "${GIT_DIR}/moodle35-plugins" ]; then
     cd $GIT_DIR/moodle35-plugins
     git pull --recurse-submodules    
 else
@@ -73,7 +73,7 @@ echo "Get git status..."
 git status
 
 
-if [ -d "$TMP_DIR/moodle" ]; then
+if [ -d "${TMP_DIR}/moodle" ]; then
    echo "Remove moodle tmp folder!"
    sudo rm -rf $TMP_DIR/moodle      
 fi
