@@ -153,7 +153,7 @@ if [[ $? -ne 0 ]] ; then
 fi
 
 echo "moving moodle core files..."
-sudo mv $TMP_DIR/moodle $MOODLE_HOME
+sudo mv $TMP_DIR/moodle/* $MOODLE_HOME
 if [[ $? -ne 0 ]] ; then
     echo "Error: Cloud not move moodle core files"
     exit 1    
