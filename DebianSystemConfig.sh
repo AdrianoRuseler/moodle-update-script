@@ -16,10 +16,18 @@ sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
 echo "Install some sys utils..."
-sudo apt-get install -y git
+sudo apt-get install -y git p7zip-full
 
 echo "Install python..."
 sudo apt-get install -y python2 python3
+
+echo "Install php extensions..."
+sudo apt-get install -y php-curl php-zip php-intl php-xmlrpc php-soap php-xml php-gd php-ldap php-common php-cli php-mbstring php-mysql php-imagick php-pdo php-json php-readline php-tidy php-xsl
+# Cache related 
+sudo apt-get install -y php-redis php-memcached php-apcu php-opcache 
+
+echo "Restart apache server..."
+sudo service apache2 restart
 
 echo "To be able to generate graphics from DOT files, you must have installed the dot executable..."
 sudo apt-get install -y graphviz
