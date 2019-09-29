@@ -58,6 +58,7 @@ fi
 # cd $GIT_DIR
 if [ -d "${GIT_DIR}/moodle35-plugins" ]; then
     cd $GIT_DIR/moodle35-plugins
+    git submodule update --init
     git pull --recurse-submodules    
 else
     git clone --recursive https://github.com/AdrianoRuseler/moodle35-plugins.git
