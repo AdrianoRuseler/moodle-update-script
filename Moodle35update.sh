@@ -1,10 +1,24 @@
 #!/bin/bash
 
-MOODLE_HOME="/var/www/html/moodle35"
-MOODLE_DATA="/var/www/moodle35data"
-TMP_DIR="/tmp"
-GIT_DIR="${HOME}/gitrepo"
+MOODLE_HOME="/var/www/html/moodle35" # moodle core folder
+MOODLE_DATA="/var/www/moodle35data" # moodle data folder
+GIT_DIR="${HOME}/gitrepo" # git folder
+BKP_DIR="${HOME}/MDLBKPS" # moodle backup (core+data) folder 
+TMP_DIR="/tmp" # temp folder
 REQSPACE=524288 # Required free space: 512 Mb in kB
+
+DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
+
+echo "Check if Backup folder exists..."
+if [ -d "$BKP_DIR" ]; then
+echo "Found Backup folder: ${BKP_DIR}"
+else
+   sudo mkdir $BKP_DIR
+   if [[ $? -ne 0 ]] ; then
+      echo "Error: Could not create folder!"
+       exit 1
+   fi
+fi
 
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
@@ -52,76 +66,37 @@ else
     echo "Enough Space!!"
 fi
 
-cd $TMP_DIR
+cd $GIT_DIR
 if [ -d "moodle35-plugins" ]; then
-  ### Take action if moodle35-plugins exists ###
-  echo "Found moodle35-plugins!"
-  sudo rm -rf moodle35-plugins
+    cd $GIT_DIR/moodle35-plugins
+    git pull --recurse-submodules    
+else
+    git clone --recursive https://github.com/AdrianoRuseler/moodle35-plugins.git
+    if [[ $? -ne 0 ]] ; then
+      echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle35-plugins.git"
+      exit 1
+    fi
+    cd $GIT_DIR/moodle35-plugins
+    git pull --recurse-submodules
 fi
 
-echo "Download Plugins..."
-git clone https://github.com/AdrianoRuseler/moodle35-plugins.git
+echo "Get git status..."
+git status
+
+echo "Rsync moodle folder from moodle-plugins repo..."
+sudo rsync -a $GIT_DIR/moodle35-plugins/moodle/ $TMP_DIR/moodle
 if [[ $? -ne 0 ]] ; then
-    echo "Error: git clone https://github.com/AdrianoRuseler/moodle35-plugins.git"
-    exit 1
-fi
-echo "OK!"
-
-cd moodle35-plugins
-git submodule update --init --recursive
-if [[ $? -ne 0 ]] ; then
-    echo "Error: git submodule update --init --recursive"
-    exit 1
-fi
-echo "OK!"
-
-cd ..
-echo "Move moodle folder from moodle-plugins repo..."
-mv moodle35-plugins/moodle moodle
-
-echo "Remove moodle-plugins repo..."
-rm -rf moodle35-plugins/.git
-
-echo "Download moodle-latest-35.tgz..."
-wget https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.tgz -O moodle-latest-35.tgz
-if [[ $? -ne 0 ]] ; then
-    exit 1
-fi
-echo "Download OK!"
-
-echo "Download moodle-latest-35.tgz.md5..."
-wget https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.tgz.md5 -O moodle-latest-35.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1
-fi
-echo "MD5 download OK!"
-
-echo "Check MD5 (128-bit) checksums..."
-md5sum -c moodle-latest-35.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    echo "Delete downloaded files..."
-    rm -rf moodle-latest-35.tgz moodle35-plugins moodle moodle-latest-35.tgz.md5
+    echo "Error: Rsync moodle folder from moodle35-plugins repo"
     exit 1    
 fi
-
-echo "Check MD5 (128-bit) checksums, same version tested?"
-md5sum -c moodle35-plugins/moodle-latest-35.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    echo "Delete downloaded files..."
-    rm -rf moodle-latest-35.tgz moodle35-plugins moodle moodle-latest-35.tgz.md5
-    exit 1    
-fi
-echo "OK!"
 
 echo "Extract moodle-latest-35.tgz..."
-tar xzf moodle-latest-35.tgz
+tar xzf $GIT_DIR/moodle35-plugins/moodle-latest-35.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-35.tgz"
     exit 1    
 fi
 
-echo "Clean files..."
-rm -rf moodle-latest-35.tgz moodle35-plugins moodle-latest-35.tgz.md5
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
@@ -138,10 +113,15 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated...";
 
-cd $MOODLE_DATA
-echo "Download page to display under maintenance... "
-sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
-cd $TMP_DIR
+echo "Rsync page to display under maintenance... "
+sudo rsync -a $GIT_DIR/moodle35-plugins/climaintenance.html  $MOODLE_DATA/climaintenance.html
+
+echo "Backup moodle core files..."
+sudo tar -zcf $BKP_DIR/moodle35home.$DAY.tar.gz $MOODLE_HOME
+  if [[ $? -ne 0 ]] ; then
+      echo "Error: Could not BackUp folder!"
+      exit 1
+   fi
 
 echo "Moving old files ..."
 sudo mv $MOODLE_HOME $MOODLE_HOME.tmpbkp
@@ -183,7 +163,5 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=
 echo "Disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
-#echo "compress moodle backup directory ..."
-#sudo tar -zcf $MOODLE_HOME.tmpbkp.tar.gz $MOODLE_HOME.tmpbkp
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.tmpbkp
