@@ -139,10 +139,14 @@ echo "Get git status..."
 git status
 
 echo "Rsync moodle folder from moodle-plugins repo..."
-rsync -a $GIT_DIR/moodle-plugins/moodle/ $TMP_DIR/moodle
+rsync -a $GIT_DIR/moodle35-plugins/moodle/ $TMP_DIR/moodle
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Rsync moodle folder from moodle-plugins repo"
+    exit 1    
+fi
 
 echo "Extract moodle-latest-35.tgz..."
-tar xzf $GIT_DIR/moodle-latest-35.tgz -C $TMP_DIR
+tar xzf $GIT_DIR/moodle35-plugins/moodle-latest-35.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-35.tgz"
     exit 1    
