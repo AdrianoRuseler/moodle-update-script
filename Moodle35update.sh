@@ -73,7 +73,7 @@ fi
 
 echo "Get git status..."
 git status
-
+git clean -ffdx   # This gets you in same state as fresh clone.
 
 if [ -d "${TMP_DIR}/moodle" ]; then
    echo "Remove moodle tmp folder!"
