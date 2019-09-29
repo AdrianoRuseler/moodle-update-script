@@ -27,7 +27,7 @@ if [ -d "$MOODLE_HOME" ]; then
   echo "Found Moodle Home folder: ${MOODLE_HOME}"
   echo "BackingUp existing files ..."
 
-  sudo tar -zcf $BKP_DIR/moodlehome.$DAY.tar.gz $MOODLE_HOME
+  sudo tar -zcf $BKP_DIR/moodle35home.$DAY.tar.gz $MOODLE_HOME
   if [[ $? -ne 0 ]] ; then
       echo "Error: Could not BackUp folder!"
       exit 1
@@ -49,7 +49,7 @@ echo "Check if Moodle Data folder exists..."
 if [ -d "$MOODLE_DATA" ]; then
   ### Take action if $MOODLE_DATA exists ###
   echo "Found Moodle Data folder: ${MOODLE_DATA}"
-  sudo tar -zcf $BKP_DIR/moodledata.$DAY.tar.gz $MOODLE_DATA #
+  sudo tar -zcf $BKP_DIR/moodle35data.$DAY.tar.gz $MOODLE_DATA #
   if [[ $? -ne 0 ]] ; then
       echo "Error: Could not BackUp folder!"
       exit 1
@@ -200,8 +200,8 @@ sudo apt-get install -y graphviz
 echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 sudo apt-get install -y maxima gcc gnuplot
 
-echo "Install Moodle Core..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/install.php
+# echo "Install Moodle Core..."
+# sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/install.php
 
 
 
