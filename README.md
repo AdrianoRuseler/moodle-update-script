@@ -9,6 +9,7 @@ chmod u+x Moodle37install.sh
 
 ./Moodle37install.sh
  ```
+ wget -O - https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37install.sh | sudo bash
  
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35install.sh
@@ -32,6 +33,9 @@ chmod u+x Moodle37update.sh
 
 ./Moodle37update.sh | tee Moodle37update.log
 ```
+```bash
+ wget -O - https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh | sudo bash
+ ```
  
  ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35update.sh -O Moodle35update.sh
