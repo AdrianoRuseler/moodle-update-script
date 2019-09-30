@@ -1,9 +1,9 @@
 #!/bin/bash
 
-MOODLE_HOME="/var/www/html/moodle37"
-MOODLE_DATA="/var/www/moodle37data"
-GIT_DIR="${HOME}/gitrepo"
-TMP_DIR="/tmp"
+MOODLE_HOME="/var/www/html/moodle37" # moodle core folder
+MOODLE_DATA="/var/www/moodle37data"  # moodle data folder
+GIT_DIR="${HOME}/gitrepo"   # git folder
+TMP_DIR="/tmp" # temp folder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
