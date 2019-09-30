@@ -74,25 +74,25 @@ else
 fi
 
 cd $GIT_DIR
-if [ -d "moodle-plugins" ]; then
-    cd $GIT_DIR/moodle-plugins
+if [ -d "moodle37-plugins" ]; then
+    cd $GIT_DIR/moodle37-plugins
     git pull --recurse-submodules
     git status
 else
-    git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git
+    git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
     if [[ $? -ne 0 ]] ; then
-      echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle-plugins.git"
+      echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
       exit 1
     fi
-    cd $GIT_DIR/moodle-plugins
+    cd $GIT_DIR/moodle37-plugins
     git pull --recurse-submodules
 fi
 
-echo "Rsync moodle folder from moodle-plugins repo..."
-rsync -a $GIT_DIR/moodle-plugins/moodle/ $TMP_DIR/moodle
+echo "Rsync moodle folder from moodle37-plugins repo..."
+rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
 
 echo "Extract moodle-latest-37.tgz..."
-tar xzf $GIT_DIR/moodle-latest-37.tgz -C $TMP_DIR
+tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]] ; then
     echo "Error: tar xzf moodle-latest-37.tgz"
     exit 1    
@@ -101,40 +101,48 @@ fi
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Activating Moodle Maintenance Mode!"
+    rm -rf $TMP_DIR/moodle
+    exit 1
+fi
+
 sleep 30 # wait 30 secs
 
 echo "Kill all user sessions...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
-echo "Moodle Maintenance Mode Activated...";
+echo "Moodle Maintenance Mode Activated!";
 
-cd $MOODLE_DATA
-echo "Download page to display under maintenance... "
-sudo -u www-data wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/climaintenance.html -O climaintenance.html
-cd $TMP_DIR
+echo "Rsync page to display under maintenance... "
+sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html  $MOODLE_DATA/climaintenance.html
 
-echo "moving old files..."
-sudo mv $MOODLE_HOME $MOODLE_HOME.bkp
+echo "Moving old files ..."
+sudo mv $MOODLE_HOME $MOODLE_HOME.$DAY.tmpbkp
 
 echo "moving new files..."
 sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
-echo "copying config file..."
-sudo cp $MOODLE_HOME.bkp/config.php $MOODLE_HOME
+echo "Copying config file ..."
+sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
+if [[ $? -ne 0 ]] ; then
+    echo "Error: Copying config file!"
+    exit 1
+fi
 
 echo "fixing file permissions..."
 sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME 
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en 
 if [[ $? -ne 0 ]] ; then # Error in upgrade script
     echo "Error in upgrade script..."
-    if [ -d "$MOODLE_HOME.bkp" ]; then # If exists
+    if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
     echo "restoring old files..."
        sudo rm -rf $MOODLE_HOME # Remove new files
-       sudo mv $MOODLE_HOME.bkp $MOODLE_HOME # restore old files
+       sudo mv $MOODLE_HOME.$DAY.tmpbkp $MOODLE_HOME # restore old files
     fi
     echo "Disable the maintenance mode..."
     sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
@@ -150,6 +158,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
-#echo "compress moodle backup directory ..."
-#sudo tar -zcf $MOODLE_HOME.bkp.tar.gz $MOODLE_HOME.bkp
-sudo rm -rf $MOODLE_HOME.bkp
+echo "Removing temporary backup files..."
+sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
+
+exit 0 
