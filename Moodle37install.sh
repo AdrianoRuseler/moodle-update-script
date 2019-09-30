@@ -122,29 +122,29 @@ sudo apt-get install -y git p7zip-full
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
   cd $GIT_DIR/moodle37-plugins
-  git pull --recurse-submodules
+  sudo git pull --recurse-submodules
 else
-  git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
+  sudo git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins
-  git pull --recurse-submodules
+  sudo git pull --recurse-submodules
 fi
 
 echo "Get git status..."
-git status
+sudo git status
 
 echo "Rsync moodle folder from moodle-plugins repo..."
-rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
+sudo rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
 if [[ $? -ne 0 ]]; then
   echo "Error: Rsync moodle folder from moodle37-plugins repo"
   exit 1
 fi
 
 echo "Extract moodle-latest-37.tgz..."
-tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
+sudo tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]]; then
   echo "Error: tar xzf moodle-latest-37.tgz"
   exit 1
