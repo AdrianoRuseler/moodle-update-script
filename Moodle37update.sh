@@ -2,8 +2,8 @@
 
 MOODLE_HOME="/var/www/html/moodle37" # moodle core folder
 MOODLE_DATA="/var/www/moodle37data"  # moodle data folder
-GIT_DIR="${HOME}/gitrepo"   # git folder
-TMP_DIR="/tmp" # temp folder
+GIT_DIR="${HOME}/gitrepo"            # git folder
+TMP_DIR="/tmp"                       # temp folder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
@@ -45,10 +45,10 @@ FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
-    echo "NOT enough Space!!"
-    exit 1
+  echo "NOT enough Space!!"
+  exit 1
 else
-    echo "Enough Space!!"
+  echo "Enough Space!!"
 fi
 
 echo "Check for free space in $GIT_DIR ..."
@@ -56,10 +56,10 @@ FREESPACE=$(df "$GIT_DIR" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
-    echo "NOT enough Space!!"
-    exit 1
+  echo "NOT enough Space!!"
+  exit 1
 else
-    echo "Enough Space!!"
+  echo "Enough Space!!"
 fi
 
 echo "Check for free space in $TMP_DIR ..."
@@ -67,25 +67,25 @@ FREESPACE=$(df "$TMP_DIR" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
-    echo "NOT enough Space!!"
-    exit 1
+  echo "NOT enough Space!!"
+  exit 1
 else
-    echo "Enough Space!!"
+  echo "Enough Space!!"
 fi
 
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
-    cd $GIT_DIR/moodle37-plugins
-    git pull --recurse-submodules
-    git status
+  cd $GIT_DIR/moodle37-plugins
+  git pull --recurse-submodules
+  git status
 else
-    git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
-    if [[ $? -ne 0 ]] ; then
-      echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
-      exit 1
-    fi
-    cd $GIT_DIR/moodle37-plugins
-    git pull --recurse-submodules
+  git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
+  if [[ $? -ne 0 ]]; then
+    echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
+    exit 1
+  fi
+  cd $GIT_DIR/moodle37-plugins
+  git pull --recurse-submodules
 fi
 
 echo "Rsync moodle folder from moodle37-plugins repo..."
@@ -93,30 +93,29 @@ rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
 
 echo "Extract moodle-latest-37.tgz..."
 tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
-if [[ $? -ne 0 ]] ; then
-    echo "Error: tar xzf moodle-latest-37.tgz"
-    exit 1    
+if [[ $? -ne 0 ]]; then
+  echo "Error: tar xzf moodle-latest-37.tgz"
+  exit 1
 fi
-
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
-if [[ $? -ne 0 ]] ; then
-    echo "Error: Activating Moodle Maintenance Mode!"
-    rm -rf $TMP_DIR/moodle
-    exit 1
+if [[ $? -ne 0 ]]; then
+  echo "Error: Activating Moodle Maintenance Mode!"
+  rm -rf $TMP_DIR/moodle
+  exit 1
 fi
 
 sleep 30 # wait 30 secs
 
-echo "Kill all user sessions...";
+echo "Kill all user sessions..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
-echo "Moodle Maintenance Mode Activated!";
+echo "Moodle Maintenance Mode Activated!"
 
 echo "Rsync page to display under maintenance... "
-sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html  $MOODLE_DATA/climaintenance.html
+sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html $MOODLE_DATA/climaintenance.html
 
 echo "Moving old files ..."
 sudo mv $MOODLE_HOME $MOODLE_HOME.$DAY.tmpbkp
@@ -126,27 +125,27 @@ sudo mv $TMP_DIR/moodle $MOODLE_HOME
 
 echo "Copying config file ..."
 sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
-if [[ $? -ne 0 ]] ; then
-    echo "Error: Copying config file!"
-    exit 1
+if [[ $? -ne 0 ]]; then
+  echo "Error: Copying config file!"
+  exit 1
 fi
 
 echo "fixing file permissions..."
 sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
-sudo chown www-data:www-data -R $MOODLE_HOME 
+sudo chown www-data:www-data -R $MOODLE_HOME
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en 
-if [[ $? -ne 0 ]] ; then # Error in upgrade script
-    echo "Error in upgrade script..."
-    if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en
+if [[ $? -ne 0 ]]; then # Error in upgrade script
+  echo "Error in upgrade script..."
+  if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
     echo "restoring old files..."
-       sudo rm -rf $MOODLE_HOME # Remove new files
-       sudo mv $MOODLE_HOME.$DAY.tmpbkp $MOODLE_HOME # restore old files
-    fi
-    echo "Disable the maintenance mode..."
-    sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
-    exit 1    
+    sudo rm -rf $MOODLE_HOME                      # Remove new files
+    sudo mv $MOODLE_HOME.$DAY.tmpbkp $MOODLE_HOME # restore old files
+  fi
+  echo "Disable the maintenance mode..."
+  sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
+  exit 1
 fi
 
 echo "purge Moodle cache..."
@@ -161,4 +160,4 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
 
-exit 0 
+exit 0

@@ -23,8 +23,8 @@ sudo apt-get install -y python2 python3
 
 echo "Install php extensions..."
 sudo apt-get install -y php-curl php-zip php-intl php-xmlrpc php-soap php-xml php-gd php-ldap php-common php-cli php-mbstring php-mysql php-imagick php-pdo php-json php-readline php-tidy php-xsl
-# Cache related 
-sudo apt-get install -y php-redis php-memcached php-apcu php-opcache 
+# Cache related
+sudo apt-get install -y php-redis php-memcached php-apcu php-opcache
 
 echo "Restart apache server..."
 sudo service apache2 restart
