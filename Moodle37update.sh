@@ -35,9 +35,13 @@ if [ -d "$GIT_DIR" ]; then
   echo "Found git folder: ${GIT_DIR}"
 else
   ###  Control will jump here if $DIR does NOT exists ###
-  echo "Error: ${GIT_DIR} not found."
-  echo "Is ${GIT_DIR} your GIT directory?"
-  exit 1
+  echo "${GIT_DIR} not found!"
+  echo "Create GIT directory: ${GIT_DIR}"
+  sudo mkdir $GIT_DIR
+  if [[ $? -ne 0 ]]; then
+     echo "Error: Could not create GIT directory: ${GIT_DIR}"
+     exit 1
+  fi
 fi
 
 echo "Check for free space in $MOODLE_HOME ..."
