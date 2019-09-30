@@ -35,5 +35,5 @@ sudo apt-get install -y graphviz
 echo "To use spell-checking within the editor, you MUST have aspell 0.50 or later installed on your server..."
 sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-es aspell-fr aspell-en aspell-pt-br aspell-pt-pt aspell-doc spellutils
 
-echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
-sudo apt-get install -y maxima gcc gnuplot
+# echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
+# sudo apt-get install -y maxima gcc gnuplot
