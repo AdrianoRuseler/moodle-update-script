@@ -92,6 +92,12 @@ else
   git pull --recurse-submodules
 fi
 
+# pull all changes in the repo including changes in the submodules
+git pull --recurse-submodules
+
+# pull all changes for the submodules
+git submodule update --remote
+
 echo "update remote"
 echo "Check MD5 (128-bit) checksums, same version tested?"
 md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
