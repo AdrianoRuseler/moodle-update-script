@@ -92,11 +92,11 @@ else
   git pull --recurse-submodules
 fi
 
-# pull all changes in the repo including changes in the submodules
-git pull --recurse-submodules
-
 # pull all changes for the submodules
 git submodule update --remote
+
+# pull all changes in the repo including changes in the submodules
+git pull --recurse-submodules
 
 echo "update remote"
 echo "Check MD5 (128-bit) checksums, same version tested?"
