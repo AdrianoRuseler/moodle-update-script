@@ -4,6 +4,13 @@ https://www.vogella.com/tutorials/GitSubmodules/article.html
 
 ## Script for Moodle install
 ```bash
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37install.sh
+chmod u+x Moodle37install.sh
+
+./Moodle37install.sh
+ ```
+ 
+```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35install.sh
 chmod u+x Moodle35install.sh
 
