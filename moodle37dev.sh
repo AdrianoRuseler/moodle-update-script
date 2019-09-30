@@ -101,6 +101,7 @@ fi
 echo "OK!"
 
 cd $GIT_DIR/moodle37-plugins/
+rm moodle-latest-37.tgz.md5
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
 md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
 if [[ $? -ne 0 ]] ; then
