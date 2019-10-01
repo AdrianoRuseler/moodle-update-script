@@ -1,9 +1,9 @@
 #!/bin/bash
 
-MOODLE_HOME="/var/www/html/moodle37dev" # moodle core folder
-MOODLE_DATA="/var/www/moodle37devdata"  # moodle data folder
-GIT_DIR="${HOME}/gitrepo"               # git folder
-TMP_DIR="/tmp"                          # temp folder
+MOODLE_HOME="/var/www/html/moodle37dev"          # moodle core folder
+MOODLE_DATA="/var/www/moodle37devdata"           # moodle data folder
+GIT_DIR="/home/usuarios/pessoas/ruseler/gitrepo" # git folder
+TMP_DIR="/tmp"                                   # temp folder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
@@ -78,10 +78,11 @@ else
 fi
 
 cd $GIT_DIR
+rm output.log
 if [ -d "moodle37-plugins" ]; then
   cd $GIT_DIR/moodle37-plugins
-  git pull --recurse-submodules
-  git status 
+ # git pull --recurse-submodules
+ # git status
 else
   git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
@@ -89,7 +90,7 @@ else
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins
-  git pull --recurse-submodules
+ # git pull --recurse-submodules
 fi
 
 # pull all changes for the submodules
@@ -102,19 +103,19 @@ git status | tee -a $GIT_DIR/output.log
 
 cd $GIT_DIR/moodle37-plugins/
 rm moodle-latest-37.tgz.md5
-wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
+wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5 | tee -a $GIT_DIR/output.log
 md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5 | tee -a $GIT_DIR/output.log
-if [[ $? -ne 0 ]] ; then    
-    echo "Updated moodle-latest-37 version! Download new version..."
-    rm moodle-latest-37.tgz
-    wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz | tee -a $GIT_DIR/output.log
-    if [[ $? -ne 0 ]] ; then
-      exit 1
-    fi        
-    else
-    echo "Same moodle-latest-37 version!"
+if [[ $? -ne 0 ]]; then
+  echo "Updated moodle-latest-37 version! Download new version..." | tee -a $GIT_DIR/output.log
+  rm moodle-latest-37.tgz
+  wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz | tee -a $GIT_DIR/output.log
+  if [[ $? -ne 0 ]]; then
+    sudo /usr/bin/php $GIT_DIR/failmail.php
+    exit 1
+  fi
+else
+  echo "Same moodle-latest-37 version!"
 fi
-
 
 echo "Rsync moodle folder from moodle37-plugins repo..."
 rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
@@ -131,6 +132,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelat
 if [[ $? -ne 0 ]]; then
   echo "Error: Activating Moodle Maintenance Mode!"
   rm -rf $TMP_DIR/moodle
+  sudo /usr/bin/php $GIT_DIR/failmail.php
   exit 1
 fi
 
@@ -155,6 +157,7 @@ echo "Copying config file ..."
 sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
 if [[ $? -ne 0 ]]; then
   echo "Error: Copying config file!"
+  sudo /usr/bin/php $GIT_DIR/failmail.php
   exit 1
 fi
 
@@ -173,6 +176,8 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   fi
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable | tee -a $GIT_DIR/output.log
+
+  sudo /usr/bin/php $GIT_DIR/failmail.php
   exit 1
 fi
 
@@ -187,5 +192,8 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable |
 
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
+
+echo "Send success mail.. "
+sudo /usr/bin/php $GIT_DIR/successmail.php
 
 exit 0
