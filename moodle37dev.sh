@@ -2,8 +2,8 @@
 
 MOODLE_HOME="/var/www/html/moodle37dev" # moodle core folder
 MOODLE_DATA="/var/www/moodle37devdata"  # moodle data folder
-GIT_DIR="${HOME}/gitrepo"            # git folder
-TMP_DIR="/tmp"                       # temp folder
+GIT_DIR="${HOME}/gitrepo"               # git folder
+TMP_DIR="/tmp"                          # temp folder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
@@ -39,8 +39,8 @@ else
   echo "Create GIT directory: ${GIT_DIR}"
   sudo mkdir $GIT_DIR
   if [[ $? -ne 0 ]]; then
-     echo "Error: Could not create GIT directory: ${GIT_DIR}"
-     exit 1
+    echo "Error: Could not create GIT directory: ${GIT_DIR}"
+    exit 1
   fi
 fi
 
@@ -101,8 +101,8 @@ git pull --recurse-submodules
 echo "update remote"
 echo "Check MD5 (128-bit) checksums, same version tested?"
 md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1    
+if [[ $? -ne 0 ]]; then
+  exit 1
 fi
 echo "OK!"
 
@@ -110,17 +110,17 @@ cd $GIT_DIR/moodle37-plugins/
 rm moodle-latest-37.tgz.md5
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
 md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    echo "Same moodle-latest-37 version!"
-    else
-    echo "Updated moodle-latest-37 version! Download new version..."
-    rm moodle-latest-37.tgz
-    wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
-    if [[ $? -ne 0 ]] ; then
-      exit 1
-    fi    
+if [[ $? -ne 0 ]]; then
+  echo "Same moodle-latest-37 version!"
+else
+  echo "Updated moodle-latest-37 version! Download new version..."
+  rm moodle-latest-37.tgz
+  wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz
+  if [[ $? -ne 0 ]]; then
+    exit 1
+  fi
+  echo "OK!"
 fi
-echo "OK!"
 
 
 echo "Rsync moodle folder from moodle37-plugins repo..."
