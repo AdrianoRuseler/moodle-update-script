@@ -98,14 +98,6 @@ git submodule update --remote
 # pull all changes in the repo including changes in the submodules
 git pull --recurse-submodules
 
-echo "update remote"
-echo "Check MD5 (128-bit) checksums, same version tested?"
-md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
-if [[ $? -ne 0 ]] ; then
-    exit 1    
-fi
-echo "OK!"
-
 cd $GIT_DIR/moodle37-plugins/
 rm moodle-latest-37.tgz.md5
 wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
