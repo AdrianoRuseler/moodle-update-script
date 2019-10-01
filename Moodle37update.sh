@@ -39,8 +39,8 @@ else
   echo "Create GIT directory: ${GIT_DIR}"
   sudo mkdir $GIT_DIR
   if [[ $? -ne 0 ]]; then
-     echo "Error: Could not create GIT directory: ${GIT_DIR}"
-     exit 1
+    echo "Error: Could not create GIT directory: ${GIT_DIR}"
+    exit 1
   fi
 fi
 
@@ -79,7 +79,10 @@ fi
 
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
+  echo "Found moodle37-plugins repository..."
   cd $GIT_DIR/moodle37-plugins
+  git clean -ffdx # This gets you in same state as fresh clone.
+  git submodule update --init
   git pull --recurse-submodules
   git status
 else
@@ -89,7 +92,7 @@ else
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins
-  git pull --recurse-submodules
+  git status
 fi
 
 echo "Rsync moodle folder from moodle37-plugins repo..."
