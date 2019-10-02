@@ -7,6 +7,12 @@ TMP_DIR="/tmp"                       # temp folder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
+echo "##--------------------- Moodle Update --------------------------##"
+echo "System info:"
+uname -a # Gets system info
+date # Gets date
+echo "##--------------------------------------------------------------##"
+
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
