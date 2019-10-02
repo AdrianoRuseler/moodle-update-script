@@ -77,6 +77,12 @@ else
   echo "Enough Space!!"
 fi
 
+echo "Update and Upgrade System..."
+sudo apt-get update && sudo apt-get upgrade -y
+
+echo "Autoremove and Autoclean System..."
+sudo apt-get autoremove -y && sudo apt-get autoclean -y
+
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
   echo "Found moodle37-plugins repository..."
