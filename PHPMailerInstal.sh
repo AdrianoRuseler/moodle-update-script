@@ -8,4 +8,8 @@ php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/local/bin/composer
 sudo chmod +x /usr/local/bin/composer
 
-composer
+composer -V
+
+mkdir PHPMailer
+cd PHPMailer
+composer require phpmailer/phpmailer 
