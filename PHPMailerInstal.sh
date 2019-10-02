@@ -15,4 +15,4 @@ cd PHPMailer
 composer require phpmailer/phpmailer 
 
 # Exemplo:
-# https://github.com/PHPMailer/PHPMailer/blob/master/examples/gmail_xoauth.phps
+# https://github.com/PHPMailer/PHPMailer/blob/master/examples
