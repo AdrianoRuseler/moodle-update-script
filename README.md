@@ -2,6 +2,9 @@
 https://docs.moodle.org/37/en/Administration_via_command_line
 https://www.vogella.com/tutorials/GitSubmodules/article.html
 
+# todo
+- https://raymii.org/s/tutorials/Silent-automatic-apt-get-upgrade.html
+
 ## Script for Moodle install
 ```bash
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37install.sh
