@@ -1,7 +1,9 @@
 #!/bin/bash
 
 echo "Update and Upgrade System..."
-sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get update 
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
+
 
 echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
