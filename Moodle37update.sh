@@ -24,6 +24,7 @@ else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_HOME} not found. Can not continue, script for Update only!"
   echo "Is ${MOODLE_HOME} your Moodle Home directory?"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -35,6 +36,7 @@ else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
   echo "Is ${MOODLE_DATA} your Moodle Data directory?"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -49,6 +51,7 @@ else
   sudo mkdir $GIT_DIR
   if [[ $? -ne 0 ]]; then
     echo "Error: Could not create GIT directory: ${GIT_DIR}"
+    echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
 fi
@@ -62,6 +65,7 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
@@ -73,6 +77,7 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
@@ -84,6 +89,7 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
@@ -113,6 +119,7 @@ else
   git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
+    echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins  
@@ -128,6 +135,7 @@ echo "Extract moodle-latest-37.tgz..."
 tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]]; then
   echo "Error: tar xzf moodle-latest-37.tgz"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -136,6 +144,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelat
 if [[ $? -ne 0 ]]; then
   echo "Error: Activating Moodle Maintenance Mode!"
   rm -rf $TMP_DIR/moodle
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -161,6 +170,7 @@ echo "Copying config file ..."
 sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
 if [[ $? -ne 0 ]]; then
   echo "Error: Copying config file!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
