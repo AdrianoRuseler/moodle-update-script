@@ -4,6 +4,7 @@ MOODLE_HOME="/var/www/html/moodle37dev"          # moodle core folder
 MOODLE_DATA="/var/www/moodle37devdata"           # moodle data folder
 GIT_DIR="/home/usuarios/pessoas/ruseler/gitrepo" # git folder
 TMP_DIR="/tmp"                                   # temp folder
+SYSUPDATE=1                                      # Perform system update?
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
