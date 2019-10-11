@@ -109,7 +109,6 @@ fi
 echo ""
 echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
-rm output.log
 if [ -d "moodle37-plugins" ]; then
   cd $GIT_DIR/moodle37-plugins
   git pull
