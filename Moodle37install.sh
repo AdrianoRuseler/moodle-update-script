@@ -195,8 +195,8 @@ sudo apt-get install -y python2 python3
 echo "To be able to generate graphics from DOT files, you must have installed the dot executable..."
 sudo apt-get install -y graphviz
 
-echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
-sudo apt-get install -y maxima gcc gnuplot
+# echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
+# sudo apt-get install -y maxima gcc gnuplot
 
 # echo "Install Moodle Core..."
 # sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/install.php
