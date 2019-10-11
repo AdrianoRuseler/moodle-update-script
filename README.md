@@ -11,7 +11,13 @@ chmod u+x Moodle37update.sh
 ./Moodle37update.sh | tee Moodle37update.log
 ```
 
- 
+```bash
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/moodle37dev.sh -O Moodle37dev.sh
+chmod u+x Moodle37dev.sh
+
+./Moodle37dev.sh | tee -a Moodle37dev.log
+```
+
 ## 
 ```php
 // Use the following flag to completely disable the installation of plugins
