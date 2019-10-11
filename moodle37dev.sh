@@ -106,8 +106,8 @@ cd $GIT_DIR
 rm output.log
 if [ -d "moodle37-plugins" ]; then
   cd $GIT_DIR/moodle37-plugins
- # git pull --recurse-submodules
- # git status
+  git pull
+  git pull --recurse-submodules
 else
   git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
@@ -116,8 +116,10 @@ else
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins
- # git pull --recurse-submodules
 fi
+
+echo "##------------------------- GIT UPDATE ---------------------------##"
+git status
 
 # pull all changes for the submodules
 git submodule update --remote
