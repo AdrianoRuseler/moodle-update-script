@@ -4,6 +4,8 @@ MOODLE_HOME="/var/www/html/moodle37" # moodle core folder
 MOODLE_DATA="/var/www/moodle37data"  # moodle data folder
 GIT_DIR="${HOME}/gitrepo"            # git folder
 TMP_DIR="/tmp"                       # temp folder
+SYSUPDATE=1                          # Perform system update?
+
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
@@ -83,12 +85,15 @@ else
   echo "Enough Space!!"
 fi
 
+if $SYSUPDATE
 echo "Update and Upgrade System..."
 sudo apt-get update 
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
 
 echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
+fi
+
 
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
