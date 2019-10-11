@@ -130,10 +130,15 @@ echo "##------------------------- GIT UPDATE ---------------------------##"
 # pull all changes for the submodules
 git submodule update --remote
 
+git pull
+
 # pull all changes in the repo including changes in the submodules
 git pull --recurse-submodules
 
 git status 
+
+echo ""
+echo "##--------------------- CHECK MOODLE RELEASE ----------------------##"
 
 cd $GIT_DIR/moodle37-plugins/
 rm moodle-latest-37.tgz.md5
