@@ -7,7 +7,11 @@ TMP_DIR="/tmp"                                   # temp folder
 SYSUPGRADE=1                                      # Perform system update?
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
+echo "##--------------------- SYSTEM INFO --------------------------##"
+uname -a # Gets system info
+date # Gets date
 
+echo "##----------------------- FOLDER CHECK ------------------------##"
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
   ### Take action if $MOODLE_HOME exists ###
@@ -16,6 +20,7 @@ else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_HOME} not found. Can not continue, script for Update only!"
   echo "Is ${MOODLE_HOME} your Moodle Home directory?"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -27,6 +32,7 @@ else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${MOODLE_DATA} not found. Can not continue, script for Update only!"
   echo "Is ${MOODLE_DATA} your Moodle Data directory?"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -41,9 +47,12 @@ else
   sudo mkdir $GIT_DIR
   if [[ $? -ne 0 ]]; then
     echo "Error: Could not create GIT directory: ${GIT_DIR}"
+    echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
 fi
+
+echo "##----------------------- SPACE CHECK ------------------------##"
 
 echo "Check for free space in $MOODLE_HOME ..."
 FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
@@ -51,6 +60,7 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
@@ -62,6 +72,7 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
@@ -73,11 +84,24 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 else
   echo "Enough Space!!"
 fi
 
+if [[ $SYSUPGRADE -ne 0 ]]; then
+echo "##----------------------- SYSTEM UPGRADE ------------------------##"
+echo "Update and Upgrade System..."
+sudo apt-get update 
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
+
+echo "Autoremove and Autoclean System..."
+sudo apt-get autoremove -y && sudo apt-get autoclean -y
+fi
+
+
+echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
 rm output.log
 if [ -d "moodle37-plugins" ]; then
@@ -88,6 +112,7 @@ else
   git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
+    echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
   cd $GIT_DIR/moodle37-plugins
@@ -118,6 +143,8 @@ else
   echo "Same moodle-latest-37 version!"
 fi
 
+echo "##------------------------ MOVING FILES -------------------------##"
+
 echo "Rsync moodle folder from moodle37-plugins repo..."
 rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
 
@@ -125,8 +152,11 @@ echo "Extract moodle-latest-37.tgz..."
 tar xzf $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]]; then
   echo "Error: tar xzf moodle-latest-37.tgz"
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
+
+echo "##------------------- MAINTENANCE MODE -------------------------##"
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
@@ -134,6 +164,7 @@ if [[ $? -ne 0 ]]; then
   echo "Error: Activating Moodle Maintenance Mode!"
   rm -rf $TMP_DIR/moodle
   sudo /usr/bin/php $GIT_DIR/failmail.php
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -144,6 +175,8 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
+
+echo "##----------------------- MOODLE UPDATE -------------------------##"
 
 echo "Rsync page to display under maintenance... "
 sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html $MOODLE_DATA/climaintenance.html
@@ -159,6 +192,7 @@ sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
 if [[ $? -ne 0 ]]; then
   echo "Error: Copying config file!"
   sudo /usr/bin/php $GIT_DIR/failmail.php
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -179,6 +213,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
   sudo /usr/bin/php $GIT_DIR/failmail.php
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -197,4 +232,5 @@ sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
 echo "Send success mail.. "
 sudo /usr/bin/php $GIT_DIR/successmail.php
 
+echo "##------------------------ SUCCESS -------------------------##"
 exit 0
