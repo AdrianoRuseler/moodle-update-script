@@ -100,7 +100,7 @@ echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 fi
 
-echo "##------------------------ GIT -------------------------##"
+echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
   echo "Found moodle37-plugins repository..."
