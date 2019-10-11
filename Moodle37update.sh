@@ -90,7 +90,7 @@ else
 fi
 
 
-if $SYSUPGRADE
+if [ $SYSUPGRADE ]; then
 echo "##----------------------- SYSTEM UPGRADE ------------------------##"
 echo "Update and Upgrade System..."
 sudo apt-get update 
