@@ -10,23 +10,7 @@ chmod u+x Moodle37update.sh
 
 ./Moodle37update.sh | tee Moodle37update.log
 ```
-```bash
- wget -O - https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh | sudo bash
- ```
- 
- ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35update.sh -O Moodle35update.sh
-chmod u+x Moodle35update.sh
 
-./Moodle35update.sh | tee Moodle35update.log
-```
- 
-  ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle35updategit.sh -O Moodle35updategit.sh
-chmod u+x Moodle35updategit.sh
-
-./Moodle35updategit.sh | tee Moodle35updategit.log
-```
  
 ## 
 ```php
