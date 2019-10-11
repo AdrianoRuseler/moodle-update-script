@@ -126,12 +126,10 @@ git status
 
 echo ""
 echo "##------------------------- GIT UPDATE ---------------------------##"
-
+# pull all changes
+git pull
 # pull all changes for the submodules
 git submodule update --remote
-
-git pull
-
 # pull all changes in the repo including changes in the submodules
 git pull --recurse-submodules
 
@@ -150,6 +148,7 @@ if [[ $? -ne 0 ]]; then
   wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz 
   if [[ $? -ne 0 ]]; then
     sudo /usr/bin/php $GIT_DIR/failmail.php
+    echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
 else
