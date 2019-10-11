@@ -10,7 +10,6 @@ SYSUPGRADE=1                         # Perform system upgrade?
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
 echo "##--------------------- SYSTEM INFO --------------------------##"
-echo "System info:"
 uname -a # Gets system info
 date # Gets date
 
@@ -138,6 +137,8 @@ if [[ $? -ne 0 ]]; then
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
+
+echo "##------------------- MAINTENANCE MODE -------------------------##"
 
 # echo "Activating Moodle Maintenance Mode in...";
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
