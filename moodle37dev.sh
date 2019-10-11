@@ -94,21 +94,21 @@ else
 fi
 
 # pull all changes for the submodules
-git submodule update --remote | tee -a $GIT_DIR/output.log
+git submodule update --remote
 
 # pull all changes in the repo including changes in the submodules
-git pull --recurse-submodules | tee -a $GIT_DIR/output.log
+git pull --recurse-submodules
 
-git status | tee -a $GIT_DIR/output.log
+git status 
 
 cd $GIT_DIR/moodle37-plugins/
 rm moodle-latest-37.tgz.md5
-wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5 | tee -a $GIT_DIR/output.log
-md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5 | tee -a $GIT_DIR/output.log
+wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz.md5 -O moodle-latest-37.tgz.md5
+md5sum -c $GIT_DIR/moodle37-plugins/moodle-latest-37.tgz.md5
 if [[ $? -ne 0 ]]; then
-  echo "Updated moodle-latest-37 version! Download new version..." | tee -a $GIT_DIR/output.log
+  echo "Updated moodle-latest-37 version! Download new version..." 
   rm moodle-latest-37.tgz
-  wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz | tee -a $GIT_DIR/output.log
+  wget https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz -O moodle-latest-37.tgz 
   if [[ $? -ne 0 ]]; then
     sudo /usr/bin/php $GIT_DIR/failmail.php
     exit 1
@@ -128,7 +128,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # echo "Activating Moodle Maintenance Mode in...";
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1 | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --enablelater=1
 if [[ $? -ne 0 ]]; then
   echo "Error: Activating Moodle Maintenance Mode!"
   rm -rf $TMP_DIR/moodle
@@ -139,7 +139,7 @@ fi
 sleep 30 # wait 30 secs
 
 echo "Kill all user sessions..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
@@ -166,7 +166,7 @@ sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
@@ -175,20 +175,20 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
     sudo mv $MOODLE_HOME.$DAY.tmpbkp $MOODLE_HOME # restore old files
   fi
   echo "Disable the maintenance mode..."
-  sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable | tee -a $GIT_DIR/output.log
+  sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
   sudo /usr/bin/php $GIT_DIR/failmail.php
   exit 1
 fi
 
 echo "purge Moodle cache..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
 
 echo "fix courses..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
 
 echo "disable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable | tee -a $GIT_DIR/output.log
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
