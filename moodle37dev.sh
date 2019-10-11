@@ -128,6 +128,7 @@ echo ""
 echo "##------------------------- GIT UPDATE ---------------------------##"
 cd $GIT_DIR/moodle37-plugins
 
+sudo git submodule init
 # if there are nested submodules:
 git submodule update --init --recursive
 # pull all changes for the submodules
