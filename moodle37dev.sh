@@ -126,8 +126,8 @@ git status
 
 echo ""
 echo "##------------------------- GIT UPDATE ---------------------------##"
-# pull all changes
-git pull
+# if there are nested submodules:
+git submodule update --init --recursive
 # pull all changes for the submodules
 git submodule update --remote
 # pull all changes in the repo including changes in the submodules
