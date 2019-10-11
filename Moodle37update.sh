@@ -4,7 +4,7 @@ MOODLE_HOME="/var/www/html/moodle37" # moodle core folder
 MOODLE_DATA="/var/www/moodle37data"  # moodle data folder
 GIT_DIR="${HOME}/gitrepo"            # git folder
 TMP_DIR="/tmp"                       # temp folder
-SYSUPDATE=1                          # Perform system update?
+SYSUPGRADE=1                         # Perform system upgrade?
 
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
@@ -13,7 +13,8 @@ echo "##--------------------- Moodle Update --------------------------##"
 echo "System info:"
 uname -a # Gets system info
 date # Gets date
-echo "##--------------------------------------------------------------##"
+
+echo "##----------------------- FOLDER CHECK ------------------------##"
 
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
@@ -52,6 +53,9 @@ else
   fi
 fi
 
+echo "##----------------------- SPACE CHECK ------------------------##"
+
+
 echo "Check for free space in $MOODLE_HOME ..."
 FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
@@ -85,7 +89,9 @@ else
   echo "Enough Space!!"
 fi
 
-if $SYSUPDATE
+
+if $SYSUPGRADE
+echo "##----------------------- SYSTEM UPGRADE ------------------------##"
 echo "Update and Upgrade System..."
 sudo apt-get update 
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
