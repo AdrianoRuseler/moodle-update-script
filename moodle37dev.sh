@@ -123,10 +123,10 @@ else
   fi
   cd $GIT_DIR/moodle37-plugins
 fi
+git status
 
 echo ""
 echo "##------------------------- GIT UPDATE ---------------------------##"
-git status
 
 # pull all changes for the submodules
 git submodule update --remote
