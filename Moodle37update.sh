@@ -94,25 +94,27 @@ echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 fi
 
-
+echo "##------------------------ GIT -------------------------##"
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
   echo "Found moodle37-plugins repository..."
   cd $GIT_DIR/moodle37-plugins
   git clean -ffdx # This gets you in same state as fresh clone.
   git submodule update --init
+  git pull
   git pull --recurse-submodules
-  git status
 else
   git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle37-plugins.git"
     exit 1
   fi
-  cd $GIT_DIR/moodle37-plugins
-  git status
+  cd $GIT_DIR/moodle37-plugins  
 fi
 
+git status
+
+echo "##------------------------ MOVING FILES -------------------------##"
 echo "Rsync moodle folder from moodle37-plugins repo..."
 rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
 
@@ -139,6 +141,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
 
+echo "##----------------------- MOODLE UPDATE -------------------------##"
 echo "Rsync page to display under maintenance... "
 sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html $MOODLE_DATA/climaintenance.html
 
@@ -170,6 +173,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   fi
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
+  echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
@@ -185,4 +189,5 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
 
+echo "##------------------------ SUCCESS -------------------------##"
 exit 0
