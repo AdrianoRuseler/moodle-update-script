@@ -9,7 +9,7 @@ SYSUPGRADE=1                         # Perform system upgrade?
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
-echo "##--------------------- Moodle Update --------------------------##"
+echo "##--------------------- SYSTEM INFO --------------------------##"
 echo "System info:"
 uname -a # Gets system info
 date # Gets date
