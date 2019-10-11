@@ -9,8 +9,12 @@ SYSUPGRADE=1                                      # Perform system update?
 REQSPACE=524288 # Required free space: 512 Mb in kB
 echo "##--------------------- SYSTEM INFO --------------------------##"
 uname -a # Gets system info
+echo ""
+df -H # Gets disk usage info
+echo ""
 date # Gets date
 
+echo ""
 echo "##----------------------- FOLDER CHECK ------------------------##"
 echo "Check if Moodle Home folder exists..."
 if [ -d "$MOODLE_HOME" ]; then
@@ -52,6 +56,7 @@ else
   fi
 fi
 
+echo ""
 echo "##----------------------- SPACE CHECK ------------------------##"
 
 echo "Check for free space in $MOODLE_HOME ..."
@@ -91,6 +96,7 @@ else
 fi
 
 if [[ $SYSUPGRADE -ne 0 ]]; then
+echo ""
 echo "##----------------------- SYSTEM UPGRADE ------------------------##"
 echo "Update and Upgrade System..."
 sudo apt-get update 
@@ -100,7 +106,7 @@ echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 fi
 
-
+echo ""
 echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
 rm output.log
@@ -118,6 +124,7 @@ else
   cd $GIT_DIR/moodle37-plugins
 fi
 
+echo ""
 echo "##------------------------- GIT UPDATE ---------------------------##"
 git status
 
@@ -145,6 +152,7 @@ else
   echo "Same moodle-latest-37 version!"
 fi
 
+echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
 
 echo "Rsync moodle folder from moodle37-plugins repo..."
@@ -158,6 +166,7 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+echo ""
 echo "##------------------- MAINTENANCE MODE -------------------------##"
 
 # echo "Activating Moodle Maintenance Mode in...";
@@ -178,6 +187,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
 
+echo ""
 echo "##----------------------- MOODLE UPDATE -------------------------##"
 
 echo "Rsync page to display under maintenance... "
@@ -234,5 +244,6 @@ sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
 echo "Send success mail.. "
 sudo /usr/bin/php $GIT_DIR/successmail.php
 
+echo ""
 echo "##------------------------ SUCCESS -------------------------##"
 exit 0
