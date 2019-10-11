@@ -8,11 +8,12 @@ TMP_DIR="/tmp"       # temp folder
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M) # gets date
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
-echo "##--------------------- Wiki Update --------------------------##"
+echo "##--------------------- SYS INFO --------------------------##"
 echo "System info:"
 uname -a # Gets system info
 date # Gets date
-echo "##------------------------------------------------------------##"
+
+echo "##--------------------- FOLDER CHECK -----------------------##"
 
 echo "Check if Wiki Home folder exists..."
 if [ -d "$WIKI_HOME" ]; then
@@ -22,8 +23,11 @@ else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${WIKI_HOME} not found. Can not continue, script for Update only!"
   echo "Is ${WIKI_HOME} your Wiki Home directory?"
+  echo "##---------------------  FAIL  ---------------------------##"
   exit 1
 fi
+
+echo "##--------------------- SPACE CHECK -----------------------##"
 
 echo "Check for free space in $WIKI_HOME ..."
 FREESPACE=$(df "$WIKI_HOME" | awk 'NR==2 { print $4 }')
@@ -31,16 +35,19 @@ echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
   echo "NOT enough Space!!"
+  echo "##---------------------  FAIL  ---------------------------##"
   exit 1
 else
   echo "Enough Space!!"
 fi
 
+echo "##------------------ MEDIAWIKI DOWNLOAD ------------------##"
 
 cd $TMP_DIR
 wget $MEDIAWIKI_URL
 if [[ $? -ne 0 ]]; then
   echo "Error: wget ${MEDIAWIKI_URL}"
+  echo "##---------------------  FAIL  ---------------------------##"
   exit 1
 fi
 
@@ -49,6 +56,7 @@ echo "Extract ${MEDIAWIKI_FILE}..."
 tar xf $MEDIAWIKI_FILE
 if [[ $? -ne 0 ]]; then
   echo "Error: tar xf ${MEDIAWIKI_FILE}"
+  echo "##---------------------  FAIL  ---------------------------##"
   exit 1
 fi
 
@@ -88,13 +96,14 @@ if [[ $? -ne 0 ]]; then
     sudo rm -rf $WIKI_HOME                      # Remove new files
     sudo mv $WIKI_HOME.$DAY.tmpbkp $WIKI_HOME # restore old files
   fi
+  echo "##---------------------  FAIL  ---------------------------##"
   exit 1
 fi
 
 echo "Removing temporary backup files..."
 sudo rm -rf $WIKI_HOME.$DAY.tmpbkp 
 sudo rm $TMP_DIR/$MEDIAWIKI_FILE
-echo "##---------------------  Success  ---------------------------##"
+echo "##---------------------  SUCCESS  ---------------------------##"
 exit 0
 
 
