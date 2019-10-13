@@ -16,6 +16,7 @@ df -H # Gets disk usage info
 echo ""
 date # Gets date
 
+echo ""
 echo "##----------------------- FOLDER CHECK ------------------------##"
 
 echo "Check if Moodle Home folder exists..."
@@ -58,6 +59,7 @@ else
   fi
 fi
 
+echo ""
 echo "##----------------------- SPACE CHECK ------------------------##"
 
 
@@ -99,6 +101,7 @@ fi
 
 
 if [[ $SYSUPGRADE -ne 0 ]]; then
+echo ""
 echo "##----------------------- SYSTEM UPGRADE ------------------------##"
 echo "Update and Upgrade System..."
 sudo apt-get update 
@@ -129,6 +132,7 @@ fi
 
 git status
 
+echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
 echo "Rsync moodle folder from moodle37-plugins repo..."
 rsync -a $GIT_DIR/moodle37-plugins/moodle/ $TMP_DIR/moodle
@@ -160,6 +164,7 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
 
+echo ""
 echo "##----------------------- MOODLE UPDATE -------------------------##"
 echo "Rsync page to display under maintenance... "
 sudo rsync -a $GIT_DIR/moodle37-plugins/climaintenance.html $MOODLE_DATA/climaintenance.html
@@ -209,5 +214,6 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
 
+echo ""
 echo "##------------------------ SUCCESS -------------------------##"
 exit 0
