@@ -11,6 +11,9 @@ REQSPACE=524288 # Required free space: 512 Mb in kB
 
 echo "##--------------------- SYSTEM INFO --------------------------##"
 uname -a # Gets system info
+echo ""
+df -H # Gets disk usage info
+echo ""
 date # Gets date
 
 echo "##----------------------- FOLDER CHECK ------------------------##"
