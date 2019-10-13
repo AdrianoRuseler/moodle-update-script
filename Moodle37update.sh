@@ -6,7 +6,6 @@ GIT_DIR="${HOME}/gitrepo"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
 
-
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
 echo "##--------------------- SYSTEM INFO --------------------------##"
