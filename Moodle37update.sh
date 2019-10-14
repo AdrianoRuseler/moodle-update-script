@@ -5,6 +5,7 @@ MOODLE_DATA="/var/www/moodle37data"  # moodle data folder
 GIT_DIR="${HOME}/gitrepo"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
+MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 
@@ -110,6 +111,7 @@ echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 fi
 
+echo ""
 echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
 if [ -d "moodle37-plugins" ]; then
@@ -144,6 +146,30 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+if [[ $MDLUPGRADE -e 0 ]]; then
+echo ""
+echo "##------------------- MOODLE COPY MODE -------------------------##"
+
+echo "Moving old files ..."
+sudo mv $MOODLE_HOME $MOODLE_HOME.$DAY.tmpbkp
+
+echo "moving new files..."
+sudo mv $TMP_DIR/moodle $MOODLE_HOME
+
+echo "Copying config file ..."
+sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
+if [[ $? -ne 0 ]]; then
+  echo "##------------------------ FAIL -------------------------##"
+  exit 1
+fi
+
+echo ""
+echo "##------------------------ SUCCESS -------------------------##"
+exit 0
+
+fi
+
+echo ""
 echo "##------------------- MAINTENANCE MODE -------------------------##"
 
 # echo "Activating Moodle Maintenance Mode in...";
