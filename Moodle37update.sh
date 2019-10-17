@@ -146,7 +146,7 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-if [[ $MDLUPGRADE -e 0 ]]; then
+if [[ $MDLUPGRADE -eq 0 ]]; then
 echo ""
 echo "##------------------- MOODLE COPY MODE -------------------------##"
 
