@@ -8,6 +8,7 @@ SYSUPGRADE=1                         # Perform system upgrade?
 MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
+DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
 echo "##--------------------- SYSTEM INFO --------------------------##"
 uname -a # Gets system info
