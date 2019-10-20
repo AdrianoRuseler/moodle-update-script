@@ -163,6 +163,10 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+echo "fixing file permissions..."
+sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
+sudo chown www-data:www-data -R $MOODLE_HOME
+
 echo ""
 echo "##------------------------ SUCCESS -------------------------##"
 exit 0
