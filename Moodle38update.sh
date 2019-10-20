@@ -218,7 +218,7 @@ sudo chmod 740 $MOODLE_HOME/admin/cli/cron.php
 sudo chown www-data:www-data -R $MOODLE_HOME
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --lang=en
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/upgrade.php --non-interactive --allow-unstable
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$MOODLE_HOME.$DAY.tmpbkp" ]; then # If exists
