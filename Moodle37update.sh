@@ -134,6 +134,8 @@ fi
 
 git status
 
+sudo du -h --max-depth=1 $GIT_DIR
+
 echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
 echo "Rsync moodle folder from moodle37-plugins repo..."
