@@ -139,10 +139,10 @@ echo "##------------------------ MOVING FILES -------------------------##"
 echo "Rsync moodle folder from moodle38-plugins repo..."
 rsync -a $GIT_DIR/moodle38-plugins/moodle/ $TMP_DIR/moodle
 
-echo "Extract moodle-latest.tgz..."
-tar xzf $GIT_DIR/moodle38-plugins/moodle-latest.tgz -C $TMP_DIR
+echo "Extract moodle-latest-38.tgz..."
+tar xzf $GIT_DIR/moodle38-plugins/moodle-latest-38.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]]; then
-  echo "Error: tar xzf moodle-latest.tgz"
+  echo "Error: tar xzf moodle-latest-38.tgz"
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
