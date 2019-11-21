@@ -2,7 +2,7 @@
 
 MOODLE_HOME="/var/www/html/moodle38" # moodle core folder
 MOODLE_DATA="/var/www/moodle38data"  # moodle data folder
-GIT_DIR="${HOME}/gitrepo"            # git folder
+GIT_DIR="${HOME}/gitrepo38"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
 MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
