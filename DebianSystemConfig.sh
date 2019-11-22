@@ -21,7 +21,7 @@ echo "Install some sys utils..."
 sudo apt-get install -y git p7zip-full
 
 echo "Install python..."
-sudo apt-get install -y python2 python3
+sudo apt-get install -y python3
 
 echo "Install php extensions..."
 sudo apt-get install -y php-curl php-zip php-intl php-xmlrpc php-soap php-xml php-gd php-ldap php-common php-cli php-mbstring php-mysql php-imagick php-pdo php-json php-readline php-tidy php-xsl
