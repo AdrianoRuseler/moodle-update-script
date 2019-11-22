@@ -160,8 +160,9 @@ sudo mv $TMP_DIR/moodle $MOODLE_HOME
 echo "Copying config file ..."
 sudo cp $MOODLE_HOME.$DAY.tmpbkp/config.php $MOODLE_HOME
 if [[ $? -ne 0 ]]; then
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
+  echo "##------------------ config.php NOT FOUND!! ---------------------##"
+else
+  echo "##------------------  config.php FOUND!!  -  --------------------##"
 fi
 
 echo "fixing file permissions..."
