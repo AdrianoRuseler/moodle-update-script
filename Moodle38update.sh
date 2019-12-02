@@ -6,6 +6,8 @@ GIT_DIR="${HOME}/gitrepo38"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
 MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
+REPOREMOVE=1                         # Remove git repo? 
+
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
@@ -48,6 +50,11 @@ echo "Check if git folder exists..."
 if [ -d "$GIT_DIR" ]; then
   ### Take action if $GIT_DIR exists ###
   echo "Found git folder: ${GIT_DIR}"
+  if [[ $REPOREMOVE -ne 0 ]]; then
+     echo "Remove git repo!"
+     sudo rm -rf $GIT_DIR
+     sudo mkdir $GIT_DIR
+  fi
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "${GIT_DIR} not found!"
@@ -243,6 +250,14 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
 
 echo "Removing temporary backup files..."
 sudo rm -rf $MOODLE_HOME.$DAY.tmpbkp
+
+if [[ $REPOREMOVE -ne 0 ]]; then
+     echo ""
+     echo "##------------------------ REMOVE GIT REPO -------------------------##"
+     echo "Remove git repo!"
+     sudo rm -rf $GIT_DIR
+     sudo mkdir $GIT_DIR
+fi  
 
 echo ""
 echo "##------------------------ SUCCESS -------------------------##"
