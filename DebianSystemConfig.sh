@@ -40,5 +40,8 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-
 echo "Install TeX..."
 sudo apt-get install -y texlive imagemagick
 
+echo "Install Universal Office Converter..."
+sudo apt-get install -y unoconv
+
 # echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 # sudo apt-get install -y maxima gcc gnuplot
