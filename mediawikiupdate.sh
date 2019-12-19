@@ -1,9 +1,9 @@
 #!/bin/bash
 
 WIKI_HOME="/var/www/html/openwiki" # wiki core folder
-MEDIAWIKI_URL="https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.1.tar.gz"
-MEDIAWIKI_FOLDER="mediawiki-1.33.1"
-MEDIAWIKI_FILE="mediawiki-1.33.1.tar.gz"
+MEDIAWIKI_URL="https://releases.wikimedia.org/mediawiki/1.34/mediawiki-1.34.0.tar.gz"
+MEDIAWIKI_FOLDER="mediawiki-1.34.0"
+MEDIAWIKI_FILE="mediawiki-1.34.0.tar.gz"
 TMP_DIR="/tmp"       # temp folder
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M) # gets date
 REQSPACE=524288 # Required free space: 512 Mb in kB
