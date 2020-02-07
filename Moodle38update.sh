@@ -174,10 +174,10 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-
+ls -l
 
 echo "Extract moodle-latest-38.tgz..."
-tar xzf $GIT_DIR/moodle38-plugins/moodle-latest-38.tgz -C $TMP_DIR
+tar xzf moodle-latest-38.tgz -C $TMP_DIR
 if [[ $? -ne 0 ]]; then
   echo "Error: tar xzf moodle-latest-38.tgz"
   echo "##------------------------ FAIL -------------------------##"
