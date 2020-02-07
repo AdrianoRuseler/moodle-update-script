@@ -129,6 +129,7 @@ if [ -d "moodle38-plugins" ]; then
   git submodule update --init
   git pull
   git pull --recurse-submodules
+  git submodule update --remote # Plugins update
 else
   git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git
   if [[ $? -ne 0 ]]; then
@@ -143,8 +144,37 @@ git status
 
 echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
-echo "Rsync moodle folder from moodle38-plugins repo..."
+echo "Rsync moodle folder from moodle38-plugins repo to tmp dir..."
 rsync -a $GIT_DIR/moodle38-plugins/moodle/ $TMP_DIR/moodle
+
+
+echo ""
+echo "##--------------------- DOWNLOADING MOODLE CORE FILES -------------------------##"
+
+cd $TMP_DIR
+wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz -O moodle-latest-38.tgz
+if [[ $? -ne 0 ]]; then
+  echo "Error: Download moodle-latest-38.tgz"
+  echo "##------------------------ FAIL -------------------------##"
+  exit 1
+fi
+
+wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz.md5 -O moodle-latest-38.tgz.md5
+if [[ $? -ne 0 ]]; then
+  echo "Error: Download moodle-latest-38.tgz.md5"
+  echo "##------------------------ FAIL -------------------------##"
+  exit 1
+fi
+
+
+md5sum -c moodle-latest-38.tgz.md5
+if [[ $? -ne 0 ]]; then
+  echo "Error: md5sum -c moodle-latest-38.tgz.md5"
+  echo "##------------------------ FAIL -------------------------##"
+  exit 1
+fi
+
+
 
 echo "Extract moodle-latest-38.tgz..."
 tar xzf $GIT_DIR/moodle38-plugins/moodle-latest-38.tgz -C $TMP_DIR
