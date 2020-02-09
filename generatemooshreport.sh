@@ -4,13 +4,16 @@
  userid=3
  sectionid=1
  
+
  
  mdlrelease=$(moosh -n config-get core release)
  moosh -n course-config-set course 1 shortname "$mdlrelease"
   
  forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease - Reported at $(date)." --section $sectionid forum $courseid)
 
-
+ courseusers=$(moosh user-list --course $courseid)
+ moosh -n forum-newdiscussion --subject "Users in this Course" --message "<pre>$courseusers</pre>" $courseid $forumid $userid
+ 
  mdlpluginsusage=$(moosh -n plugins-usage)
  moosh -n forum-newdiscussion --subject "Plugins Usage" --message "<pre>$mdlpluginsusage</pre>" $courseid $forumid $userid
 
