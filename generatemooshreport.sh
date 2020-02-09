@@ -1,6 +1,8 @@
  
  # moosh
- 
+ # wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/generatemooshreport.sh -O generatemooshreport.sh
+ # chmod u+x generatemooshreport.sh
+
  courseid=2
  userid=3
  sectionid=1 
