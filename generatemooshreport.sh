@@ -8,8 +8,7 @@
  mdlrelease=$(moosh -n config-get core release)
  moosh -n course-config-set course 1 shortname "$mdlrelease"
   
- forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease updated in $(date)." --section $sectionid forum $courseid)
-
+ forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease - Reported at $(date)." --section $sectionid forum $courseid)
 
 
  mdlpluginsusage=$(moosh -n plugins-usage)
@@ -42,8 +41,6 @@
  themeinfo=$(moosh -n theme-info)
  moosh -n forum-newdiscussion --subject "Theme Info" --message "<pre>$themeinfo</pre>" $courseid $forumid $userid
 
- # passwords=$(moosh -n audit-passwords -r)
- # moosh -n forum-newdiscussion --subject "audit passwords" --message "<pre>$passwords</pre>" $courseid $forumid $userid
 
  authlist=$(moosh -n auth-list)
  moosh -n forum-newdiscussion --subject "auth-list" --message "<pre>$authlist</pre>" $courseid $forumid $userid
