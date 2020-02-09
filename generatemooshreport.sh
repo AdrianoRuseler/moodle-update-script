@@ -2,12 +2,13 @@
  
  
  mdlrelease=$(moosh -n config-get core release)
- mdlpluginsusage=$(moosh -n plugins-usage)
-
+ moosh -n course-config-set course 1 shortname "$mdlrelease"
+  
  forumid=$(moosh -n activity-add --name "Moodle $mdlrelease" -o="--intro=Moodle version $mdlrelease updated in $(date)." --section 1 forum 2)
 
- moosh -n course-config-set course 1 shortname "$mdlrelease"
 
+
+ mdlpluginsusage=$(moosh -n plugins-usage)
  moosh -n forum-newdiscussion --subject "Plugins Usage" --message "<pre>$mdlpluginsusage</pre>" 2 $forumid 3
 
  datastats=$(moosh -n data-stats)
