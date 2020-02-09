@@ -4,7 +4,10 @@
  courseid=2
  userid=3
  sectionid=1 
+ 
+ MOODLE_HOME="/var/www/html/moodle38" # moodle core folder
 
+ cd $MOODLE_HOME
  
  mdlrelease=$(moosh -n config-get core release)
  moosh -n course-config-set course 1 shortname "$mdlrelease"
