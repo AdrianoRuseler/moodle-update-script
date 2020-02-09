@@ -1,15 +1,15 @@
  
+ # moosh
  
  courseid=2
  userid=3
- sectionid=1
- 
+ sectionid=1 
 
  
  mdlrelease=$(moosh -n config-get core release)
  moosh -n course-config-set course 1 shortname "$mdlrelease"
   
- forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease - Reported at $(date)." --section $sectionid forum $courseid)
+ forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease - $(date)." --section $sectionid forum $courseid)
 
  courseusers=$(moosh -n user-list --course $courseid)
  moosh -n forum-newdiscussion --subject "Users in this Course" --message "<pre>$courseusers</pre>" $courseid $forumid $userid
@@ -36,12 +36,12 @@
  moosh -n forum-newdiscussion --subject "File dbcheck - Check that all files recorder in the DB do exist in Moodle data directory." --message "<pre>$dbcheck</pre>" $courseid $forumid $userid
 
  infoplugins=$(moosh -n info-plugins)
- moosh -n forum-newdiscussion --subject "info plugins - List all possible plugins in this version of Moodle and directory for each." --message "<pre>$infoplugins</pre>" $courseid $forumid $userid
+ moosh -n forum-newdiscussion --subject "Info Plugins - List all possible plugins in this version of Moodle and directory for each." --message "<pre>$infoplugins</pre>" $courseid $forumid $userid
 
  nowdate=$(date '+%Y%m%d')
  lastweek=$(date +%Y%m%d -d "7 day ago")
  concurrency=$(moosh -n report-concurrency -f $lastweek -t $nowdate -p 30)
- moosh -n forum-newdiscussion --subject "Report Concurrency - Get information about concurrent users online." --message "<pre>$concurrency</pre>" $courseid $forumid $userid
+ moosh -n forum-newdiscussion --subject "Report Concurrency (last Week)- Get information about concurrent users online." --message "<pre>$concurrency</pre>" $courseid $forumid $userid
 
  themeinfo=$(moosh -n theme-info)
  moosh -n forum-newdiscussion --subject "Theme Info - Show what themes are really used on Moodle site." --message "<pre>$themeinfo</pre>" $courseid $forumid $userid
