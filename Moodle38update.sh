@@ -184,6 +184,10 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+echo "##-------------- DELETE  moodle-latest-38.tgz ------------------##"
+rm moodle-latest-38.tgz
+rm moodle-latest-38.tgz.md5
+
 if [[ $MDLUPGRADE -eq 0 ]]; then
 echo ""
 echo "##------------------- MOODLE COPY MODE -------------------------##"
