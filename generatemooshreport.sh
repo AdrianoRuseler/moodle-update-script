@@ -4,7 +4,7 @@
  mdlrelease=$(moosh -n config-get core release)
  mdlpluginsusage=$(moosh -n plugins-usage)
 
- forumid=$(moosh -n activity-add --name "Moodle $mdlrelease" -o="--intro=Moodle versão $mdlrelease atualizado em $(date)." --section 1 forum 2)
+ forumid=$(moosh -n activity-add --name "Moodle $mdlrelease" -o="--intro=Moodle version $mdlrelease updated in $(date)." --section 1 forum 2)
 
  moosh -n course-config-set course 1 shortname "$mdlrelease"
 
