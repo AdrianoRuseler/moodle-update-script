@@ -8,7 +8,7 @@
  mdlrelease=$(moosh -n config-get core release)
  moosh -n course-config-set course 1 shortname "$mdlrelease"
   
- forumid=$(moosh -n activity-add --name "Moodle $mdlrelease" -o="--intro=Moodle version $mdlrelease updated in $(date)." --section $sectionid forum $courseid)
+ forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease updated in $(date)." --section $sectionid forum $courseid)
 
 
 
