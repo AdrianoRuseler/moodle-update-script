@@ -61,5 +61,9 @@
  phpinfo=$(php -i)
  moosh -n forum-newdiscussion --subject "PHP information" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
 
-
-
+ httpdver=$(httpd -V)
+ moosh -n forum-newdiscussion --subject "Apache compile settings" --message "<pre>$httpdver</pre>" $courseid $forumid $userid
+ 
+ mysqlver=$(mysqld -V)
+ moosh -n forum-newdiscussion --subject "Database Version" --message "<pre>$mysqlver</pre>" $courseid $forumid $userid
+ 
