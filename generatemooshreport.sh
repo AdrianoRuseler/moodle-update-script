@@ -57,6 +57,9 @@
 
  categorylist=$(moosh -n category-list)
  moosh -n forum-newdiscussion --subject "Category List - List all categories or those that match search string(s)." --message "<pre>$categorylist</pre>" $courseid $forumid $userid
+ 
+ phpinfo=$(php -i)
+ moosh -n forum-newdiscussion --subject "PHP information" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
 
 
 
