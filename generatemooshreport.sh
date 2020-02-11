@@ -60,6 +60,10 @@
  
  phpinfo=$(php -i)
  moosh -n forum-newdiscussion --subject "PHP information" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
+ 
+ moodlerootinfo=$(ls -l)
+ moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo</pre>" $courseid $forumid $userid
+ 
 
  httpdver=$(httpd -V)
  moosh -n forum-newdiscussion --subject "Apache compile settings" --message "<pre>$httpdver</pre>" $courseid $forumid $userid
