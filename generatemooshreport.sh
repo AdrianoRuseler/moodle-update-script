@@ -26,7 +26,6 @@
  datastats=$(moosh -n data-stats)
  moosh -n forum-newdiscussion --subject "Data Stats - Provides information on size of dataroot directory, dataroot/filedir subdirectory and total size of non-external files in moodle." --message "<pre>$datastats</pre>" $courseid $forumid $userid
 
- MOODLE_DATA
  mdldatastats=$(moosh -n data-stats)
  moosh -n forum-newdiscussion --subject "Plugins Usage - Shows the usage of the subset of the plugins used in Moodle installation." --message "<pre>$mdldatastats</pre>" $courseid $forumid $userid
  
