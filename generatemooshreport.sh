@@ -27,7 +27,7 @@
 
  coreconfig=$(moosh -n config-get)
  moosh -n forum-newdiscussion --subject "Config - Get config variable from config or config_plugins table." --message "<pre>$coreconfig</pre>" $courseid $forumid $userid
-  
+
  pluginsconfig=$(moosh -n config-plugins)
  moosh -n forum-newdiscussion --subject "Config - Get config variable from config_plugins table." --message "<pre>$pluginsconfig</pre>" $courseid $forumid $userid
 
@@ -62,15 +62,23 @@
  moosh -n forum-newdiscussion --subject "Category List - List all categories or those that match search string(s)." --message "<pre>$categorylist</pre>" $courseid $forumid $userid
  
  phpinfo=$(php -i)
- moosh -n forum-newdiscussion --subject "PHP information" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
+ moosh -n forum-newdiscussion --subject "System Info" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
  
  moodlerootinfo=$(ls -l)
- moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo</pre>" $courseid $forumid $userid
+ moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo</pre>" $courseid $forumid $userid 
+ 
+sysinfo=$(uname -a) # Gets system info
+diskinfo=$(df -H) # Gets disk usage info 
+httpdver=$(httpd -V)
+mysqlver=$(mysqld -V)
+phpversion=$(php -v)
+
+moosh -n forum-newdiscussion --subject "System info" --message "<pre>$sysinfo</pre><hr><br><pre>$diskinfo</pre><hr><br><pre>$httpdver</pre><hr><br><pre>$mysqlver</pre><hr><br><pre>$phpversion</pre>" $courseid $forumid $userid
+ 
  
 
- httpdver=$(httpd -V)
- moosh -n forum-newdiscussion --subject "Apache compile settings" --message "<pre>$httpdver</pre>" $courseid $forumid $userid
+
+
+
  
- mysqlver=$(mysqld -V)
- moosh -n forum-newdiscussion --subject "Database Version" --message "<pre>$mysqlver</pre>" $courseid $forumid $userid
  
