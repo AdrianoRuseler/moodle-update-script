@@ -16,8 +16,8 @@
   
  forumid=$(moosh -n activity-add --name "Moodle $mdlrelease - Report at $(date)" -o="--intro=Moodle version $mdlrelease - $(date)." --section $sectionid forum $courseid)
 
- courseusers=$(moosh -n user-list --course $courseid)
- moosh -n forum-newdiscussion --subject "Users in this Course" --message "<pre>$courseusers</pre>" $courseid $forumid $userid
+# courseusers=$(moosh -n user-list --course $courseid)
+# moosh -n forum-newdiscussion --subject "Users in this Course" --message "<pre>$courseusers</pre>" $courseid $forumid $userid
  
  mdlpluginsusage=$(moosh -n plugins-usage)
  moosh -n forum-newdiscussion --subject "Plugins Usage - Shows the usage of the subset of the plugins used in Moodle installation." --message "<pre>$mdlpluginsusage</pre>" $courseid $forumid $userid
@@ -51,18 +51,17 @@
  concurrency=$(moosh -n report-concurrency -f $lastweek -t $nowdate -p 30)
  moosh -n forum-newdiscussion --subject "Report Concurrency (last Week)- Get information about concurrent users online." --message "<pre>$concurrency</pre>" $courseid $forumid $userid
 
- themeinfo=$(moosh -n theme-info)
- moosh -n forum-newdiscussion --subject "Theme Info - Show what themes are really used on Moodle site." --message "<pre>$themeinfo</pre>" $courseid $forumid $userid
+# themeinfo=$(moosh -n theme-info)
+# moosh -n forum-newdiscussion --subject "Theme Info - Show what themes are really used on Moodle site." --message "<pre>$themeinfo</pre>" $courseid $forumid $userid
 
-
- authlist=$(moosh -n auth-list)
- moosh -n forum-newdiscussion --subject "Auth List - List authentication plugins." --message "<pre>$authlist</pre>" $courseid $forumid $userid
+# authlist=$(moosh -n auth-list)
+# moosh -n forum-newdiscussion --subject "Auth List - List authentication plugins." --message "<pre>$authlist</pre>" $courseid $forumid $userid
 
  categorylist=$(moosh -n category-list)
  moosh -n forum-newdiscussion --subject "Category List - List all categories or those that match search string(s)." --message "<pre>$categorylist</pre>" $courseid $forumid $userid
  
  phpinfo=$(php -i)
- moosh -n forum-newdiscussion --subject "System Info" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
+ moosh -n forum-newdiscussion --subject "PHP Info" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
  
  moodlerootinfo=$(ls -l)
  moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo</pre>" $courseid $forumid $userid 
@@ -75,10 +74,5 @@ phpversion=$(php -v)
 
 moosh -n forum-newdiscussion --subject "System info" --message "<pre>$sysinfo</pre><hr><br><pre>$diskinfo</pre><hr><br><pre>$httpdver</pre><hr><br><pre>$mysqlver</pre><hr><br><pre>$phpversion</pre>" $courseid $forumid $userid
  
- 
-
-
-
-
  
  
