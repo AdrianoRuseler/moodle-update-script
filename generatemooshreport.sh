@@ -27,6 +27,9 @@
 
  coreconfig=$(moosh -n config-get)
  moosh -n forum-newdiscussion --subject "Config - Get config variable from config or config_plugins table." --message "<pre>$coreconfig</pre>" $courseid $forumid $userid
+  
+ pluginsconfig=$(moosh -n config-plugins)
+ moosh -n forum-newdiscussion --subject "Config - Get config variable from config_plugins table." --message "<pre>$pluginsconfig</pre>" $courseid $forumid $userid
 
  courselist=$(moosh -n course-list)
  moosh -n forum-newdiscussion --subject "Course List - Lists courses that match your search criteria." --message "<pre>$courselist</pre>" $courseid $forumid $userid
