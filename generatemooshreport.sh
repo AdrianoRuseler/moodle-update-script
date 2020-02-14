@@ -8,6 +8,7 @@
  sectionid=1 
  
  MOODLE_HOME="/var/www/html/moodle38" # moodle core folder
+ MOODLE_DATA="/var/www/moodle38data" # moodle data folder
 
  cd $MOODLE_HOME
  
@@ -25,6 +26,10 @@
  datastats=$(moosh -n data-stats)
  moosh -n forum-newdiscussion --subject "Data Stats - Provides information on size of dataroot directory, dataroot/filedir subdirectory and total size of non-external files in moodle." --message "<pre>$datastats</pre>" $courseid $forumid $userid
 
+ MOODLE_DATA
+ mdldatastats=$(moosh -n data-stats)
+ moosh -n forum-newdiscussion --subject "Plugins Usage - Shows the usage of the subset of the plugins used in Moodle installation." --message "<pre>$mdldatastats</pre>" $courseid $forumid $userid
+ 
  coreconfig=$(moosh -n config-get)
  moosh -n forum-newdiscussion --subject "Config - Get config variable from config or config_plugins table." --message "<pre>$coreconfig</pre>" $courseid $forumid $userid
 
@@ -63,8 +68,15 @@
  phpinfo=$(php -i)
  moosh -n forum-newdiscussion --subject "PHP Info" --message "<pre>$phpinfo</pre>" $courseid $forumid $userid
  
- moodlerootinfo=$(ls -l)
- moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo</pre>" $courseid $forumid $userid 
+ moodlerootinfo1=$(ls -lh)
+ moodlerootinfo2=$(du -h --max-depth=1)
+ 
+ moosh -n forum-newdiscussion --subject "Moodle root info" --message "<pre>$moodlerootinfo1</pre><hr><pre>$moodlerootinfo2</pre>" $courseid $forumid $userid 
+ 
+ moodledatainfo1=$(ls -lh $MOODLE_DATA)
+ moodledatainfo2=$(du -h --max-depth=1 $MOODLE_DATA)
+
+ moosh -n forum-newdiscussion --subject "Moodle data info" --message "<pre>$moodledatainfo1</pre><hr><pre>$moodledatainfo2</pre>" $courseid $forumid $userid 
  
 sysinfo=$(uname -a) # Gets system info
 diskinfo=$(df -H) # Gets disk usage info 
