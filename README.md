@@ -19,8 +19,8 @@ sudo ./Moodle38update.sh | tee Moodle38update.log
 ```
 
 ## Test some plugins
-https://plugins.moodlebites.com/
-https://www.moodlebites.com/
+- https://plugins.moodlebites.com/
+- https://www.moodlebites.com/
 
 
 ## 
