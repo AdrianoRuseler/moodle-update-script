@@ -1,7 +1,7 @@
 # moodle-update-script
 - https://docs.moodle.org/38/en/Administration_via_command_line
 - https://www.vogella.com/tutorials/GitSubmodules/article.html
-
+- https://docs.moodle.org/38/en/Git_for_Administrators
 
 ## Debian Config
 ```bash
