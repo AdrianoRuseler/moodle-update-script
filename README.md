@@ -1,5 +1,5 @@
 # moodle-update-script
-- https://docs.moodle.org/37/en/Administration_via_command_line
+- https://docs.moodle.org/38/en/Administration_via_command_line
 - https://www.vogella.com/tutorials/GitSubmodules/article.html
 
 
