@@ -18,6 +18,11 @@ chmod u+x Moodle37dev.sh
 ./Moodle37dev.sh | tee -a Moodle37dev.log
 ```
 
+## Test some plugins
+https://plugins.moodlebites.com/
+https://www.moodlebites.com/
+
+
 ## 
 ```php
 // Use the following flag to completely disable the installation of plugins
