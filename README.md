@@ -3,19 +3,19 @@
 - https://www.vogella.com/tutorials/GitSubmodules/article.html
 
 
-## Script for Moodle Update
+## Debian Config
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle37update.sh -O Moodle37update.sh
-chmod u+x Moodle37update.sh
-
-./Moodle37update.sh | tee Moodle37update.log
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/DebianSystemConfig.sh -O DebianSystemConfig.sh
+chmod u+x DebianSystemConfig.sh
+sudo ./DebianSystemConfig.sh | tee DebianSystemConfig.log
 ```
 
+## Script for Moodle Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/moodle37dev.sh -O Moodle37dev.sh
-chmod u+x Moodle37dev.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle38update.sh -O Moodle38update.sh
+chmod u+x Moodle38update.sh
 
-./Moodle37dev.sh | tee -a Moodle37dev.log
+sudo ./Moodle38update.sh | tee Moodle38update.log
 ```
 
 ## Test some plugins
