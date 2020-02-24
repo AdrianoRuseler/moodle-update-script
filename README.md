@@ -34,7 +34,7 @@ $CFG->disableupdateautodeploy = true;
 $CFG->disableupdatenotifications = true;
 ```
 ## crontab
-https://docs.moodle.org/37/en/Cron
+https://docs.moodle.org/38/en/Cron
 
 https://crontab.guru/
 ```bash
