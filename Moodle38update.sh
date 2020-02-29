@@ -7,7 +7,7 @@ TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
 MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
 REPOREMOVE=1                         # Remove git repo? 
-
+SUBUPGRADE=1                         # submodule (plugins) update
 
 REQSPACE=524288 # Required free space: 512 Mb in kB
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
@@ -129,7 +129,9 @@ if [ -d "moodle38-plugins" ]; then
   git submodule update --init
   git pull
   git pull --recurse-submodules
-  git submodule update --remote # Plugins update
+    if [[ $SUBUPGRADE -ne 0 ]]; then
+      git submodule update --remote # Plugins update
+    fi
 else
   git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git
   if [[ $? -ne 0 ]]; then
@@ -138,6 +140,9 @@ else
     exit 1
   fi
   cd $GIT_DIR/moodle38-plugins  
+    if [[ $SUBUPGRADE -ne 0 ]]; then
+      git submodule update --remote # Plugins update
+    fi
 fi
 
 git status
