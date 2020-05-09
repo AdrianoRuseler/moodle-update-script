@@ -31,7 +31,6 @@ bin/moodle-docker-compose up -d
 bin/moodle-docker-wait-for-db
 
 # Work with the containers (see below)
-composer update
 tests/setup.sh
 
 tests/test.sh
