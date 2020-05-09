@@ -13,7 +13,7 @@ bash -c 'echo $BASH_VERSION'
 
 git clone --branch $GIT --depth 1 git://github.com/moodle/moodle $HOME/moodle
 
-cd moodlehq/moodle-docker
+cd moodle-docker
 
 cp config.docker-template.php $HOME/moodle/config.php
 cp composer.json $HOME/moodle/composer.json
