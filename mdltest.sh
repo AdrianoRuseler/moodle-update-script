@@ -32,6 +32,7 @@ bin/moodle-docker-wait-for-db
 
 # Work with the containers (see below)
 tests/setup.sh
+tests/setup.sh
 
 tests/test.sh
 
