@@ -16,8 +16,8 @@ git clone --branch $GIT --depth 1 git://github.com/moodle/moodle $HOME/moodle
 cd moodle-docker
 
 cp config.docker-template.php $HOME/moodle/config.php
-cp composer.json $HOME/moodle/composer.json
-cp composer.lock $HOME/moodle/composer.lock
+#cp composer.json $HOME/moodle/composer.json
+#cp composer.lock $HOME/moodle/composer.lock
 
 export MOODLE_DOCKER_DB=$DB
 export MOODLE_DOCKER_BROWSER=$BROWSER
@@ -31,7 +31,9 @@ bin/moodle-docker-compose up -d
 bin/moodle-docker-wait-for-db
 
 # Work with the containers (see below)
+composer update
 tests/setup.sh
+
 tests/test.sh
 
 
