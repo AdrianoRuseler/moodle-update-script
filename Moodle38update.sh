@@ -1,5 +1,5 @@
 #!/bin/bash
-
+MOODLE_BRANCH="MOODLE_38_STABLE"     # Moodle Branch
 MOODLE_HOME="/var/www/html/moodle38" # moodle core folder
 MOODLE_DATA="/var/www/moodle38data"  # moodle data folder
 GIT_DIR="${HOME}/gitrepo38"            # git folder
@@ -133,7 +133,7 @@ if [ -d "moodle38-plugins" ]; then
       git submodule update --remote # Plugins update
     fi
 else
-  git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git
+  git clone --depth=1 --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git"
     echo "##------------------------ FAIL -------------------------##"
@@ -157,41 +157,12 @@ echo ""
 echo "##--------------------- DOWNLOADING MOODLE CORE FILES -------------------------##"
 
 cd $TMP_DIR
-wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz -O moodle-latest-38.tgz
+git clone --depth=1 --branch=$MOODLE_BRANCH https://github.com/moodle/moodle.git moodle
 if [[ $? -ne 0 ]]; then
-  echo "Error: Download moodle-latest-38.tgz"
+  echo "Error: git clone --depth=1 --branch=MOODLE_38_STABLE https://github.com/moodle/moodle.git moodle"
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
-
-wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz.md5 -O moodle-latest-38.tgz.md5
-if [[ $? -ne 0 ]]; then
-  echo "Error: Download moodle-latest-38.tgz.md5"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
-
-
-md5sum -c moodle-latest-38.tgz.md5
-if [[ $? -ne 0 ]]; then
-  echo "Error: md5sum -c moodle-latest-38.tgz.md5"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
-
-ls -l
-
-echo "Extract moodle-latest-38.tgz..."
-tar xzf moodle-latest-38.tgz -C $TMP_DIR
-if [[ $? -ne 0 ]]; then
-  echo "Error: tar xzf moodle-latest-38.tgz"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
-
-echo "##-------------- DELETE  moodle-latest-38.tgz ------------------##"
-rm moodle-latest-38.tgz
-rm moodle-latest-38.tgz.md5
 
 if [[ $MDLUPGRADE -eq 0 ]]; then
 echo ""
