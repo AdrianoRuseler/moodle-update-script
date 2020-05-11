@@ -1,5 +1,5 @@
 #!/bin/bash
-
+MOODLE_BRANCH="MOODLE_38_STABLE"
 MOODLE_HOME="/var/www/html/moodle" # moodle core folder
 MOODLE_DATA="/var/www/moodledata"  # moodle data folder
 GIT_DIR="${HOME}/gitrepo38"            # git folder
@@ -91,40 +91,48 @@ echo ""
 echo "##--------------------- DOWNLOADING FILES -------------------------##"
 
 cd $TMP_DIR
-wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz -O moodle-latest-38.tgz
+git clone --depth=1 --branch=$MOODLE_BRANCH https://github.com/moodle/moodle.git moodle
 if [[ $? -ne 0 ]]; then
-  echo "Error: Download moodle-latest-38.tgz"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
-
-wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz.md5 -O moodle-latest-38.tgz.md5
-if [[ $? -ne 0 ]]; then
-  echo "Error: Download moodle-latest-38.tgz.md5"
+  echo "Error: git clone --depth=1 --branch=MOODLE_38_STABLE https://github.com/moodle/moodle.git moodle"
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
 
 
-md5sum -c moodle-latest-38.tgz.md5
-if [[ $? -ne 0 ]]; then
-  echo "Error: md5sum -c moodle-latest-38.tgz.md5"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
+#wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz -O moodle-latest-38.tgz
+#if [[ $? -ne 0 ]]; then
+#  echo "Error: Download moodle-latest-38.tgz"
+#  echo "##------------------------ FAIL -------------------------##"
+#  exit 1
+#fi
+
+#wget https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz.md5 -O moodle-latest-38.tgz.md5
+#if [[ $? -ne 0 ]]; then
+#  echo "Error: Download moodle-latest-38.tgz.md5"
+#  echo "##------------------------ FAIL -------------------------##"
+#  exit 1
+#fi
+
+
+#md5sum -c moodle-latest-38.tgz.md5
+#if [[ $? -ne 0 ]]; then
+#  echo "Error: md5sum -c moodle-latest-38.tgz.md5"
+#  echo "##------------------------ FAIL -------------------------##"
+#  exit 1
+#fi
 
 
 
 echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
 
-echo "Extract moodle-latest-38.tgz..."
-tar xzf moodle-latest-38.tgz 
-if [[ $? -ne 0 ]]; then
-  echo "Error: tar xzf moodle-latest-38.tgz"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-fi
+#echo "Extract moodle-latest-38.tgz..."
+#tar xzf moodle-latest-38.tgz 
+#if [[ $? -ne 0 ]]; then
+#  echo "Error: tar xzf moodle-latest-38.tgz"
+#  echo "##------------------------ FAIL -------------------------##"
+ # exit 1
+#fi
 
 if [[ $MDLUPGRADE -eq 0 ]]; then
 echo ""
