@@ -148,21 +148,28 @@ fi
 git status
 
 echo ""
-echo "##------------------------ MOVING FILES -------------------------##"
-echo "Rsync moodle folder from moodle38-plugins repo to tmp dir..."
-rsync -a $GIT_DIR/moodle38-plugins/moodle/ $TMP_DIR/moodle
-
-
-echo ""
 echo "##--------------------- DOWNLOADING MOODLE CORE FILES -------------------------##"
 
 cd $TMP_DIR
+
+if [ -d "moodle" ]; then
+  ### Take action if moodle dir exists ###
+  echo "Remove moodle dir!"
+  sudo rm -rf moodle
+fi
+
 git clone --depth=1 --branch=$MOODLE_BRANCH https://github.com/moodle/moodle.git moodle
 if [[ $? -ne 0 ]]; then
   echo "Error: git clone --depth=1 --branch=MOODLE_38_STABLE https://github.com/moodle/moodle.git moodle"
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
+
+echo ""
+echo "##------------------------ MOVING FILES -------------------------##"
+echo "Rsync moodle folder from moodle38-plugins repo to tmp dir..."
+rsync -a $GIT_DIR/moodle38-plugins/moodle/ $TMP_DIR/moodle
+
 
 if [[ $MDLUPGRADE -eq 0 ]]; then
 echo ""
