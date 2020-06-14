@@ -1,8 +1,10 @@
 #!/bin/bash
-MOODLE_BRANCH="MOODLE_39_STABLE"     # Moodle Branch
-PLUGINS_GIT="https://github.com/AdrianoRuseler/moodle39-plugins.git"
+
 MOODLE_HOME="/var/www/html/moodle" # moodle core folder
 MOODLE_DATA="/var/www/moodledata"  # moodle data folder
+
+MOODLE_BRANCH="MOODLE_39_STABLE"     # Moodle Branch
+PLUGINS_GIT="https://github.com/AdrianoRuseler/moodle39-plugins.git"
 GIT_DIR="${HOME}/gitrepo"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=0                         # Perform system upgrade?
