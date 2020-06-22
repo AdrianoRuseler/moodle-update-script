@@ -10,6 +10,7 @@ sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
 echo "Add locales pt_BR, en_US, es_ES, de_DE, fr_FR, pt_PT..."
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
+sudo sed -i '/^#.* en_AU.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* es_ES.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* de_DE.* /s/^#//' /etc/locale.gen
