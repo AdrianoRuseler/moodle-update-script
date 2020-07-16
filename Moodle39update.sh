@@ -136,7 +136,7 @@ if [ -d "moodle-plugins" ]; then
       git submodule update --remote # Plugins update
     fi
 else
-  git clone --depth=1 --recursive $PLUGINS_GIT 
+  git clone --depth=1 --recursive $PLUGINS_GIT moodle-plugins
   if [[ $? -ne 0 ]]; then
     echo "Error: git clone --recursive"
     echo "##------------------------ FAIL -------------------------##"
