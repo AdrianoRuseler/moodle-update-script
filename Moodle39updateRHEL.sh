@@ -2,6 +2,9 @@
 
 MOODLE_HOME="/var/www/html/moodle39" # moodle core folder
 MOODLE_DATA="/var/www/moodle39data"  # moodle data folder
+
+MOODLE_BRANCH="MOODLE_39_STABLE"     # Moodle Branch
+PLUGINS_GIT="https://github.com/AdrianoRuseler/moodle39-plugins.git"
 GIT_DIR="${HOME}/gitrepo39"            # git folder
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=1                         # Perform system upgrade?
@@ -124,24 +127,24 @@ fi
 echo ""
 echo "##--------------------------- GIT ------------------------------##"
 cd $GIT_DIR
-if [ -d "moodle38-plugins" ]; then
-  echo "Found moodle38-plugins repository..."
-  cd $GIT_DIR/moodle38-plugins
+if [ -d "moodle-plugins" ]; then
+  echo "Found moodle-plugins repository..."
+  cd $GIT_DIR/moodle-plugins
   git clean -ffdx # This gets you in same state as fresh clone.
   git submodule update --init
   git pull
   git pull --recurse-submodules
-  if [[ $SUBUPGRADE -ne 0 ]]; then
-    git submodule update --remote # Plugins update
-  fi
+    if [[ $SUBUPGRADE -ne 0 ]]; then
+      git submodule update --remote # Plugins update
+    fi
 else
-  git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git
+  git clone --depth=1 --recursive $PLUGINS_GIT moodle-plugins
   if [[ $? -ne 0 ]]; then
-    echo "Error: git clone --recursive https://github.com/AdrianoRuseler/moodle38-plugins.git"
+    echo "Error: git clone --recursive"
     echo "##------------------------ FAIL -------------------------##"
     exit 1
   fi
-  cd $GIT_DIR/moodle38-plugins  
+  cd $GIT_DIR/moodle-plugins  
     if [[ $SUBUPGRADE -ne 0 ]]; then
       git submodule update --remote # Plugins update
     fi
@@ -152,7 +155,7 @@ git status
 echo ""
 echo "##------------------------ MOVING FILES -------------------------##"
 echo "Rsync moodle folder from moodle38-plugins repo to tmp dir..."
-rsync -a $GIT_DIR/moodle38-plugins/moodle/ $TMP_DIR/moodle
+rsync -a $GIT_DIR/moodle-plugins/moodle/ $TMP_DIR/moodle
 
 
 echo ""
