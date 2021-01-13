@@ -24,13 +24,20 @@ sudo apt-get install -y git p7zip-full
 echo "Install python..."
 sudo apt-get install -y python3
 
-echo "Install php extensions..."
-sudo apt-get install -y php-curl php-zip php-intl php-xmlrpc php-soap php-xml php-gd php-ldap php-common php-cli php-mbstring php-mysql php-imagick php-pdo php-json php-readline php-tidy php-xsl
+echo "Install php7.4 for apache..."
+sudo apt-get install apache2 php7.4 libapache2-mod-php7.4
+
+echo "Install php7.4 extensions..."
+sudo apt-get install -y php7.4-curl php7.4-zip php7.4-intl php7.4-xmlrpc php7.4-soap php7.4-xml php7.4-gd php7.4-ldap php7.4-common php7.4-cli php7.4-mbstring php7.4-mysql php7.4-imagick php7.4-json php7.4-readline php7.4-tidy
+
 # Cache related
-sudo apt-get install -y php-redis php-memcached php-apcu php-opcache
+sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache
 
 echo "Restart apache server..."
 sudo service apache2 restart
+
+# Select php version
+# sudo update-alternatives --config php
 
 echo "To be able to generate graphics from DOT files, you must have installed the dot executable..."
 sudo apt-get install -y graphviz
