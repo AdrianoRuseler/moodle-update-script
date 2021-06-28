@@ -8,13 +8,11 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--forc
 echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
-echo "Add locales pt_BR, en_US, es_ES, de_DE, fr_FR, pt_PT..."
+echo "Add locales pt_BR, en_US, es_ES, pt_PT..."
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_AU.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* es_ES.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* de_DE.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* fr_FR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
@@ -42,15 +40,18 @@ sudo service apache2 restart
 echo "To be able to generate graphics from DOT files, you must have installed the dot executable..."
 sudo apt-get install -y graphviz
 
+echo "Install pdftoppm poppler-utils - Poppler is a PDF rendering library based on the xpdf-3.0 code base."
+sudo apt-get install poppler-utils
+
 echo "To use spell-checking within the editor, you MUST have aspell 0.50 or later installed on your server..."
 sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-es aspell-fr aspell-en aspell-pt-br aspell-pt-pt aspell-doc spellutils
 
-echo "Install TeX..."
-sudo apt-get install -y texlive imagemagick
+#echo "Install TeX..."
+#sudo apt-get install -y texlive imagemagick
 
-echo "Install Universal Office Converter..."
-sudo apt-get install -y unoconv
-sudo chown www-data /var/www
+#echo "Install Universal Office Converter..."
+#sudo apt-get install -y unoconv
+#sudo chown www-data /var/www
 
 # echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 # sudo apt-get install -y maxima gcc gnuplot
