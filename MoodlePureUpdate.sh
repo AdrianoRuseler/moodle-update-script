@@ -47,26 +47,7 @@ else
   exit 1
 fi
 
-echo "Check if git folder exists..."
-if [ -d "$GIT_DIR" ]; then
-  ### Take action if $GIT_DIR exists ###
-  echo "Found git folder: ${GIT_DIR}"
-  if [[ $REPOREMOVE -ne 0 ]]; then
-     echo "Remove git repo!"
-     sudo rm -rf $GIT_DIR
-     sudo mkdir $GIT_DIR
-  fi
-else
-  ###  Control will jump here if $DIR does NOT exists ###
-  echo "${GIT_DIR} not found!"
-  echo "Create GIT directory: ${GIT_DIR}"
-  sudo mkdir $GIT_DIR
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Could not create GIT directory: ${GIT_DIR}"
-    echo "##------------------------ FAIL -------------------------##"
-    exit 1
-  fi
-fi
+
 
 echo ""
 echo "##----------------------- SPACE CHECK ------------------------##"
