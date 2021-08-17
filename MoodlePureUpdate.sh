@@ -1,9 +1,9 @@
 #!/bin/bash
 
-MOODLE_HOME="/var/www/html/moodle" # moodle core folder
-MOODLE_DATA="/var/www/moodledata"  # moodle data folder
+MOODLE_HOME="/var/www/html/moodle310" # moodle core folder
+MOODLE_DATA="/var/www/moodle310data"  # moodle data folder
 
-MOODLE_BRANCH="MOODLE_311_STABLE"     # Moodle Branch
+MOODLE_BRANCH="MOODLE_310_STABLE"     # Moodle Branch
 TMP_DIR="/tmp"                       # temp folder
 SYSUPGRADE=0                         # Perform system upgrade?
 MDLUPGRADE=1                         # Moodle upgrade? 0-> just copy MDL foder
@@ -47,26 +47,12 @@ else
   exit 1
 fi
 
-
-
 echo ""
 echo "##----------------------- SPACE CHECK ------------------------##"
 
 
 echo "Check for free space in $MOODLE_HOME ..."
 FREESPACE=$(df "$MOODLE_HOME" | awk 'NR==2 { print $4 }')
-echo "Free space: $FREESPACE"
-echo "Req. space: $REQSPACE"
-if [[ $FREESPACE -le REQSPACE ]]; then
-  echo "NOT enough Space!!"
-  echo "##------------------------ FAIL -------------------------##"
-  exit 1
-else
-  echo "Enough Space!!"
-fi
-
-echo "Check for free space in $GIT_DIR ..."
-FREESPACE=$(df "$GIT_DIR" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
