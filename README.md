@@ -12,10 +12,10 @@ sudo ./DebianSystemConfig.sh | tee DebianSystemConfig.log
 
 ## Script for Moodle Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle38update.sh -O Moodle38update.sh
-chmod u+x Moodle38update.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle311update.sh -O Moodle311update.sh
+chmod u+x Moodle311update.sh
 
-sudo ./Moodle38update.sh | tee Moodle38update.log
+sudo ./Moodle311update.sh | tee Moodle311update.log
 ```
 
 ## Test some plugins
@@ -32,9 +32,15 @@ sudo ./Moodle38update.sh | tee Moodle38update.log
 $CFG->disableupdateautodeploy = true;
 // Disabling update notifications
 $CFG->disableupdatenotifications = true;
+
+// Some administration options allow setting the path to executable files. This can
+// potentially cause a security risk. Set this option to true to disable editing
+// those config settings via the web. They will need to be set explicitly in the
+// config.php file
+// $CFG->preventexecpath = true;
 ```
 ## crontab
-https://docs.moodle.org/38/en/Cron
+https://docs.moodle.org/311/en/Cron
 
 https://crontab.guru/
 ```bash
