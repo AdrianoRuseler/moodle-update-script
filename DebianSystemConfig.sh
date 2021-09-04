@@ -16,6 +16,10 @@ sudo sed -i '/^#.* es_ES.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
+echo "Set timezone and locale..." 
+timedatectl set-timezone America/Sao_Paulo
+update-locale LANG=pt_BR.UTF-8 # Requires reboot
+
 echo "Install some sys utils..."
 sudo apt-get install -y git p7zip-full
 
@@ -33,6 +37,14 @@ sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache
 
 echo "Restart apache server..."
 sudo service apache2 restart
+
+# Set PHP ini
+sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/7.4/apache2/php.ini
+sed -i 's/post_max_size =.*/post_max_size = 128M/' /etc/php/7.4/apache2/php.ini
+sed -i 's/upload_max_filesize =.*/upload_max_filesize = 128M/' /etc/php/7.4/apache2/php.ini
+sed -i 's/;max_input_vars =.*/max_input_vars = 5000/' /etc/php/7.4/apache2/php.ini
+systemctl reload apache2
+
 
 # Select php version
 # sudo update-alternatives --config php
