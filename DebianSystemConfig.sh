@@ -68,6 +68,12 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-
 # echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 # sudo apt-get install -y maxima gcc gnuplot
 
+# https://redis.io/download
+# sudo apt-get install redis-server
+# sudo systemctl enable redis-server.service
+# sudo nano /etc/redis/redis.conf
+# sudo systemctl restart redis-server.service
+
 
 # https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 #wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
