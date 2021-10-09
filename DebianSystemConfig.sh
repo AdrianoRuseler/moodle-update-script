@@ -33,7 +33,7 @@ echo "Install php7.4 extensions..."
 sudo apt-get install -y php7.4-curl php7.4-zip php7.4-intl php7.4-xmlrpc php7.4-soap php7.4-xml php7.4-gd php7.4-ldap php7.4-common php7.4-cli php7.4-mbstring php7.4-mysql php7.4-imagick php7.4-json php7.4-readline php7.4-tidy
 
 # Cache related
-sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache
+sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache php7.4-mongodb
 
 echo "Restart apache server..."
 sudo service apache2 restart
@@ -67,3 +67,12 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-
 
 # echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 # sudo apt-get install -y maxima gcc gnuplot
+
+
+# https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+#wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
+#echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+#sudo apt-get update
+#sudo apt-get install -y mongodb-org
+#sudo systemctl enable mongod
+#sudo systemctl start mongod
