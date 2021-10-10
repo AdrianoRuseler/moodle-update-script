@@ -68,6 +68,10 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-
 # echo "Install maxima, gcc and gnuplot (Stack question type for Moodle) ..."
 # sudo apt-get install -y maxima gcc gnuplot
 
+#sudo apt install memcached libmemcached-tools
+
+
+
 # https://redis.io/download
 # sudo apt-get install redis-server
 # sudo systemctl enable redis-server.service
