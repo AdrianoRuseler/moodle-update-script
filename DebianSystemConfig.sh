@@ -10,10 +10,7 @@ sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
 echo "Add locales pt_BR, en_US, es_ES, pt_PT..."
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* en_AU.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* es_ES.* /s/^#//' /etc/locale.gen
-sudo sed -i '/^#.* pt_PT.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
 echo "Set timezone and locale..." 
@@ -56,7 +53,7 @@ echo "Install pdftoppm poppler-utils - Poppler is a PDF rendering library based 
 sudo apt-get install poppler-utils
 
 echo "To use spell-checking within the editor, you MUST have aspell 0.50 or later installed on your server..."
-sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-de aspell-es aspell-fr aspell-en aspell-pt-br aspell-pt-pt aspell-doc spellutils
+sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-en aspell-pt-br aspell-doc spellutils
 
 #echo "Install TeX..."
 #sudo apt-get install -y texlive imagemagick
