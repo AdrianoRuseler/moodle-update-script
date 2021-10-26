@@ -211,6 +211,21 @@ sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/kill_all_sessions.php
 sleep 30 # wait 30 secs
 echo "Moodle Maintenance Mode Activated!"
 
+echo "CLI purge Moodle cache..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
+
+echo "CLI fix_course_sequence..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
+
+echo "CLI fix_deleted_users..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_deleted_users.php
+
+echo "CLI fix_orphaned_calendar_events..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_orphaned_calendar_events.php
+
+echo "CLI fix_orphaned_question_categories..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_orphaned_question_categories.php
+
 echo ""
 echo "##----------------------- MOODLE UPDATE -------------------------##"
 echo "Rsync page to display under maintenance... "
@@ -249,11 +264,17 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   exit 1
 fi
 
-echo "purge Moodle cache..."
-sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/purge_caches.php
-
-echo "fix courses..."
+echo "CLI fix_course_sequence..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_course_sequence.php -c=* --fix
+
+echo "CLI fix_deleted_users..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_deleted_users.php
+
+echo "CLI fix_orphaned_calendar_events..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_orphaned_calendar_events.php
+
+echo "CLI fix_orphaned_question_categories..."
+sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/fix_orphaned_question_categories.php
 
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MOODLE_HOME/admin/cli/maintenance.php --disable
