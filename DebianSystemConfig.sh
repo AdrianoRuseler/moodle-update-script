@@ -23,6 +23,11 @@ sudo apt-get install -y git p7zip-full
 echo "Install python..."
 sudo apt-get install -y python3
 
+echo "Add the following Apache2 PPA repository"
+sudo add-apt-repository ppa:ondrej/apache2 -y && sudo apt-get update
+echo "Add the following PHP PPA repository"
+sudo add-apt-repository ppa:ondrej/php -y && sudo apt-get update
+
 echo "Install php7.4 for apache..."
 sudo apt-get install apache2 php7.4 libapache2-mod-php7.4
 
