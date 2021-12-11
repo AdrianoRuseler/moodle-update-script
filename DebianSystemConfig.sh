@@ -11,6 +11,7 @@ sudo apt-get autoremove -y && sudo apt-get autoclean -y
 echo "Add locales pt_BR, en_US, es_ES, pt_PT..."
 sudo sed -i '/^#.* pt_BR.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
+sudo sed -i '/^#.* en_AU.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
 echo "Set timezone and locale..." 
