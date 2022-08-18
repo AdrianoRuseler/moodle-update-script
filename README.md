@@ -19,6 +19,7 @@ sudo ./Moodle311update.sh | tee Moodle311update.log
 ```
 
 ## Script for Apache
+- https://docs.moodle.org/400/en/Apache
 ```bash
 # https://docs.moodle.org/400/en/Apache
 # The function slash arguments is required for various features 
@@ -57,7 +58,8 @@ RewriteRule "(\/fixtures\/)" - [F]
 - https://www.moodlebites.com/
 
 
-## 
+## Configuration file
+- https://docs.moodle.org/400/en/Configuration_file
 ```php
 // Use the following flag to completely disable the installation of plugins
 // (new plugins, available updates and missing dependencies) and related
@@ -71,7 +73,7 @@ $CFG->disableupdatenotifications = true;
 // potentially cause a security risk. Set this option to true to disable editing
 // those config settings via the web. They will need to be set explicitly in the
 // config.php file
-// $CFG->preventexecpath = true;
+$CFG->preventexecpath = true;
 ```
 ## crontab
 https://docs.moodle.org/400/en/Cron
