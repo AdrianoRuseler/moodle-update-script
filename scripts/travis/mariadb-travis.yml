@@ -1,0 +1,95 @@
+language: php
+
+dist: bionic
+
+addons:
+  mariadb: '10.3'
+  #hosts:
+  #  - moodle.test
+ # firefox: stable
+  chrome: stable
+  apt:
+    packages:
+      - redis-server
+      - openjdk-8-jre-headless
+      - chromium-chromedriver
+services:
+  - memcached
+  - redis-server
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.npm
+
+env:
+  global:
+    - IGNORE_PATHS=vendor,source
+    - IGNORE_NAMES=*.txt,*.md
+    - MUSTACHE_IGNORE_NAMES=mobile_teacher_form.mustache
+    
+    - MOODLE_BRANCH=MOODLE_38_STABLE
+    - DB=mariadb
+# Alternate tests with MySQL and PostgreSQL
+matrix:
+  include:
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/availability/condition/ipaddress
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/mod/jitsi
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/lib/editor/atto/plugins/fullscreen
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/blocks/completion_progress
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/mod/attendance
+
+#    - php: 7.3
+#      env: PLUGIN_DIR=moodle/mod/hvp
+      
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/lib/editor/atto/plugins/cloze
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/blocks/xp
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/mod/customcert
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/enrol/auto
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/question/type/oumultiresponse
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/mod/scheduler
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/theme/adaptable
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/mod/choicegroup
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/mod/booking
+    - php: 7.3
+      env: PLUGIN_DIR=moodle/mod/studentquiz
+      
+before_install:
+  - phpenv config-rm xdebug.ini
+  - mv $PLUGIN_DIR/* .
+  - rm -rf moodle
+  - cd ../..
+  - nvm install 8.9;
+    nvm use 8.9;
+    composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2;
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//') JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+ # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3
+install:
+  - moodle-plugin-ci install
+
+script:
+  - moodle-plugin-ci validate
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci phpcpd
+  - moodle-plugin-ci phpmd
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci savepoints
+ # - moodle-plugin-ci mustache
+ # - moodle-plugin-ci grunt
+  - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat --profile chrome
