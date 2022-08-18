@@ -20,9 +20,6 @@ docker exec greenlight-v2 bundle exec rake user:create["Prof. Adriano Ruseler","
 
 
 
-
-
-
 ### NOT WORKING FOR IP CHANGE ###
 # bbb-conf --secret
 sudo bbb-conf --setip bbb.adrianoruseler.com
