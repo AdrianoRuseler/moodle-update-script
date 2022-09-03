@@ -40,8 +40,12 @@ uname -a # Gets system info
 echo ""
 df -H # Gets disk usage info
 echo ""
-date # Gets date
+apache2 -v # Gets apache version
 echo ""
+php -version # Gets php version
+echo ""
+
+echo "##------------ MDL INFO -----------------##"
 
 # Verify for MDLHOME and MDLDATA
 if [[ ! -v MDLHOME ]] || [[ -z "$MDLHOME" ]] || [[ ! -v MDLDATA ]] || [[ -z "$MDLDATA" ]]; then
