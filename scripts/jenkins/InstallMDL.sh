@@ -96,7 +96,7 @@ fi
  # Verify for MDLCONFIGDISTFILE
 if [[ ! -v MDLCONFIGDISTFILE ]] || [[ -z "$MDLCONFIGDISTFILE" ]]; then
     echo "MDLCONFIGDISTFILE is not set or is set to the empty string!"
-	MDLCONFIGDISTFILE="https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/config/config-dist.php"
+	MDLCONFIGDISTFILE="https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/config-dist.php"
 	echo "MDLCONFIGDISTFILE=\"$MDLCONFIGDISTFILE\"" >> $ENVFILE
 else
     echo "MDLCONFIGDISTFILE has the value: $MDLCONFIGDISTFILE"	
@@ -119,7 +119,7 @@ sed -i 's/mydbtype/'"$USEDB"'/' $MDLCONFIGFILE # Configure DB Name
  # Verify for MDLCONFIGDISTFILE
 if [[ ! -v MDLDEFAULTSDISTFILE ]] || [[ -z "$MDLDEFAULTSDISTFILE" ]]; then
     echo "MDLDEFAULTSDISTFILE is not set or is set to the empty string!"
-	MDLDEFAULTSDISTFILE="https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/config/defaults-dist.php"
+	MDLDEFAULTSDISTFILE="https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/defaults-dist.php"
 	echo "MDLDEFAULTSDISTFILE=\"$MDLDEFAULTSDISTFILE\"" >> $ENVFILE
 else
     echo "MDLDEFAULTSDISTFILE has the value: $MDLDEFAULTSDISTFILE"	
