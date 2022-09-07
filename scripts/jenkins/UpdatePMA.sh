@@ -56,7 +56,9 @@ sudo rm -rf phpMyAdmin-$PMAVER-all-languages phpMyAdmin-$PMAVER-all-languages.ta
 cd $LOCALSITEDIR
 
 # https://stackoverflow.com/questions/34539132/updating-phpmyadmin-blowfish-secret-via-bash-shell-script-in-linux
-randomBlowfishSecret=$(openssl rand -base64 32)
+#randomBlowfishSecret=$(openssl rand -base64 32)
+randomBlowfishSecret=$(openssl rand -base64 24) # The secret passphrase in configuration (blowfish_secret) is not the correct length. It should be 32 bytes long.
+
 sed -e "s|cfg\['blowfish_secret'\] = ''|cfg['blowfish_secret'] = '$randomBlowfishSecret'|" config.sample.inc.php > config.inc.php
 
 sudo systemctl restart mariadb.service
