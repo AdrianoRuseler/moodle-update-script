@@ -61,10 +61,12 @@ echo "##------------ GET MAHARA -----------------##"
 
 # https://stackoverflow.com/questions/29109673/is-there-a-way-to-get-the-latest-tag-of-a-given-repo-using-github-api-v3
 MAHARAVER=$(curl "https://api.github.com/repos/MaharaProject/mahara/tags" | jq -r '.[0].name')
+echo $MAHARAVER
 
 #MAHARAZIPURL=$(curl "https://api.github.com/repos/MaharaProject/mahara/tags" | jq -r '.[0].zipball_url')
 #wget $MAHARAZIPURL -O mahara.zip
 MAHARATARURL=$(curl "https://api.github.com/repos/MaharaProject/mahara/tags" | jq -r '.[0].tarball_url')
+echo $MAHARATARURL
 
 cd /tmp/
 wget $MAHARATARURL -O mahara.tar.gz
@@ -93,7 +95,7 @@ sudo cp $LOCALSITEDIR.$DAY.tmpbkp/htdocs/config.php $LOCALSITEDIR
 sudo chown -R www-data:www-data $LOCALSITEDIR
 
 echo "Upgrading Mahara..."
-sudo -u www-data /usr/bin/php $LOCALSITEDIR/admin/cli/upgrade.php
+sudo -u www-data /usr/bin/php $LOCALSITEDIR/htdocs/admin/cli/upgrade.php
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$LOCALSITEDIR.$DAY.tmpbkp" ]; then # If exists
