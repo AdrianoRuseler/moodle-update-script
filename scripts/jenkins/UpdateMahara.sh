@@ -88,7 +88,7 @@ sudo mv /tmp/mahara/* $LOCALSITEDIR
 rm -rf /tmp/mahara
 
 echo "Copying config file ..."
-sudo cp $LOCALSITEDIR.$DAY.tmpbkp/htdocs/config.php $LOCALSITEDIR
+sudo cp $LOCALSITEDIR.$DAY.tmpbkp/htdocs/config.php $LOCALSITEDIR/htdocs
 
 
 # https://wiki.mahara.org/wiki/System_Administrator%27s_Guide/Upgrading_Mahara#4a._Upgrading_at_the_command-line
