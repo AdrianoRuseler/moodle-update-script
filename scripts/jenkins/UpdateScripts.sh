@@ -88,6 +88,10 @@ rm UpdatePMA.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdatePMA.sh
 chmod a+x UpdatePMA.sh
 
+rm UpdateMahara.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateMahara.sh
+chmod a+x UpdateMahara.sh
+
 rm SystemUpdate.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/SystemUpdate.sh
 chmod a+x SystemUpdate.sh
