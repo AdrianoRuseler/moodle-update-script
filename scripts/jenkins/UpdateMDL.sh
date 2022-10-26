@@ -94,8 +94,11 @@ else
 fi
 
 # Clone git repository
+MDLCORE=$LOCALSITENAME'mdlcore'
+MDLPLGS=$LOCALSITENAME'mdlplugins'
+
 cd /tmp
-git clone --depth=1 --branch=$MDLBRANCH $MDLREPO mdlcore
+git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
 
 # Verify for Moodle Branch
 if [[ ! -v PLGREPO ]] || [[ -z "$PLGREPO" ]]; then
@@ -110,9 +113,9 @@ else
 		echo "PLGBRANCH has the value: $PLGBRANCH"
 	fi
 	cd /tmp
-	git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO mdlplugins
-	sudo rsync -a /tmp/mdlplugins/moodle/* /tmp/mdlcore/
-	rm -rf /tmp/mdlplugins
+	git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+	sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
+	rm -rf /tmp/$MDLPLGS
 fi
 
 echo "Kill all user sessions..."
@@ -146,8 +149,8 @@ sudo mv $MDLHOME $MDLHOME.$DAY.tmpbkp
 mkdir $MDLHOME
 
 echo "moving new files..."
-sudo mv /tmp/mdlcore/* $MDLHOME
-rm -rf /tmp/mdlcore
+sudo mv /tmp/$MDLCORE/* $MDLHOME
+rm -rf /tmp/$MDLCORE
 
 echo "Copying config file ..."
 sudo cp $MDLHOME.$DAY.tmpbkp/config.php $MDLHOME
