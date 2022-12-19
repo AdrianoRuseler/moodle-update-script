@@ -183,11 +183,16 @@ cd ..
 ls -l
 sudo rm -rf $MDLHOME.$DAY.tmpbkp
 
-echo "Update Moodle site name:"
-cd $MDLHOME
-mdlrelease=$(moosh -n config-get core release)
-moosh -n course-config-set course 1 fullname "Moodle $mdlrelease"
-moosh -n course-config-set course 1 shortname "Moodle $mdlrelease"
+
+if ! [ -x "$(command -v moosh)" ]; then
+	echo 'Error: moosh is not installed.'
+else
+	echo "Update Moodle site name:"
+	cd $MDLHOME
+	mdlrelease=$(moosh -n config-get core release)
+	moosh -n course-config-set course 1 fullname "Moodle $mdlrelease"
+	moosh -n course-config-set course 1 shortname "Moodle $mdlrelease"
+fi
 
 echo "Disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
