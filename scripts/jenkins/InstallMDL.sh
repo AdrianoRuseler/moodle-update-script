@@ -35,6 +35,14 @@ else
     echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
+# Verifies if pwgen is installed	
+if ! [ -x "$(command -v pwgen)" ]; then
+	echo 'Error: pwgen is not installed.'
+	exit 1
+else
+	echo 'pwgen is installed!'
+fi
+
 datastr=$(date) # Generates datastr
 echo "" >> $ENVFILE
 echo "# ----- $datastr -----" >> $ENVFILE
