@@ -42,6 +42,14 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	fi
 fi
 	
+# Verifies if pwgen is installed	
+if ! [ -x "$(command -v pwgen)" ]; then
+	echo 'Error: pwgen is not installed.'
+	exit 1
+else
+	echo 'pwgen is installed!'
+fi
+
 
 datastr=$(date) # Generates datastr
 ENVFILE='.'${DBNAME}'.env'
