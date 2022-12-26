@@ -68,6 +68,13 @@ else
 fi
 
 echo ""
+echo "##------------ VERIFY FOR JQ -----------------##"
+if ! [ -x "$(command -v jq)" ]; then
+	echo 'Error: jq is not installed.'
+	exit 1
+fi
+
+echo ""
 echo "##------------ GET MEDIAWIKI -----------------##"
 
 # https://stackoverflow.com/questions/29109673/is-there-a-way-to-get-the-latest-tag-of-a-given-repo-using-github-api-v3
