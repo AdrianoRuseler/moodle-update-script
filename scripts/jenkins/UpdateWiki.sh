@@ -101,7 +101,7 @@ rm mediawiki.tar.gz
 echo "##----------------------- MEDIAWIKI UPDATE -------------------------##"
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
-echo "##--------------------- Wiki Extensions --------------------------##"
+#echo "##--------------------- Wiki Extensions --------------------------##"
 # echo "https://www.mediawiki.org/wiki/Special:ExtensionDistributor"
 #cd $TMP_DIR
 
