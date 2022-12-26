@@ -81,8 +81,11 @@ echo "##------------ GET MEDIAWIKI -----------------##"
 
 WIKIVER=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].name')
 echo $WIKIVER
+WIKIV=$(echo $WIKIVER | cut -d. -f1-2)
+echo $WIKIV
 
-WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
+#WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
+WIKITARURL="https://releases.wikimedia.org/mediawiki/"$WIKIV"/mediawiki-"$WIKIVER".tar.gz"
 echo $WIKITARURL
 
 cd /tmp/
