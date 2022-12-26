@@ -124,6 +124,7 @@ sudo chown -R www-data:www-data $LOCALSITEDIR
 
 echo "##------------------ Wiki core update ------------------------##"
 echo "Upgrading mediaiwki Core..."
+cd $LOCALSITEDIR
 sudo -u www-data composer update --no-dev
 sudo -u www-data /usr/bin/php $LOCALSITEDIR/maintenance/update.php --quick
 if [[ $? -ne 0 ]]; then
