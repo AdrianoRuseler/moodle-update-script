@@ -122,10 +122,15 @@ sudo cp $LOCALSITEDIR.$DAY.tmpbkp/LocalSettings.php $LOCALSITEDIR
 echo "fixing file permissions..."
 sudo chown -R www-data:www-data $LOCALSITEDIR
 
-echo "##------------------ Wiki core update ------------------------##"
-echo "Upgrading mediaiwki Core..."
+echo "composer update --no-dev..."
 cd $LOCALSITEDIR
 sudo -u www-data composer update --no-dev
+
+echo "fixing file permissions..."
+sudo chown -R www-data:www-data $LOCALSITEDIR
+
+echo "##------------------ Wiki core update ------------------------##"
+echo "Upgrading mediaiwki Core..."
 sudo -u www-data /usr/bin/php $LOCALSITEDIR/maintenance/update.php --quick
 if [[ $? -ne 0 ]]; then
   echo "Error: Upgrading mediaiwki Core!"
