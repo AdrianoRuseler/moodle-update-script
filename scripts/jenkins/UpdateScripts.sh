@@ -95,3 +95,7 @@ chmod a+x UpdateMahara.sh
 rm SystemUpdate.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/SystemUpdate.sh
 chmod a+x SystemUpdate.sh
+
+rm UpdateWiki.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateWiki.sh
+chmod a+x UpdateWiki.sh
