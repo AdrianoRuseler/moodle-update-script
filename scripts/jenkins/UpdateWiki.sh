@@ -79,11 +79,19 @@ echo ""
 echo "##------------ GET MEDIAWIKI -----------------##"
 
 # https://stackoverflow.com/questions/29109673/is-there-a-way-to-get-the-latest-tag-of-a-given-repo-using-github-api-v3
-
+# Get latest wiki version
 WIKIVER=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].name')
 echo $WIKIVER
 WIKIV=$(echo $WIKIVER | cut -d. -f1-2)
-echo $WIKIV
+#echo $WIKIV
+
+# Get actual wiki version
+WIKIACTUALVER=$(cat $LOCALSITEDIR/includes/Defines.php | grep "MW_VERSION" | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+
+if [ $WIKIVER == $WIKIACTUALVER ]; then
+    echo "Version is up to date"
+	exit 0
+fi
 
 #WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
 WIKITARURL="https://releases.wikimedia.org/mediawiki/"$WIKIV"/mediawiki-"$WIKIVER".tar.gz"
@@ -100,6 +108,8 @@ rm -rf mediawiki # if exists
 mkdir mediawiki
 tar -xf mediawiki.tar.gz -C mediawiki --strip-components=1
 rm mediawiki.tar.gz
+
+
 
 
 echo "##----------------------- MEDIAWIKI UPDATE -------------------------##"
