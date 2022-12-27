@@ -71,6 +71,7 @@ echo ""
 echo "##------------ VERIFY FOR JQ -----------------##"
 if ! [ -x "$(command -v jq)" ]; then
 	echo 'Error: jq is not installed.'
+	echo 'Use: apt install jq'
 	exit 1
 fi
 
@@ -106,7 +107,6 @@ DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
 #echo "##--------------------- Wiki Extensions --------------------------##"
 # echo "https://www.mediawiki.org/wiki/Special:ExtensionDistributor"
-#cd $TMP_DIR
 
 echo "Moving old files ..."
 sudo mv $LOCALSITEDIR $LOCALSITEDIR.$DAY.tmpbkp
@@ -118,14 +118,14 @@ sudo mv /tmp/mediawiki/* $LOCALSITEDIR
 echo "Copying config file ..."
 sudo cp $LOCALSITEDIR.$DAY.tmpbkp/LocalSettings.php $LOCALSITEDIR
 
-#echo "Copying assets files ..."
-#sudo cp $WIKI_HOME.$DAY.tmpbkp/resources/assets/ARWiki.png $WIKI_HOME/resources/assets/
-#sudo cp $WIKI_HOME.$DAY.tmpbkp/resources/assets/favicon.ico $WIKI_HOME/resources/assets/
+echo "Copying assets files ..."
+sudo cp $LOCALSITEDIR.$DAY.tmpbkp/resources/assets/wikilogo.png $LOCALSITEDIR/resources/assets/
+sudo cp $LOCALSITEDIR.$DAY.tmpbkp/resources/assets/favicon.ico $LOCALSITEDIR/resources/assets/
 
 echo "fixing file permissions..."
 sudo chown -R www-data:www-data $LOCALSITEDIR
 
-echo "composer update --no-dev..."
+echo "Composer update --no-dev..."
 cd $LOCALSITEDIR
 sudo -u www-data composer update --no-dev
 
