@@ -35,6 +35,13 @@ else
     echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+	PHPVER='php' # Uses default version
+else
+    echo "PHPVER has the value: $PHPVER"
+fi
+
 # Verifies if pwgen is installed	
 if ! [ -x "$(command -v pwgen)" ]; then
 	echo 'Error: pwgen is not installed.'
@@ -147,16 +154,16 @@ echo "MDLADMEMAIL=\"$MDLADMEMAIL\"" >> $ENVFILE
 echo "MDLLANG=\"$MDLLANG\"" >> $ENVFILE
 
 mdlver=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/install_database.php --lang=$MDLLANG --adminpass=$MDLADMPASS --agree-license --adminemail=$MDLADMEMAIL --fullname="Moodle $mdlver" --shortname="Moodle $mdlver"
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/install_database.php --lang=$MDLLANG --adminpass=$MDLADMPASS --agree-license --adminemail=$MDLADMEMAIL --fullname="Moodle $mdlver" --shortname="Moodle $mdlver"
 
 # Config Moodle
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/cfg.php --name=allowthemechangeonurl --set=1
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/cfg.php --name=allowthemechangeonurl --set=1
 
 # Install H5P content
-#sudo -u www-data /usr/bin/php $MDLHOME/admin/tool/task/cli/schedule_task.php --execute='\core\task\h5p_get_content_types_task'
+#sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/tool/task/cli/schedule_task.php --execute='\core\task\h5p_get_content_types_task'
 
 # Add cron for moodle - Shows: no crontab for root
-(crontab -l | grep . ; echo -e "*/1 * * * * /usr/bin/php  $MDLHOME/admin/cli/cron.php >/dev/null\n") | crontab -
+(crontab -l | grep . ; echo -e "*/1 * * * * /usr/bin/$PHPVER  $MDLHOME/admin/cli/cron.php >/dev/null\n") | crontab -
 
 # rm $MDLCONFIGFILE
 # rm $MDLDEFAULTSFILE
