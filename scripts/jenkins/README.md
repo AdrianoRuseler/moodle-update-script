@@ -12,6 +12,13 @@ wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/maste
 chmod a+x UpdateScripts.sh
 ./UpdateScripts.sh
 ```
+## CreateApacheLocalSite
+```bash
+export LOCALSITENAME="mysite"
+export SITETYPE="PHP"
+./CreateApacheLocalSite.sh
+```
+
 ## Install phpMyAdmin
 ```bash
 export LOCALSITENAME="pma"
