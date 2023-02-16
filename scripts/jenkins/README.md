@@ -19,6 +19,13 @@ export SITETYPE="PHP"
 ./CreateApacheLocalSite.sh
 ```
 
+## CreateDataBaseUser
+```bash
+export LOCALSITENAME="mysite"
+export USEDB="pgsql"
+./CreateDataBaseUser.sh
+```
+
 ## Install phpMyAdmin
 ```bash
 export LOCALSITENAME="pma"
