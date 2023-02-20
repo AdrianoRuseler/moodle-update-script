@@ -28,6 +28,15 @@ if [ -f $ENVFILE ]; then
 #	rm $ENVFILE
 fi
 
+echo ""
+echo "##------------ SYSTEM INFO -----------------##"
+uname -a # Gets system info
+echo ""
+df -H # Gets disk usage info
+echo ""
+apache2 -v # Gets apache version
+echo ""
+
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
     echo "LOCALSITEURL is not set or is set to the empty string!"
 	LOCALSITEURL=${LOCALSITENAME}'.local' # Generates ramdon site name
@@ -35,11 +44,21 @@ else
     echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
+# PHP version to use
 if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
     echo "PHPVER is not set or is set to the empty string!"
 	PHPVER='php' # Uses default version
 else
     echo "PHPVER has the value: $PHPVER"
+fi
+
+# Verifies if PHPVER is installed	
+if ! [ -x "$(command -v $PHPVER)" ]; then
+	echo "Error: $PHPVER is not installed."
+	exit 1
+else
+	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	echo ""
 fi
 
 # Verifies if pwgen is installed	
