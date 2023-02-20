@@ -205,7 +205,8 @@ if ! [ -x "$(command -v moosh)" ]; then
 else
 	echo "Update Moodle site name:"
 	cd $MDLHOME
-	mdlrelease=$(moosh -n config-get core release)
+	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
+	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
 	moosh -n course-config-set course 1 fullname "Moodle $mdlrelease"
 	moosh -n course-config-set course 1 shortname "Moodle $mdlrelease"
 fi
