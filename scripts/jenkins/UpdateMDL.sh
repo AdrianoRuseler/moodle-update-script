@@ -42,8 +42,24 @@ df -H # Gets disk usage info
 echo ""
 apache2 -v # Gets apache version
 echo ""
-php -version # Gets php version
-echo ""
+
+# PHP version to use
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+	PHPVER='php' # Uses default version
+else
+    echo "PHPVER has the value: $PHPVER"
+fi
+
+# Verifies if PHPVER is installed	
+if ! [ -x "$(command -v $PHPVER)" ]; then
+	echo "Error: $PHPVER is not installed."
+	exit 1
+else
+	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	echo ""
+fi
+
 
 echo "##------------ MDL INFO -----------------##"
 
@@ -119,25 +135,25 @@ else
 fi
 
 echo "Kill all user sessions..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/kill_all_sessions.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/kill_all_sessions.php
 
 echo "Enable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --enable
 
 echo "CLI purge Moodle cache..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/purge_caches.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/purge_caches.php
 
 echo "CLI fix_course_sequence..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_course_sequence.php -c=* --fix
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_course_sequence.php -c=* --fix
 
 echo "CLI fix_deleted_users..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_deleted_users.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_deleted_users.php
 
 echo "CLI fix_orphaned_calendar_events..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_calendar_events.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_orphaned_calendar_events.php
 
 echo "CLI fix_orphaned_question_categories..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_question_categories.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_orphaned_question_categories.php
 
 
 echo ""
@@ -163,7 +179,7 @@ sudo chmod -R 0755 $MDLHOME
 
 
 echo "Upgrading Moodle Core started..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/upgrade.php --non-interactive --allow-unstable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/upgrade.php --non-interactive --allow-unstable
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
@@ -172,7 +188,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
     sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
   fi
   echo "Disable the maintenance mode..."
-  sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
+  sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
   echo "##------------------------ FAIL -------------------------##"
   exit 1
 fi
@@ -195,4 +211,4 @@ else
 fi
 
 echo "Disable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
