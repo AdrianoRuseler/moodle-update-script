@@ -213,8 +213,8 @@ else
 	cd $MDLHOME
 	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
 	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
-	sudo -u www-data /usr/bin/$PHPVER moosh -n course-config-set course 1 fullname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
-	sudo -u www-data /usr/bin/$PHPVER moosh -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+	sudo /usr/bin/$PHPVER /home/ubuntu/moosh/moosh.php -n course-config-set course 1 fullname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+	sudo /usr/bin/$PHPVER /home/ubuntu/moosh/moosh.php -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
 fi
 
 echo "Disable the maintenance mode..."
