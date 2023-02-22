@@ -10,6 +10,7 @@ fi
 # export MDLREPO="https://github.com/moodle/moodle.git"
 # export PLGBRANCH="main"
 # export PLGREPO="https://github.com/AdrianoRuseler/moodle311-plugins.git"
+# export PHPVER="php7.4"
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
@@ -221,3 +222,9 @@ sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
 
 echo "start cron..."
 sudo service cron start
+
+echo "Prints tab-separated list of all third-party installed plugins..."
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php  --show-contrib
+
+echo "Prints tab-separated list of all missing from disk plugins..."
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php  --show-missing
