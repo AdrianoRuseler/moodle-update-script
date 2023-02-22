@@ -205,16 +205,17 @@ cd ..
 ls -l
 sudo rm -rf $MDLHOME.$DAY.tmpbkp
 
-
-if ! [ -x "$(command -v moosh)" ]; then
+MOOSHCMD=$(command -v moosh) # Find moosh
+if ! [ -x $MOOSHCMD ]; then
 	echo 'Error: moosh is not installed.'
 else
+	echo $MOOSHCMD
 	echo "Update Moodle site name:"
 	cd $MDLHOME
 	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
 	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
-	sudo /usr/bin/$PHPVER /home/ubuntu/moosh/moosh.php -n course-config-set course 1 fullname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
-	sudo /usr/bin/$PHPVER /home/ubuntu/moosh/moosh.php -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+	sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+	sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
 fi
 
 echo "Disable the maintenance mode..."
