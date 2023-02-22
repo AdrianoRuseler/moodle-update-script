@@ -134,6 +134,9 @@ else
 	rm -rf /tmp/$MDLPLGS
 fi
 
+echo "stop cron..."
+sudo service cron stop
+
 echo "Kill all user sessions..."
 sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/kill_all_sessions.php
 
@@ -190,6 +193,8 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
   echo "##------------------------ FAIL -------------------------##"
+  echo "start cron..."
+  sudo service cron start
   exit 1
 fi
 
@@ -207,9 +212,12 @@ else
 	cd $MDLHOME
 	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
 	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
-	moosh -n course-config-set course 1 fullname "Moodle $mdlrelease"
-	moosh -n course-config-set course 1 shortname "Moodle $mdlrelease"
+	moosh -n course-config-set course 1 fullname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+	moosh -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
 fi
 
 echo "Disable the maintenance mode..."
 sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
+
+echo "start cron..."
+sudo service cron start
