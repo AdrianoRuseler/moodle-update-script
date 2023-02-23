@@ -109,13 +109,15 @@ fi
 if [[ "$USEDB" == "mariadb" ]]; then
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
-		mysql -e "DELETE FROM mdl_logstore_standard_log;" # TODO: verify for table prefix
+		mysql -e $'USE '${DBNAME}$'; DELETE FROM mdl_logstore_standard_log;' # TODO: verify for table prefix
 		# ALTER TABLE mdl_logstore_standard_log AUTO_INCREMENT = 1
-		mysql -e "DELETE FROM mdl_task_log;" # TODO: verify for table prefix
+		mysql -e $'USE '${DBNAME}$'; DELETE FROM mdl_task_log;' # TODO: verify for table prefix
+		mysql -e $'USE '${DBNAME}$'; DELETE FROM mdl_upgrade_log;' # TODO: verify for table prefix
 	# If /root/.my.cnf doesn't exist then it'll ask for password   
 	else
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "DELETE FROM mdl_logstore_standard_log;" # TODO: verify for table prefix
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "DELETE FROM mdl_task_log;" # TODO: verify for table prefix
+		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e $'USE '${DBNAME}$'; DELETE FROM mdl_logstore_standard_log;' # TODO: verify for table prefix
+		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e $'USE '${DBNAME}$'; DELETE FROM mdl_task_log;' # TODO: verify for table prefix
+		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e $'USE '${DBNAME}$'; DELETE FROM mdl_upgrade_log;' # TODO: verify for table prefix
 	fi
 else
 	touch /tmp/createPGDBUSER.sql
