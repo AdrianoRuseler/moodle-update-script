@@ -84,6 +84,18 @@ if [[ ! -d "$DBBKP" ]]; then
 	mkdir $DBBKP
 fi
 
+# Verify for BKPNAME -- Not set on .env file
+if [[ ! -v BKPNAME ]] || [[ -z "$BKPNAME" ]]; then
+    echo "BKPNAME is not set or is set to the empty string!"
+    BKPNAME=$(date +\%Y-\%m-\%d-\%H.\%M)
+	echo "Now BKPNAME is set to: $BKPNAME"
+else
+    echo "BKPNAME has the value: $BKPNAME"	
+	# O que fazer caso já exista backup com o nome utilizado?
+fi
+
+DBFILE=$DBBKP$BKPNAME.sql
+
 mdlver=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
 echo "Moodle "$mdlver
 
@@ -103,6 +115,8 @@ else
 	sudo -i -u postgres pg_dump $DBNAME mdl_logstore_standard_log mdl_task_log mdl_upgrade_log > $DBFILE # TODO: verify for table prefix
 fi
 
+ls -l $DBBKP
+
 # DELETE FROM mdl_logstore_standard_log;
 # DELETE FROM mdl_task_log;
 
@@ -121,8 +135,10 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	fi
 else
 	touch /tmp/createPGDBUSER.sql
+	echo $'USE '${DBNAME}$';' >> /tmp/createPGDBUSER.sql
 	echo 'DELETE FROM mdl_logstore_standard_log;' >> /tmp/createPGDBUSER.sql
 	echo 'DELETE FROM mdl_task_log;' >> /tmp/createPGDBUSER.sql
+	echo 'DELETE FROM mdl_upgrade_log;' >> /tmp/createPGDBUSER.sql
 #	echo $'GRANT ALL PRIVILEGES ON DATABASE '${DBNAME}$' TO '${DBUSER}$';' >> /tmp/createPGDBUSER.sql
 	cat /tmp/createPGDBUSER.sql
 
@@ -132,7 +148,6 @@ fi
 	
 # NB: It is not necessary to copy the contents of these directories: tar -cvf backup.tar --exclude={"public_html/template/cache","public_html/images"} public_html/
 # --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"}	
-
 
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
