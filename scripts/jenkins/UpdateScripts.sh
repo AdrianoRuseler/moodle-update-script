@@ -99,3 +99,7 @@ chmod a+x SystemUpdate.sh
 rm UpdateWiki.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateWiki.sh
 chmod a+x UpdateWiki.sh
+
+rm ClearLogsMDL.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/ClearLogsMDL.sh
+chmod a+x ClearLogsMDL.sh
