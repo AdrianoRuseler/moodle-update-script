@@ -78,6 +78,17 @@ ls -lh $MDLDATA
 # NB: It is not necessary to copy the contents of these directories: tar -cvf backup.tar --exclude={"public_html/template/cache","public_html/images"} public_html/
 # --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"}	
 
+echo "CLI fix_course_sequence..."
+sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_course_sequence.php -c=* --fix
+
+echo "CLI fix_deleted_users..."
+sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_deleted_users.php
+
+echo "CLI fix_orphaned_calendar_events..."
+sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_calendar_events.php
+
+echo "CLI fix_orphaned_question_categories..."
+sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_question_categories.php
 
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
