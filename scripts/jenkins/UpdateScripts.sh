@@ -103,3 +103,7 @@ chmod a+x UpdateWiki.sh
 rm ClearLogsMDL.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/ClearLogsMDL.sh
 chmod a+x ClearLogsMDL.sh
+
+rm UpdatePluginMDL.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdatePluginMDL.sh
+chmod a+x UpdatePluginMDL.sh
