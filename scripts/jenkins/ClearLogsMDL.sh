@@ -35,11 +35,17 @@ else
     echo "MDLHOME has the value: $MDLHOME"	
 fi
 
-# Verify if folder exists
-if [[ -d "$MDLDATA" ]]; then
-	echo "$MDLDATA exists on your filesystem."
+# Verify if folder and config.php exists
+if [[ -d "$MDLHOME" ]] && [[ -d "$MDLDATA" ]]; then
+	echo "$MDLHOME and $MDLDATA exists on your filesystem."
+	if [ -f "$MDLHOME/config.php" ]; then
+		echo "$MDLHOME/config.php exists!"
+	else 
+		echo "$MDLHOME/config.php does not exist!"
+		exit 1
+	fi
 else
-    echo "$MDLDATA NOT exists on your filesystem."
+    echo "$MDLHOME or $MDLDATA NOT exists on your filesystem."
 	exit 1
 fi
 
