@@ -62,10 +62,14 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	fi
 fi
 
+
+#DBPASS=$(cat $MDLHOME/config.php | grep 'dbpass' | cut -d\' -f 2) # Gets Moodle DB Password
+
 # Verify for DB Credentials
 if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]]; then
     echo "DBNAME is not set or is set to the empty string!"
-    exit 1
+	DBNAME=$(cat $MDLHOME/config.php | grep 'dbname' | cut -d\' -f 2) # Gets Moodle DB Name
+    echo "DBNAME has been found in config.php: $DBNAME"
 else
     echo "DBNAME has the value: $DBNAME"	
 fi
@@ -105,6 +109,7 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
 echo "CLI kill_all_sessions..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/kill_all_sessions.php
 
+DBPREFIX=$(cat $MDLHOME/config.php | grep 'prefix' | cut -d\' -f 2) # Gets Moodle DB prefix
 # mysqldump -u [uname] -p db_name table1 table2 > table_backup.sql
 # make database backup
 if [[ "$USEDB" == "mariadb" ]]; then
