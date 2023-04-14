@@ -78,23 +78,31 @@ sudo apt-get install -y aspell dictionaries-common libaspell15 aspell-en aspell-
 echo "Add the following PHP PPA repository"
 sudo add-apt-repository ppa:ondrej/php -y && sudo apt-get update
 
-echo "Install php7.4 for apache..."
-sudo apt-get install -y php7.4 libapache2-mod-php7.4
+echo "Install php7.8 for apache..."
+sudo apt-get install -y php8.0 libapache2-mod-php8.0 php-common php8.0-cli php8.0-common php8.0-opcache php8.0-readline php8.0-fpm
 
-echo "Install php7.4 extensions..."
-sudo apt-get install -y php7.4-curl php7.4-zip php7.4-intl php7.4-xmlrpc php7.4-soap php7.4-xml php7.4-gd php7.4-ldap php7.4-common php7.4-cli php7.4-mbstring php7.4-mysql php7.4-imagick php7.4-json php7.4-readline php7.4-tidy
+echo "Install php7.8 extensions..."
+sudo apt-get install -y php8.0-curl php8.0-zip php8.0-intl php8.0-xmlrpc php8.0-soap php8.0-xml php8.0-gd php8.0-ldap php8.0-mbstring php8.0-mysql php8.0-imagick php8.0-tidy
 
 # Cache related
-sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache php7.4-mongodb
+sudo apt-get install -y php8.0-redis php8.0-memcached php8.0-apcu php8.0-mongodb
 
 echo "Restart apache server..."
 sudo service apache2 restart
 
 # Set PHP ini
-sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/post_max_size =.*/post_max_size = 128M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/upload_max_filesize =.*/upload_max_filesize = 128M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/;max_input_vars =.*/max_input_vars = 5000/' /etc/php/7.4/apache2/php.ini
+sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/8.0/apache2/php.ini
+sed -i 's/post_max_size =.*/post_max_size = 256M/' /etc/php/8.0/apache2/php.ini
+sed -i 's/upload_max_filesize =.*/upload_max_filesize = 256M/' /etc/php/8.0/apache2/php.ini
+sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/8.0/apache2/php.ini
+
+# Set PHP CLI ini
+sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/8.0/cli/php.ini
+sed -i 's/post_max_size =.*/post_max_size = 256M/' /etc/php/8.0/cli/php.ini
+sed -i 's/upload_max_filesize =.*/upload_max_filesize = 256M/' /etc/php/8.0/cli/php.ini
+sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/8.0/cli/php.ini
+
+systemctl reload apache2
 
 # populate site folder with index.php and phpinfo
 touch /var/www/html/index.php
@@ -111,12 +119,9 @@ echo "Install pwgen..."
 sudo apt-get install -y pwgen # Install pwgen
 
 echo "Install MariaDB..."
-sudo apt-get install -y software-properties-common dirmngr apt-transport-https
-sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-sudo add-apt-repository 'deb [arch=amd64] http://mariadb.mirror.triple-it.nl/repo/10.6/ubuntu focal main'
+curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
+sudo apt-get install mariadb-server mariadb-client mariadb-backup
 
-sudo apt-get update
-sudo apt-get install -y mariadb-server
 
 DBROOTPASS=$(pwgen -s 16 1) # Generates ramdon password for db root user
 DBADMPASS=$DBROOTPASS # Generates ramdon password for db admin
@@ -212,7 +217,7 @@ sudo apt-get autoremove -y && sudo apt-get autoclean -y
 cd $HOMEDIR
 mkdir scripts
 cd scripts
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/scripts/UpdateScripts.sh -O UpdateScripts.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateScripts.sh -O UpdateScripts.sh
 chmod a+x UpdateScripts.sh
 ./UpdateScripts.sh
 
