@@ -93,11 +93,8 @@ echo ""
 ls /etc/apache2/sites-enabled/
 
 echo ""
-echo "##------ LOCAL DNS SERVICE CONFIGURATION -----##"
+echo "##------ $ENVFILE -----##"
 echo ""
 
-IP4STR=$(ip -4 addr show enp0s3 | grep -oP "(?<=inet ).*(?=/)")
-echo "Remove $IP4STR $LOCALSITEURL from %WINDIR%\System32\drivers\etc\hosts "
-echo ""
-echo "rm $ENVFILE # Remove env file"
+echo "rm $ENVFILE # to remove env file"
 echo ""
