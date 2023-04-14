@@ -65,7 +65,39 @@ else
 fi
 
 # Create new conf files
-cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+case $SITETYPE in
+  MDL)
+    echo "Site type is MDL"
+	# populate site folder with index.php and phpinfo
+	touch ${LOCALSITEDIR}/index.php
+	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;
+
+  PMA)
+    echo "Site type is PMA"	
+	# populate site folder with index.php and phpinfo
+	touch ${LOCALSITEDIR}/index.php
+	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;
+	
+  PHP)
+    echo "Site type is PHP"
+	# populate site folder with index.php and phpinfo
+	touch ${LOCALSITEDIR}/index.php
+	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;
+  *)
+    echo "Site type is unknown"
+	# populate site folder with index.php and phpinfo
+	touch ${LOCALSITEDIR}/index.php
+	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;
+esac
+
 
 # Create certificate
 openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /etc/ssl/private/${LOCALSITEURL}-selfsigned.key \
