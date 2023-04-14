@@ -107,3 +107,7 @@ chmod a+x ClearLogsMDL.sh
 rm UpdatePluginMDL.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdatePluginMDL.sh
 chmod a+x UpdatePluginMDL.sh
+
+rm DeleteApacheSite.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/DeleteApacheSite.sh
+chmod a+x DeleteApacheSite.sh
