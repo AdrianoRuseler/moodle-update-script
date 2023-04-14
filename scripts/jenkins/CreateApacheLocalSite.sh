@@ -86,7 +86,7 @@ case $SITETYPE in
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/scripts/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;
 
   PMA)
@@ -94,7 +94,7 @@ case $SITETYPE in
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/scripts/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;
 	
   PHP)
@@ -102,14 +102,14 @@ case $SITETYPE in
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/scripts/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;
   *)
     echo "Site type is unknown"
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodledev-plugins/main/scripts/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;
 esac
 
