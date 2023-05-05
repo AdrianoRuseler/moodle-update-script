@@ -61,5 +61,5 @@ randomBlowfishSecret=$(openssl rand -base64 24) # The secret passphrase in confi
 
 sed -e "s|cfg\['blowfish_secret'\] = ''|cfg['blowfish_secret'] = '$randomBlowfishSecret'|" config.sample.inc.php > config.inc.php
 
-sudo systemctl restart mariadb.service
+# sudo systemctl restart mariadb.service
 
