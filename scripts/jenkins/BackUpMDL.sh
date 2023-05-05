@@ -71,28 +71,28 @@ BKPDIR="/home/ubuntu/backups/"$LOCALSITENAME  # moodle backup folder
 # Verify if folder NOT exists
 if [[ ! -d "$BKPDIR" ]]; then
 	echo "$BKPDIR NOT exists on your filesystem."
-	mkdir $BKPDIR
+	mkdir -p $BKPDIR
 fi
 
 DBBKP=$BKPDIR"/db/" # moodle database backup folder
 # Verify if folder NOT exists
 if [[ ! -d "$DBBKP" ]]; then
 	echo "$DBBKP NOT exists on your filesystem."
-	mkdir $DBBKP
+	mkdir -p $DBBKP
 fi
 
 DATABKP=$BKPDIR"/data/"  # moodle data backup folder
 # Verify if folder NOT exists
 if [[ ! -d "$DATABKP" ]]; then
 	echo "$DATABKP NOT exists on your filesystem."
-	mkdir $DATABKP
+	mkdir -p $DATABKP
 fi
 
 HTMLBKP=$BKPDIR"/html/"  # moodle html backup folder
 # Verify if folder NOT exists
 if [[ ! -d "$HTMLBKP" ]]; then
 	echo "$HTMLBKP NOT exists on your filesystem."
-	mkdir $HTMLBKP
+	mkdir -p $HTMLBKP
 fi
 
 # Verify for BKPNAME -- Not set on .env file
