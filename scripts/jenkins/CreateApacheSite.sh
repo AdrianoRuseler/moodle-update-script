@@ -120,11 +120,11 @@ else
 	if ! [ -x "$(command -v $PHPVER)" ]; then
 		echo "Error: $PHPVER is not installed."
 	else
-		sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+		sudo -u www-data /usr/bin/$PHPVER -version # Gets php version 
 		echo "PHPVER=\"$PHPVER\"" >> $ENVFILE
 		# For Apache version 2.4.10 and above, use SetHandler to run PHP as a fastCGI process server
 		sed -i '/SetHandlerInsert$/a \\n\t\t\t</FilesMatch>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-		sed -i '/SetHandlerInsert$/a \\t\t\t\tSetHandler "proxy:unix:/run/php/php8.0-fpm.sock|fcgi://localhost"' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+		sed -i '/SetHandlerInsert$/a \\t\t\t\tSetHandler "proxy:unix:/run/php/'${PHPVER}$'-fpm.sock|fcgi://localhost"' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 		sed -i '/SetHandlerInsert$/a \\t\t\t<FilesMatch \\.php$>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 	fi
 fi
