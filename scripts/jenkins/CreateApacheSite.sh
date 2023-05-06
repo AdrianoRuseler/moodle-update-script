@@ -80,12 +80,12 @@ fi
 # Create new conf files
 case $SITETYPE in
   MDL)
-    echo "Site type is MDL"
+    echo "Site type is MDL" # 
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf 
+	;;
 
   PMA)
     echo "Site type is PMA"	
@@ -111,6 +111,23 @@ case $SITETYPE in
     ;;
 esac
 
+# PHP version to use
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+else
+    echo "PHPVER has the value: $PHPVER"
+	# Verifies if PHPVER is installed	
+	if ! [ -x "$(command -v $PHPVER)" ]; then
+		echo "Error: $PHPVER is not installed."
+	else
+		sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+		echo "PHPVER=\"$PHPVER\"" >> $ENVFILE
+		# For Apache version 2.4.10 and above, use SetHandler to run PHP as a fastCGI process server
+		sed -i '/SetHandlerInsert$/a \\n\t\t\t</FilesMatch>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+		sed -i '/SetHandlerInsert$/a \\t\t\t\tSetHandler "proxy:unix:/run/php/php8.0-fpm.sock|fcgi://localhost"' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+		sed -i '/SetHandlerInsert$/a \\t\t\t<FilesMatch \\.php$>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	fi
+fi
 
 # Create certificate
 openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /etc/ssl/private/${LOCALSITEURL}-selfsigned.key \
