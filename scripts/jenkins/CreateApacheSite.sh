@@ -80,23 +80,14 @@ fi
 case $SITETYPE in
   MDL)
     echo "Site type is MDL" # 
-	# populate site folder with index.php and phpinfo
-	touch ${LOCALSITEDIR}/index.php
-	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf 
 	;;
   PMA)
     echo "Site type is PMA"	
-	# populate site folder with index.php and phpinfo
-	touch ${LOCALSITEDIR}/index.php
-	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;	
   PHP)
     echo "Site type is PHP"
-	# populate site folder with index.php and phpinfo
-	touch ${LOCALSITEDIR}/index.php
-	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/php-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;	
   HTPASSWD)
@@ -114,22 +105,17 @@ case $SITETYPE in
 	echo "SITEPASS: $SITEPASS"
 	echo ""   # 
 	htpasswd -b -c /etc/apache2/.${LOCALSITENAME}.htpasswd ${SITEUSER} ${SITEPASS}
-	sed -i 's/changetousername/'${LOCALSITENAME}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 	# Save Environment Variables
 	echo "" >> $ENVFILE
 	echo "# Site credentials" >> $ENVFILE
 	echo "SITEUSER=\"$SITEUSER\"" >> $ENVFILE
 	echo "SITEPASS=\"$SITEPASS\"" >> $ENVFILE
-	# populate site folder with index.php and phpinfo
-	touch ${LOCALSITEDIR}/index.php
-	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/htpasswd-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;	
+    sed -i 's/changetousername/'${LOCALSITENAME}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	;;	
   *)
     echo "Site type is unknown"
-	# populate site folder with index.php and phpinfo
-	touch ${LOCALSITEDIR}/index.php
-	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
     ;;
 esac
@@ -161,6 +147,10 @@ openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /et
   
 # create site folder
 mkdir ${LOCALSITEDIR}
+
+# populate site folder with index.php and phpinfo
+touch ${LOCALSITEDIR}/index.php
+echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 
 # Change site folder and name
 sed -i 's/\/var\/www\/html/\/var\/www\/html\/'${LOCALSITEFOLDER}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
