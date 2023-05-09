@@ -76,16 +76,23 @@ else
 	exit 1
 fi
 
-# Enable site
+# Disable site
 sudo a2dissite ${LOCALSITEURL}-ssl.conf
 sudo systemctl reload apache2
 
-# remove apache files
+# Remove apache files
 rm /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt /etc/ssl/private/${LOCALSITEURL}-selfsigned.key
 
 # Remove folder
 rm -rf /var/www/html/${LOCALSITEFOLDER}
 # rm -rf /var/www/data/${LOCALSITEFOLDER}
+
+# If /etc/apache2/.${LOCALSITENAME}.htpasswd exists then delete it
+if [ -f /etc/apache2/.${LOCALSITENAME}.htpasswd ]; then
+	echo "/etc/apache2/.${LOCALSITENAME}.htpasswd exists"  
+	rm -rf /etc/apache2/.${LOCALSITENAME}.htpasswd
+fi
+
 
 echo ""
 echo "##------------ SITES ENABLED -----------------##"
