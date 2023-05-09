@@ -3,10 +3,9 @@
 # systemctl status apache2.service --no-pager --lines=2
 
 # Set web server (apache)
-# export LOCALSITENAME="mdl39"
-# export LOCALSITEURL="devtest.local"
-# export LOCALSITEFOLDER="devtest"
-# export LOCALSITEDIR="devtest"
+# export LOCALSITENAME="mdl42"
+# export SITETYPE="MDL" HTPASSWD
+# export PHPVER="php8.1"
 
 # Load .env
 if [ -f .env ]; then
@@ -86,22 +85,46 @@ case $SITETYPE in
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf 
 	;;
-
   PMA)
     echo "Site type is PMA"	
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;
-	
+    ;;	
   PHP)
     echo "Site type is PHP"
 	# populate site folder with index.php and phpinfo
 	touch ${LOCALSITEDIR}/index.php
 	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/php-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;	
+  HTPASSWD)
+    echo "Site type is HTPASSWD"
+	SITEUSER=$LOCALSITENAME # Use same generated ramdon user name
+	# Verifies if pwgen is installed	
+	if ! [ -x "$(command -v pwgen)" ]; then
+		echo 'Error: pwgen is not installed.'
+				SITEPASS=$LOCALSITENAME # Use same generated ramdon user name
+	else
+		echo 'pwgen is installed!'
+		SITEPASS=$(pwgen -s 14 1) # Generates ramdon password for db user
+	fi
+	echo "SITEUSER: $SITEUSER"
+	echo "SITEPASS: $SITEPASS"
+	echo ""   # 
+	htpasswd -b -c /etc/apache2/.${LOCALSITENAME}.htpasswd ${SITEUSER} ${SITEPASS}
+	sed -i 's/changetousername/'${LOCALSITENAME}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	# Save Environment Variables
+	echo "" >> $ENVFILE
+	echo "# Site credentials" >> $ENVFILE
+	echo "SITEUSER=\"$SITEUSER\"" >> $ENVFILE
+	echo "SITEPASS=\"$SITEPASS\"" >> $ENVFILE
+	# populate site folder with index.php and phpinfo
+	touch ${LOCALSITEDIR}/index.php
+	echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/htpasswd-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+    ;;	
   *)
     echo "Site type is unknown"
 	# populate site folder with index.php and phpinfo
@@ -129,6 +152,7 @@ else
 	fi
 fi
 
+
 # Create certificate
 openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /etc/ssl/private/${LOCALSITEURL}-selfsigned.key \
  -newkey rsa:2048 -nodes -sha256 \
@@ -137,10 +161,6 @@ openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /et
   
 # create site folder
 mkdir ${LOCALSITEDIR}
-
-# populate site folder with index.php and phpinfo
-touch ${LOCALSITEDIR}/index.php
-echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
 
 # Change site folder and name
 sed -i 's/\/var\/www\/html/\/var\/www\/html\/'${LOCALSITEFOLDER}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
