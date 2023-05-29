@@ -18,6 +18,12 @@ export LOCALSITENAME="mysite"
 export SITETYPE="PHP"
 ./CreateApacheLocalSite.sh
 ```
+## CreateApacheSite
+```bash
+export LOCALSITENAME="mysite"
+export SITETYPE="PHP"
+./CreateApacheSite.sh
+```
 
 ## CreateDataBaseUser
 ```bash
