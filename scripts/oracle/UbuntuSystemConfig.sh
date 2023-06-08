@@ -39,6 +39,12 @@ echo "Change hostname..."
 sudo nano /etc/hostname
 sudo nano /etc/hosts
 
+echo "Get Jenkins Scripts..." 
+mkdir scripts
+cd scripts
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateScripts.sh -O UpdateScripts.sh
+chmod a+x UpdateScripts.sh
+./UpdateScripts.sh
 
 echo "Add the following Apache2 PPA repository"
 sudo add-apt-repository ppa:ondrej/apache2 -y && sudo apt-get update
@@ -48,11 +54,22 @@ sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
 sudo netfilter-persistent save
 
+export LOCALSITENAME="mysite"
+# export SITETYPE="PHP"
+./CreateApacheSite.sh
+# cp /var/www/html/index.html /var/www/html/$LOCALSITENAME/index.html
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
 # https://certbot.eff.org/instructions?ws=apache&os=ubuntufocal
 sudo snap install core; sudo snap refresh core
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --apache
+
 
 
 # Jenkins JOBs
