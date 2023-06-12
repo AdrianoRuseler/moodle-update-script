@@ -160,7 +160,7 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
 # make database backup
 if [[ "$USEDB" == "mariadb" ]]; then
 	# echo "USEDB=mariadb"
-	mysqldump $DBNAME > $DBFILE
+	mariadb-dump $DBNAME > $DBFILE
 else
 	# echo "USEDB=pgsql"
 	sudo -i -u postgres pg_dump $DBNAME > $DBFILE
