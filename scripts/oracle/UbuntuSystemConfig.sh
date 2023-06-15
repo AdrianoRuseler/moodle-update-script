@@ -71,17 +71,60 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --apache
 
 
-
-# Jenkins JOBs
+# Jenkins JOBs - Slave
+# https://www.jenkins.io/doc/book/using/using-agents/
 sudo apt-get install fontconfig openjdk-11-jre
 
 useradd -d /var/lib/jenkins jenkins
-mkdir /var/lib/jenkins/.ssh
+mkdir -p /var/lib/jenkins/.ssh
 touch /var/lib/jenkins/.ssh/authorized_keys
+touch /var/lib/jenkins/.ssh/known_hosts
 
 chown -R jenkins /var/lib/jenkins/.ssh
 chmod 600 /var/lib/jenkins/.ssh/authorized_keys
 chmod 700 /var/lib/jenkins/.ssh
 
-# ssh-keyscan -H moodleconf.ct.utfpr.edu.br >> /var/lib/jenkins/.ssh/known_hosts
+cd /var/lib/jenkins/.ssh
+ssh-keygen -t rsa -f jenkins_agent
+cat jenkins_agent.pub >> authorized_keys
+cat jenkins_agent.pub >> /root/.ssh/authorized_keys
 
+ssh-keyscan -H adrianoruseler.com >> /var/lib/jenkins/.ssh/known_hosts # Master
+ssh-keyscan -H adrianoruseler.com >> /root/.ssh/known_hosts # Master
+
+cat jenkins_agent # OPENSSH PRIVATE KEY
+
+
+ssh-keyscan -H mysql.adrianoruseler.com >> /var/lib/jenkins/.ssh/known_hosts # Slave
+
+ssh -i mysql_jenkins_agent root@mysql.adrianoruseler.com
+
+
+# Install MariaDB Server
+curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
+sudo apt-get install mariadb-server
+
+# mariadb.service - MariaDB 11.0.2 database server
+# https://docs.moodle.org/402/en/MySQL
+nano /etc/mysql/my.cnf
+
+[client]
+default-character-set = utf8mb4
+
+[mysqld]
+innodb_file_format = Barracuda   # Remove line if not needed
+innodb_file_per_table = 1
+innodb_large_prefix = 1          # Remove line if not needed
+
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+skip-character-set-client-handshake
+
+[mysql]
+default-character-set = utf8mb4
+
+systemctl restart mariadb
+
+
+# GitHub 
+# https://docs.github.com/pt/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
