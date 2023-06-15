@@ -151,6 +151,7 @@ mkdir ${LOCALSITEDIR}
 # populate site folder with index.php and phpinfo
 touch ${LOCALSITEDIR}/index.php
 echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+# cp /var/www/html/index.html /var/www/html/$LOCALSITENAME/index.html
 
 # Change site folder and name
 sed -i 's/\/var\/www\/html/\/var\/www\/html\/'${LOCALSITEFOLDER}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
