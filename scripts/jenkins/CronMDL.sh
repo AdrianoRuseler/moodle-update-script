@@ -30,13 +30,3 @@ done
 #for MDLFOLDER in "${FOLDERS[@]}"; do
 #  sudo -u www-data /usr/bin/php7.2 /var/www/html/$MDLFOLDER/admin/cli/cron.php >/dev/null
 #done
-
-
-
-
-
-
-
-
-
-
