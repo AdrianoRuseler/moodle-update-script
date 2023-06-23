@@ -104,6 +104,8 @@ ssh -i mysql_jenkins_agent root@mysql.adrianoruseler.com
 curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
 sudo apt-get install mariadb-server
 
+sudo mysql_secure_installation
+
 # mariadb.service - MariaDB 11.0.2 database server
 # https://docs.moodle.org/402/en/MySQL
 nano /etc/mysql/my.cnf
@@ -125,6 +127,14 @@ default-character-set = utf8mb4
 
 systemctl restart mariadb
 
+nano /root/.my.cnf
+[client] 
+user=""
+password=""
 
 # GitHub 
 # https://docs.github.com/pt/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+# Docker 
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
