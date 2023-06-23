@@ -43,17 +43,34 @@ else
 	exit 1
 fi
 
+# PHP version to use
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+	PHPVER='php' # Uses default version
+else
+    echo "PHPVER has the value: $PHPVER"
+fi
+
+# Verifies if PHPVER is installed	
+if ! [ -x "$(command -v $PHPVER)" ]; then
+	echo "Error: $PHPVER is not installed."
+	exit 1
+else
+	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	echo ""
+fi
+
 mdlver=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
 echo "Moodle "$mdlver
 
 echo "Enable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --enable
 
 echo "CLI kill_all_sessions..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/kill_all_sessions.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/kill_all_sessions.php
 
 echo "CLI purge_caches..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/purge_caches.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/purge_caches.php
 
 ls -lh $MDLDATA
 
@@ -79,19 +96,19 @@ ls -lh $MDLDATA
 # --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"}	
 
 echo "CLI fix_course_sequence..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_course_sequence.php -c=* --fix
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_course_sequence.php -c=* --fix
 
 echo "CLI fix_deleted_users..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_deleted_users.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_deleted_users.php
 
 echo "CLI fix_orphaned_calendar_events..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_calendar_events.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_orphaned_calendar_events.php
 
 echo "CLI fix_orphaned_question_categories..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/fix_orphaned_question_categories.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/fix_orphaned_question_categories.php
 
 echo "disable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
 
 
 
