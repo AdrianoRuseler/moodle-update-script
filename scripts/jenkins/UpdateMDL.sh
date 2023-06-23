@@ -43,6 +43,10 @@ df -H # Gets disk usage info
 echo ""
 apache2 -v # Gets apache version
 echo ""
+php -version # Gets php version
+echo ""
+mariadb --version # Gets mariadb version
+echo ""
 
 # PHP version to use
 if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
