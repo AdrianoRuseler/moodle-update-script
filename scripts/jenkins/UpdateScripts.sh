@@ -111,3 +111,7 @@ chmod a+x UpdatePluginMDL.sh
 rm DeleteApacheSite.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/DeleteApacheSite.sh
 chmod a+x DeleteApacheSite.sh
+
+rm RCloneCopy.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/RCloneCopy.sh
+chmod a+x RCloneCopy.sh
