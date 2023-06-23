@@ -45,6 +45,21 @@ else
     echo "BKPDIR has the value: $BKPDIR"	
 fi
 
+# Verify for DESTNAME
+if [[ ! -v DESTNAME ]] || [[ -z "$DESTNAME" ]]; then
+    echo "DESTNAME is not set or is set to the empty string!"
+	DESTNAME='dropbox' #  
+else
+    echo "DESTNAME has the value: $DESTNAME"	
+fi
+
+# Verify for DESTPATH
+if [[ ! -v DESTPATH ]] || [[ -z "$DESTPATH" ]]; then
+    echo "DESTPATH is not set or is set to the empty string!"
+	DESTPATH='Server-BackUps/MySQL/'
+else
+    echo "DESTPATH has the value: $DESTPATH"	
+fi
 
 # BKPDIR="/home/ubuntu/backups/"$LOCALSITENAME  # moodle backup folder
 # Verify if folder NOT exists
@@ -55,6 +70,10 @@ fi
 
 ls -lh $DBBKP
 
-rclone copy --transfers 1  $BKPDIR dropbox:Server-BackUps/MySQL/$LOCALSITENAME
+# rclone copy source:sourcepath destname:destpath DESTNAME:DESTPATH
 
-rclone lsd dropbox:Server-BackUps/MySQL/$LOCALSITENAME
+rclone copy --transfers 1  $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME
+
+rclone lsd $DESTNAME:$DESTPATH$LOCALSITENAME
+
+
