@@ -71,7 +71,7 @@ fi
 ls -lh $DBBKP
 
 # rclone copy source:sourcepath destname:destpath DESTNAME:DESTPATH
-
+echo 'rclone copy...'
 rclone copy --transfers 1  $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME
 
 rclone lsd $DESTNAME:$DESTPATH$LOCALSITENAME
