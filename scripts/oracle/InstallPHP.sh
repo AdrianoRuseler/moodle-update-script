@@ -29,6 +29,7 @@ for PHPVER in "${PHPVERS[@]}"; do
 	sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/$PHPVER/cli/php.ini
 done
 
-
-systemctl reload apache2
+sudo a2enmod actions alias proxy_fcgi
+sudo systemctl restart apache2
+# systemctl reload apache2
 
