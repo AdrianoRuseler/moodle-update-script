@@ -150,12 +150,29 @@ echo "DBBKPFILE=\"$DBBKPFILE\"" >> $ENVFILE
 echo "DATABKPFILE=\"$DATABKPFILE\"" >> $ENVFILE
 echo "HTMLBKPFILE=\"$HTMLBKPFILE\"" >> $ENVFILE
 
+
+# PHP version to use
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+	PHPVER='php' # Uses default version
+else
+    echo "PHPVER has the value: $PHPVER"
+fi
+
+# Verifies if PHPVER is installed	
+if ! [ -x "$(command -v $PHPVER)" ]; then
+	echo "Error: $PHPVER is not installed."
+	exit 1
+else
+	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	echo ""
+fi
+
 echo "Kill all user sessions..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/kill_all_sessions.php
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/kill_all_sessions.php
 
-echo "Activating Moodle Maintenance Mode in..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
-
+echo "Enable the maintenance mode..."
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --enable
 
 # make database backup
 if [[ "$USEDB" == "mariadb" ]]; then
@@ -189,7 +206,7 @@ md5sum -c $HTMLBKPFILE.md5
 ls -lh $HTMLBKP
 
 echo "disable the maintenance mode..."
-sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
+sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
 
 cd $SCRIPTDIR
 echo ""
