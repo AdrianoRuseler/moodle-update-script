@@ -28,6 +28,20 @@ if [ -f $ENVFILE ]; then
 #	rm $ENVFILE
 fi
 
+echo ""
+echo "##------------ SYSTEM INFO -----------------##"
+uname -a # Gets system info
+echo ""
+df -H # Gets disk usage info
+echo ""
+apache2 -v # Gets apache version
+echo ""
+php -version # Gets php version
+echo ""
+mariadb --version # Gets mariadb version
+echo ""
+
+
 datastr=$(date) # Generates datastr
 echo "" >> $ENVFILE
 echo "# ----- $datastr -----" >> $ENVFILE
