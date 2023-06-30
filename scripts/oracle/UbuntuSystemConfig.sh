@@ -26,7 +26,7 @@ update-locale LANG=pt_BR.UTF-8 # Requires reboot
 # https://www.edivaldobrito.com.br/adicionar-a-swap-no-ubuntu/
 echo "Add swap file..." 
 sudo swapon -s
-sudo fallocate -l 2G /swapfile
+sudo fallocate -l 4G /swapfile
 chmod 600 /swapfile
 sudo mkswap /swapfile
 sudo swapon /swapfile
