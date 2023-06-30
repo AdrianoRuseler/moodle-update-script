@@ -101,7 +101,7 @@ echo $WIKIACTUALVER
 
 if [ $WIKIVER == $WIKIACTUALVER ]; then
     echo "Version is up to date"
-	if [ "$FORCEUPDATE" = true ]; then
+	if [ "$FORCEUPDATE" = false ]; then
 		echo "Dont force update!"
 		exit 0
 	else
