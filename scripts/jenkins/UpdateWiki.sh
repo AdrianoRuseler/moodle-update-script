@@ -35,6 +35,16 @@ else
     echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
+if [[ ! -v FORCEUPDATE ]] || [[ -z "$FORCEUPDATE" ]]; then
+    echo "FORCEUPDATE is not set or is set to the empty string!"
+	FORCEUPDATE=0 # Dont force update
+	echo "Now FORCEUPDATE has the value: $FORCEUPDATE"
+else
+    echo "FORCEUPDATE has the value: $FORCEUPDATE"
+fi
+
+
+
 # Verify if folder exists
 if [[ -d "$LOCALSITEDIR" ]]; then
 	echo "$LOCALSITEDIR exists on your filesystem."
@@ -87,10 +97,17 @@ WIKIV=$(echo $WIKIVER | cut -d. -f1-2)
 
 # Get actual wiki version
 WIKIACTUALVER=$(cat $LOCALSITEDIR/includes/Defines.php | grep "MW_VERSION" | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+echo $WIKIACTUALVER
+
 
 if [ $WIKIVER == $WIKIACTUALVER ]; then
     echo "Version is up to date"
-	exit 0
+	if [ $FORCEUPDATE ]; then
+		echo "Dont force update!"
+		exit 0
+	else
+		echo "Force update!!"
+	fi	
 fi
 
 #WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
