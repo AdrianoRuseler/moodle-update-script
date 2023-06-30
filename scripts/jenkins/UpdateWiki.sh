@@ -37,7 +37,7 @@ fi
 
 if [[ ! -v FORCEUPDATE ]] || [[ -z "$FORCEUPDATE" ]]; then
     echo "FORCEUPDATE is not set or is set to the empty string!"
-	FORCEUPDATE=false # Dont force update
+	FORCEUPDATE=0 # Dont force update
 	echo "Now FORCEUPDATE has the value: $FORCEUPDATE"
 else
     echo "FORCEUPDATE has the value: $FORCEUPDATE"
@@ -101,11 +101,11 @@ echo $WIKIACTUALVER
 
 if [ $WIKIVER == $WIKIACTUALVER ]; then
     echo "Version is up to date"
-	if [ "$FORCEUPDATE" = false ]; then
+	if [[ $SYSUPGRADE -ne 0 ]]; then
+		echo "Force update!!"		
+	else
 		echo "Dont force update!"
 		exit 0
-	else
-		echo "Force update!!"
 	fi	
 fi
 
