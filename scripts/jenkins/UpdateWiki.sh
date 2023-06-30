@@ -37,12 +37,11 @@ fi
 
 if [[ ! -v FORCEUPDATE ]] || [[ -z "$FORCEUPDATE" ]]; then
     echo "FORCEUPDATE is not set or is set to the empty string!"
-	FORCEUPDATE=0 # Dont force update
+	FORCEUPDATE=false # Dont force update
 	echo "Now FORCEUPDATE has the value: $FORCEUPDATE"
 else
     echo "FORCEUPDATE has the value: $FORCEUPDATE"
 fi
-
 
 
 # Verify if folder exists
@@ -102,7 +101,7 @@ echo $WIKIACTUALVER
 
 if [ $WIKIVER == $WIKIACTUALVER ]; then
     echo "Version is up to date"
-	if [ $FORCEUPDATE ]; then
+	if [ "$FORCEUPDATE" = true ]; then
 		echo "Dont force update!"
 		exit 0
 	else
