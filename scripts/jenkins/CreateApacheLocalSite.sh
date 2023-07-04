@@ -138,6 +138,11 @@ else
 		sed -i '/SetHandlerInsert$/a \\n\t\t\t</FilesMatch>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 		sed -i '/SetHandlerInsert$/a \\t\t\t\tSetHandler "proxy:unix:/run/php/'${PHPVER}$'-fpm.sock|fcgi://localhost"' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 		sed -i '/SetHandlerInsert$/a \\t\t\t<FilesMatch \\.php$>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+
+		# populate site folder with index.php and phpinfo
+		touch ${LOCALSITEDIR}/index.php
+		echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+		# cp /var/www/html/index.html /var/www/html/$LOCALSITENAME/index.html
 	fi
 fi
 
