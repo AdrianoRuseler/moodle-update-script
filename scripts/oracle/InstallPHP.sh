@@ -4,10 +4,10 @@
 echo "Add the following PHP PPA repository"
 sudo add-apt-repository ppa:ondrej/php -y && sudo apt-get update
 
-PHPVERS=('7.4' '8.0' '8.1' '8.2')
+PHPVERS=('8.0' '8.1' '8.2')
 for PHPVER in "${PHPVERS[@]}"; do
 	sudo apt-get install -y php$PHPVER libapache2-mod-php$PHPVER
-	sudo apt-get install -y php$PHPVER-{fpm,curl,zip,intl,xmlrpc,soap,xml,gd,ldap,common,cli,mbstring,mysql,imagick,json,readline,tidy,redis,memcached,apcu,opcache,mongodb} 
+	sudo apt-get install -y php$PHPVER-{fpm,curl,zip,intl,xmlrpc,soap,xml,gd,ldap,common,cli,mbstring,mysql,imagick,readline,tidy,redis,memcached,apcu,opcache,mongodb} 
 done
 
 
