@@ -31,7 +31,6 @@ fi
 # Verify for DESTNAME
 if [[ ! -v DESTNAME ]] || [[ -z "$DESTNAME" ]]; then
     echo "DESTNAME is not set or is set to the empty string!"
-	#DESTNAME='dropbox' # 
 	exit 1 
 else
     echo "DESTNAME has the value: $DESTNAME"	
@@ -48,7 +47,6 @@ fi
 # Verify for DESTPATH
 if [[ ! -v DESTPATH ]] || [[ -z "$DESTPATH" ]]; then
     echo "DESTPATH is not set or is set to the empty string!"
-	# DESTPATH='Server-BackUps/MySQL/'
 	exit 1 
 else
     echo "DESTPATH has the value: $DESTPATH"	
@@ -61,5 +59,7 @@ echo 'rclone copy...'
 rclone copy --transfers 1  $BKPDIR $DESTNAME:$DESTPATH
 
 rclone lsd $DESTNAME:$DESTPATH
+
+# rclone md5sum $DESTNAME:$DESTPATH
 
 
