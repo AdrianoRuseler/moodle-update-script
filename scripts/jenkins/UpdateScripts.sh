@@ -123,3 +123,7 @@ chmod a+x RCloneCopy.sh
 rm BackUpWP.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpWP.sh
 chmod a+x BackUpWP.sh
+
+rm BackUpWT.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpWT.sh
+chmod a+x BackUpWT.sh
