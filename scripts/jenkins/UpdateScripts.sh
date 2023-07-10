@@ -127,3 +127,7 @@ chmod a+x BackUpWP.sh
 rm BackUpWT.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpWT.sh
 chmod a+x BackUpWT.sh
+
+rm BackUpPGV.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpPGV.sh
+chmod a+x BackUpPGV.sh
