@@ -54,12 +54,12 @@ else
     echo "DESTPATH has the value: $DESTPATH"	
 fi
 
-ls -lh $DBBKP
+ls -lh $BKPDIR
 
 # rclone copy source:sourcepath destname:destpath DESTNAME:DESTPATH
 echo 'rclone copy...'
-rclone copy --transfers 1  $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME
+rclone copy --transfers 1  $BKPDIR $DESTNAME:$DESTPATH
 
-rclone lsd $DESTNAME:$DESTPATH$LOCALSITENAME
+rclone lsd $DESTNAME:$DESTPATH
 
 
