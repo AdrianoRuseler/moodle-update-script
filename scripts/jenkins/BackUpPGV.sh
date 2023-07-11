@@ -119,28 +119,18 @@ if [[ ! -v USEDB ]] || [[ -z "$USEDB" ]]; then
 	USEDB="mariadb"
 fi
 
+# Create file names
 DBFILE=$DBBKP$BKPNAME.sql
-DBBKPFILE=$DBBKP$BKPNAME.tar.gz
-HTMLBKPFILE=$HTMLBKP$BKPNAME.tar.gz
+DBBKPFILE=$DBBKP$BKPNAME.7z
+HTMLBKPFILE=$HTMLBKP$BKPNAME.7z
 
-# Verify DBFILE if file exists
-if [[ -f "$DBFILE" ]]; then
-	echo "$DBFILE file exists on your filesystem."
+# Verify if DBFILE or DBBKPFILE or HTMLBKPFILE file exists
+if [[ -f "$DBFILE" ]] || [[ -f "$DBBKPFILE" ]] || [[ -f "$HTMLBKPFILE" ]]; then
+	echo "Backup files already exists on your filesystem."
 	exit 1
 fi
 
-# Verify DBBKPFILE if file exists
-if [[ -f "$DBBKPFILE" ]]; then
-	echo "$DBBKPFILE file exists on your filesystem."
-	exit 1
-fi
-
-# Verify HTMLBKPFILE if file exists
-if [[ -f "$HTMLBKPFILE" ]]; then
-	echo "$HTMLBKPFILE file exists on your filesystem."
-	exit 1
-fi
-
+# Update .env file
 echo "BKPDIR=\"$BKPDIR\"" >> $ENVFILE
 echo "DBBKP=\"$DBBKP\"" >> $ENVFILE
 echo "HTMLBKP=\"$HTMLBKP\"" >> $ENVFILE
@@ -149,25 +139,7 @@ echo "DBFILE=\"$DBFILE\"" >> $ENVFILE
 echo "DBBKPFILE=\"$DBBKPFILE\"" >> $ENVFILE
 echo "HTMLBKPFILE=\"$HTMLBKPFILE\"" >> $ENVFILE
 
-
-# PHP version to use
-if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
-    echo "PHPVER is not set or is set to the empty string!"
-	PHPVER='php' # Uses default version
-else
-    echo "PHPVER has the value: $PHPVER"
-fi
-
-# Verifies if PHPVER is installed	
-if ! [ -x "$(command -v $PHPVER)" ]; then
-	echo "Error: $PHPVER is not installed."
-	exit 1
-else
-	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
-	echo ""
-fi
-
-# make database backup
+# Make database backup
 if [[ "$USEDB" == "mariadb" ]]; then
 	# echo "USEDB=mariadb"
 	mariadb-dump $DBNAME > $DBFILE
@@ -176,19 +148,19 @@ else
 	sudo -i -u postgres pg_dump $DBNAME > $DBFILE
 fi
 
-tar -czf $DBBKPFILE $DBFILE
+7z a $DBBKPFILE $DBFILE
+#tar -czf $DBBKPFILE $DBFILE
 md5sum $DBBKPFILE > $DBBKPFILE.md5
 md5sum -c $DBBKPFILE.md5
 rm $DBFILE
 ls -lh $DBBKP
 
-
-tar -czf $HTMLBKPFILE $LOCALSITEDIR
+7z a $HTMLBKPFILE $LOCALSITEDIR
+#tar -czf $HTMLBKPFILE $LOCALSITEDIR
 md5sum $HTMLBKPFILE > $HTMLBKPFILE.md5
 md5sum -c $HTMLBKPFILE.md5
 
 ls -lh $HTMLBKP
-
 
 cd $SCRIPTDIR
 echo ""
