@@ -41,6 +41,30 @@ echo ""
 mariadb --version # Gets mariadb version
 echo ""
 
+# Verifies if 7z is installed	
+if ! [ -x "$(command -v 7z)" ]; then
+	echo 'Error: 7z is not installed.'
+	exit 1
+else
+	echo '7z is installed!'
+fi
+
+# PHP version to use
+if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
+    echo "PHPVER is not set or is set to the empty string!"
+	PHPVER='php' # Uses default version
+else
+    echo "PHPVER has the value: $PHPVER"
+fi
+
+# Verifies if PHPVER is installed	
+if ! [ -x "$(command -v $PHPVER)" ]; then
+	echo "Error: $PHPVER is not installed."
+	exit 1
+else
+	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	echo ""
+fi
 
 datastr=$(date) # Generates datastr
 echo "" >> $ENVFILE
@@ -125,35 +149,19 @@ if [[ ! -v USEDB ]] || [[ -z "$USEDB" ]]; then
 	USEDB="mariadb"
 fi
 
+# Create backup files names
 DBFILE=$DBBKP$BKPNAME.sql
-DBBKPFILE=$DBBKP$BKPNAME.tar.gz
-DATABKPFILE=$DATABKP$BKPNAME.tar.gz
-HTMLBKPFILE=$HTMLBKP$BKPNAME.tar.gz
+DBBKPFILE=$DBBKP$BKPNAME.7z
+DATABKPFILE=$DATABKP$BKPNAME.7z
+HTMLBKPFILE=$HTMLBKP$BKPNAME.7z
 
-# Verify DBFILE if file exists
-if [[ -f "$DBFILE" ]]; then
-	echo "$DBFILE file exists on your filesystem."
+# Verify if DBFILE or DBBKPFILE or  DATABKPFILE or HTMLBKPFILE file exists
+if [[ -f "$DBFILE" ]] || [[ -f "$DBBKPFILE" ]] || [[ -f "$DATABKPFILE" ]] || [[ -f "$HTMLBKPFILE" ]]; then
+	echo "Backup file already exists on your filesystem."
 	exit 1
 fi
 
-# Verify DBBKPFILE if file exists
-if [[ -f "$DBBKPFILE" ]]; then
-	echo "$DBBKPFILE file exists on your filesystem."
-	exit 1
-fi
-
-# Verify DATABKPFILE if file exists
-if [[ -f "$DATABKPFILE" ]]; then
-	echo "$DATABKPFILE file exists on your filesystem."
-	exit 1
-fi
-
-# Verify HTMLBKPFILE if file exists
-if [[ -f "$HTMLBKPFILE" ]]; then
-	echo "$HTMLBKPFILE file exists on your filesystem."
-	exit 1
-fi
-
+# Update .env file
 echo "BKPDIR=\"$BKPDIR\"" >> $ENVFILE
 echo "DBBKP=\"$DBBKP\"" >> $ENVFILE
 echo "DATABKP=\"$DATABKP\"" >> $ENVFILE
@@ -163,24 +171,6 @@ echo "DBFILE=\"$DBFILE\"" >> $ENVFILE
 echo "DBBKPFILE=\"$DBBKPFILE\"" >> $ENVFILE
 echo "DATABKPFILE=\"$DATABKPFILE\"" >> $ENVFILE
 echo "HTMLBKPFILE=\"$HTMLBKPFILE\"" >> $ENVFILE
-
-
-# PHP version to use
-if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
-    echo "PHPVER is not set or is set to the empty string!"
-	PHPVER='php' # Uses default version
-else
-    echo "PHPVER has the value: $PHPVER"
-fi
-
-# Verifies if PHPVER is installed	
-if ! [ -x "$(command -v $PHPVER)" ]; then
-	echo "Error: $PHPVER is not installed."
-	exit 1
-else
-	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
-	echo ""
-fi
 
 echo "Kill all user sessions..."
 sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/kill_all_sessions.php
@@ -197,7 +187,8 @@ else
 	sudo -i -u postgres pg_dump $DBNAME > $DBFILE
 fi
 
-tar -czf $DBBKPFILE $DBFILE
+#tar -czf $DBBKPFILE $DBFILE
+7z a $DBBKPFILE $DBFILE
 md5sum $DBBKPFILE > $DBBKPFILE.md5
 md5sum -c $DBBKPFILE.md5
 rm $DBFILE
@@ -206,14 +197,16 @@ ls -lh $DBBKP
 # Backup the files using tar.
 # NB: It is not necessary to copy the contents of these directories: tar -cvf backup.tar --exclude={"public_html/template/cache","public_html/images"} public_html/
 # --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"}
-tar -czf $DATABKPFILE --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"} $MDLDATA
+#tar -czf $DATABKPFILE --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"} $MDLDATA
 #tar -czf $DATABKPFILE $MDLDATA
+7z a $DATABKPFILE $MDLDATA
 md5sum $DATABKPFILE > $DATABKPFILE.md5
 md5sum -c $DATABKPFILE.md5
 
 ls -lh $DATABKP
 
-tar -czf $HTMLBKPFILE $MDLHOME
+#tar -czf $HTMLBKPFILE $MDLHOME
+7z a $HTMLBKPFILE $MDLHOME
 md5sum $HTMLBKPFILE > $HTMLBKPFILE.md5
 md5sum -c $HTMLBKPFILE.md5
 
