@@ -34,13 +34,16 @@ uname -a # Gets system info
 echo ""
 df -H # Gets disk usage info
 echo ""
-apache2 -v # Gets apache version
-echo ""
-php -version # Gets php version
-echo ""
 mariadb --version # Gets mariadb version
 echo ""
 
+# Verifies if 7z is installed	
+if ! [ -x "$(command -v 7z)" ]; then
+	echo 'Error: 7z is not installed.'
+	exit 1
+else
+	echo '7z is installed!'
+fi
 
 datastr=$(date) # Generates datastr
 echo "" >> $ENVFILE
@@ -148,6 +151,7 @@ else
 	sudo -i -u postgres pg_dump $DBNAME > $DBFILE
 fi
 
+# Zip files
 7z a $DBBKPFILE $DBFILE
 #tar -czf $DBBKPFILE $DBFILE
 md5sum $DBBKPFILE > $DBBKPFILE.md5
@@ -160,7 +164,7 @@ ls -lh $DBBKP
 md5sum $HTMLBKPFILE > $HTMLBKPFILE.md5
 md5sum -c $HTMLBKPFILE.md5
 
-ls -lh $HTMLBKP
+ls -lh $BKPDIR
 
 cd $SCRIPTDIR
 echo ""
