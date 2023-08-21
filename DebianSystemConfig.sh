@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# https://www.debian.org/releases/bullseye/debian-installer/
 echo "Update and Upgrade System..."
 sudo apt-get update 
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef

@@ -127,6 +127,7 @@ else
 fi
 
 ls -l $DBBKP
+# https://dev.mysql.com/doc/refman/8.0/en/mysqldump-definition-data-dumps.html
 
 # DELETE FROM mdl_logstore_standard_log;
 # DELETE FROM mdl_task_log;
