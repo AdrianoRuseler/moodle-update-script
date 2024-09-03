@@ -10,10 +10,10 @@ chmod u+x DebianSystemConfig.sh
 sudo ./DebianSystemConfig.sh | tee DebianSystemConfig.log
 ```
 ## Moodle Plugins Repos
-- https://github.com/AdrianoRuseler/moodle401-plugins.git
-- https://github.com/AdrianoRuseler/moodle402-plugins.git
-- https://github.com/AdrianoRuseler/moodle403-plugins.git
-- https://github.com/AdrianoRuseler/moodle404-plugins.git
+- https://github.com/AdrianoRuseler/moodle401-plugins
+- https://github.com/AdrianoRuseler/moodle402-plugins
+- https://github.com/AdrianoRuseler/moodle403-plugins
+- https://github.com/AdrianoRuseler/moodle404-plugins
 
   
 ## Moodle Update
