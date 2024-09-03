@@ -80,6 +80,9 @@ RewriteRule "(\/upgrade\.txt)" - [F]
 RewriteRule "(phpunit\.xml\.dist)" - [F]
 RewriteRule "(\/tests\/behat\/)" - [F]
 RewriteRule "(\/fixtures\/)" - [F]
+RewriteRule "(\/lib\/classes\/)" - [F]
+RewriteRule "(\/package\.json)" - [F]
+RewriteRule "(\/Gruntfile\.js)" - [F]
 ```
 
 ## Test some plugins
