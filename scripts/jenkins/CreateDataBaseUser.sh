@@ -82,10 +82,10 @@ echo "DBPASS=\"$DBPASS\"" >> $ENVFILE
 if [[ "$USEDB" == "mariadb" ]]; then
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
-		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mariadb -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';"
-		mariadb -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
-		mariadb -e "FLUSH PRIVILEGES;"
+		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+		mariadb -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';" --skip-ssl
+		mariadb -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';" --skip-ssl
+		mariadb -e "FLUSH PRIVILEGES;" --skip-ssl
 	# If /root/.my.cnf doesn't exist then it'll ask for password   
 	else
 		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
