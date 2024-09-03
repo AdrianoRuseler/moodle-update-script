@@ -130,7 +130,7 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
 
 if [[ "$USEDB" == "mariadb" ]]; then
 	echo "Database tmp dump..." 
-	mysqldump $DBNAME > $TMPFOLDER.tmp.sql
+	mariadb-dump $DBNAME > $TMPFOLDER.tmp.sql
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
 		echo "Database DROP DATABASE ${DBNAME}..." 
