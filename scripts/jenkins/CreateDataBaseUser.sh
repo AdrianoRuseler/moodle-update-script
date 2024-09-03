@@ -82,16 +82,16 @@ echo "DBPASS=\"$DBPASS\"" >> $ENVFILE
 if [[ "$USEDB" == "mariadb" ]]; then
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
-		mysql -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mysql -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';"
-		mysql -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
-		mysql -e "FLUSH PRIVILEGES;"
+		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';"
+		mariadb -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+		mariadb -e "FLUSH PRIVILEGES;"
 	# If /root/.my.cnf doesn't exist then it'll ask for password   
 	else
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';"
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "FLUSH PRIVILEGES;"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE USER ${DBUSER}@localhost IDENTIFIED BY '${DBPASS}';"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "FLUSH PRIVILEGES;"
 	fi
 else
 	touch /tmp/createPGDBUSER.sql
