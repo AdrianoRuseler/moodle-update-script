@@ -211,13 +211,12 @@ sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/upgrade.php --non-interacti
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
+  	echo "Restore DB.." 
+	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp/tmpbkp.sql --skip-ssl
     echo "restoring old files..."
     sudo rm -rf $MDLHOME                      # Remove new files
     sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
   fi
-  # TODO - Restore DB
-	echo "Restore DB.." 
-	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp/tmpbkp.sql --skip-ssl
 
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
