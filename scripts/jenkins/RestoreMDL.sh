@@ -134,14 +134,14 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
 		echo "Database DROP DATABASE ${DBNAME}..." 
-		mysql -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mysql -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
 		echo "Restore DB.." 
-		mysql ${DBNAME} < $TMPFOLDER$DBFILE
+		mariadb ${DBNAME} < $TMPFOLDER$DBFILE
 	# If /root/.my.cnf doesn't exist then it'll ask for password   
 	else
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mysql -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
 	fi	
 else
 	echo "USEDB=pgsql"
