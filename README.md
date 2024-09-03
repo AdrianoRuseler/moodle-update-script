@@ -9,13 +9,42 @@ wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/maste
 chmod u+x DebianSystemConfig.sh
 sudo ./DebianSystemConfig.sh | tee DebianSystemConfig.log
 ```
+## Moodle Plugins Repos
+- https://github.com/AdrianoRuseler/moodle401-plugins.git
+- https://github.com/AdrianoRuseler/moodle402-plugins.git
+- https://github.com/AdrianoRuseler/moodle403-plugins.git
+- https://github.com/AdrianoRuseler/moodle404-plugins.git
 
-## Script for Moodle Update
+  
+## Moodle Update
 ```bash
-wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/Moodle311update.sh -O Moodle311update.sh
-chmod u+x Moodle311update.sh
+export MDLREPO="https://github.com/moodle/moodle.git"
+export MDLBRANCH="MOODLE_404_STABLE"  # GIT Branch for moodle core
+export MDLCORE="mdlcore" # Temp folder for moodle core
+export PLGREPO="https://github.com/AdrianoRuseler/moodle404-plugins.git"
+export PLGBRANCH="main" # GIT Branch for moodle plugins
+export MDLPLGS="mdlplugins" # Temp folder for moodle plugins
+# Moodle software (For example, everything in server/htdocs/moodle)
+export MDLHOME="path/to/moodle" # TODO!
 
-sudo ./Moodle311update.sh | tee Moodle311update.log
+cd /tmp
+git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
+git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
+	
+echo "Moving old files ..."
+sudo mv $MDLHOME $MDLHOME.tmpbkp
+mkdir $MDLHOME
+
+echo "moving new files..."
+sudo mv /tmp/$MDLCORE/* $MDLHOME
+
+echo "Copying config file ..."
+sudo cp $MDLHOME.tmpbkp/config.php $MDLHOME
+
+echo "Remove tmp files..."
+sudo rm -rf /tmp/$MDLPLGS
+sudo rm -rf /tmp/$MDLCORE
 ```
 
 ## Script for Apache
