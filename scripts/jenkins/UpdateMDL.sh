@@ -176,10 +176,11 @@ DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
 echo "Database tmp dump..." 
 mariadb-dump $DBNAME > tmpbkp.sql --skip-ssl
-sudo mv tmpbkp.sql $MDLHOME.$DAY.tmpbkp
 
 echo "Moving old files ..."
 sudo mv $MDLHOME $MDLHOME.$DAY.tmpbkp
+sudo mv tmpbkp.sql $MDLHOME.$DAY.tmpbkp
+
 mkdir $MDLHOME
 
 echo "moving new files..."
