@@ -213,6 +213,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
   	echo "Restore DB.." 
 	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp/tmpbkp.sql --skip-ssl
+	sudo rm -rf $MDLHOME.$DAY.tmpbkp/tmpbkp.sql
     echo "restoring old files..."
     sudo rm -rf $MDLHOME                      # Remove new files
     sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
