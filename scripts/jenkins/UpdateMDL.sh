@@ -175,7 +175,7 @@ echo "##----------------------- MOODLE UPDATE -------------------------##"
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
 echo "Database tmp dump..." 
-mariadb-dump $DBNAME > $MDLHOME.$DAY.tmpbkp.sql
+mariadb-dump $DBNAME > $MDLHOME.$DAY.tmpbkp.sql --skip-ssl
 
 echo "Moving old files ..."
 sudo mv $MDLHOME $MDLHOME.$DAY.tmpbkp
@@ -206,7 +206,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
   fi
   # TODO - Restore DB
 	echo "Restore DB.." 
-	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp.sql
+	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp.sql --skip-ssl
 
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
