@@ -107,6 +107,15 @@ else
     echo "MDLREPO has the value: $MDLREPO"
 fi
 
+# Verify for Moodle DB name
+if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]]; then
+    echo "DBNAME is not set or is set to the empty string"
+    exit 1
+else
+    echo "DBNAME has the value: $DBNAME"
+fi
+
+
 echo "Check for free space in $MDLHOME ..."
 REQSPACE=524288 # Required free space: 512 Mb in kB
 FREESPACE=$(df "$MDLHOME" | awk 'NR==2 { print $4 }')
