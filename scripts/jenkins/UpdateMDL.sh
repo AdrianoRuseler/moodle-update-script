@@ -5,12 +5,12 @@ if [ -f .env ]; then
 	export $(grep -v '^#' .env | xargs)
 fi
 
-# export LOCALSITENAME="oficina"
-# export MDLBRANCH="MOODLE_311_STABLE"
+# export LOCALSITENAME="subsitename"
+# export MDLBRANCH="MOODLE_404_STABLE"
 # export MDLREPO="https://github.com/moodle/moodle.git"
 # export PLGBRANCH="main"
-# export PLGREPO="https://github.com/AdrianoRuseler/moodle311-plugins.git"
-# export PHPVER="php7.4"
+# export PLGREPO="https://github.com/AdrianoRuseler/moodle404-plugins.git"
+# export PHPVER="php8.3"
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
@@ -174,6 +174,9 @@ echo ""
 echo "##----------------------- MOODLE UPDATE -------------------------##"
 DAY=$(date +\%Y-\%m-\%d-\%H.\%M)
 
+echo "Database tmp dump..." 
+mariadb-dump $DBNAME > $MDLHOME.$DAY.tmpbkp.sql
+
 echo "Moving old files ..."
 sudo mv $MDLHOME $MDLHOME.$DAY.tmpbkp
 mkdir $MDLHOME
@@ -201,6 +204,10 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
     sudo rm -rf $MDLHOME                      # Remove new files
     sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
   fi
+  # TODO - Restore DB
+	echo "Restore DB.." 
+	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp.sql
+
   echo "Disable the maintenance mode..."
   sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
   echo "##------------------------ FAIL -------------------------##"
