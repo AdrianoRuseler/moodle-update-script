@@ -85,8 +85,8 @@ if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]] || [[ ! -v DBUSER ]] || [[ -z "$DBUSE
 else
     echo "DBNAME has the value: $DBNAME"	
 	echo "DBUSER has the value: $DBUSER"
-	mariadb -e "DROP DATABASE ${DBNAME};"
-	mariadb -e "DROP USER ${DBUSER}@localhost;"
+	mariadb -e "DROP DATABASE ${DBNAME};" --skip-ssl
+	mariadb -e "DROP USER ${DBUSER}@localhost;" --skip-ssl
 fi
 
 
@@ -96,8 +96,8 @@ if [[ ! -v PHPUNITDBNAME ]] || [[ -z "$PHPUNITDBNAME" ]] || [[ ! -v PHPUNITDBUSE
 else
     echo "PHPUNITDBNAME has the value: $PHPUNITDBNAME"	
 	echo "PHPUNITDBUSER has the value: $PHPUNITDBUSER"
-	mariadb -e "DROP DATABASE ${PHPUNITDBNAME};"
-	mariadb -e "DROP USER ${PHPUNITDBUSER}@localhost;"
+	mariadb -e "DROP DATABASE ${PHPUNITDBNAME};" --skip-ssl
+	mariadb -e "DROP USER ${PHPUNITDBUSER}@localhost;" --skip-ssl
 fi
 
 # Verify for MDLHOME and MDLDATA
