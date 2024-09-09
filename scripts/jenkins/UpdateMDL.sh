@@ -134,6 +134,13 @@ MDLCORE=$LOCALSITENAME'mdlcore'
 MDLPLGS=$LOCALSITENAME'mdlplugins'
 
 cd /tmp
+
+echo "Check if $MDLCORE folder exists..."
+if [ -d "$MDLCORE" ]; then
+	echo "Folder exists, so remove it..."
+    rm -rf $MDLCORE 
+fi
+
 git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
 
 # Verify for Moodle Branch
@@ -149,6 +156,11 @@ else
 		echo "PLGBRANCH has the value: $PLGBRANCH"
 	fi
 	cd /tmp
+	echo "Check if $MDLPLGS folder exists..."
+	if [ -d "$MDLPLGS" ]; then
+		echo "Folder exists, so remove it..."
+		rm -rf $MDLPLGS 
+	fi
 	git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 	sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
 	rm -rf /tmp/$MDLPLGS
