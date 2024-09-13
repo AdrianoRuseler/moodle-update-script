@@ -27,26 +27,37 @@ sudo apt-get install -y python3
 
 echo "Add the following Apache2 PPA repository"
 sudo add-apt-repository ppa:ondrej/apache2 -y && sudo apt-get update
+
+echo "Install apache..."
+sudo apt-get install apache2  
+
 echo "Add the following PHP PPA repository"
 sudo add-apt-repository ppa:ondrej/php -y && sudo apt-get update
 
-echo "Install php7.4 for apache..."
-sudo apt-get install apache2 php7.4 libapache2-mod-php7.4
+# PHPVERS=('8.1' '8.2' '8.3')
+PHPVERS='8.3'
+for PHPVER in "${PHPVERS[@]}"; do
+	sudo apt-get install -y php$PHPVER libapache2-mod-php$PHPVER
+	sudo apt-get install -y php$PHPVER-{fpm,curl,zip,intl,xmlrpc,soap,xml,gd,ldap,common,cli,mbstring,mysql,imagick,readline,tidy,redis,memcached,apcu,opcache,mongodb} 
+done
 
-echo "Install php7.4 extensions..."
-sudo apt-get install -y php7.4-curl php7.4-zip php7.4-intl php7.4-xmlrpc php7.4-soap php7.4-xml php7.4-gd php7.4-ldap php7.4-common php7.4-cli php7.4-mbstring php7.4-mysql php7.4-imagick php7.4-json php7.4-readline php7.4-tidy
+for PHPVER in "${PHPVERS[@]}"; do
+	# Set PHP ini
+	sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/$PHPVER/fpm/php.ini
+	sed -i 's/post_max_size =.*/post_max_size = 512M/' /etc/php/$PHPVER/fpm/php.ini
+	sed -i 's/upload_max_filesize =.*/upload_max_filesize = 512M/' /etc/php/$PHPVER/fpm/php.ini
+	sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/$PHPVER/fpm/php.ini
 
-# Cache related
-sudo apt-get install -y php7.4-redis php7.4-memcached php7.4-apcu php7.4-opcache php7.4-mongodb
+	sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/$PHPVER/apache2/php.ini
+	sed -i 's/post_max_size =.*/post_max_size = 512M/' /etc/php/$PHPVER/apache2/php.ini
+	sed -i 's/upload_max_filesize =.*/upload_max_filesize = 512M/' /etc/php/$PHPVER/apache2/php.ini
+	sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/$PHPVER/apache2/php.ini
 
-echo "Restart apache server..."
-sudo service apache2 restart
-
-# Set PHP ini
-sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/post_max_size =.*/post_max_size = 128M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/upload_max_filesize =.*/upload_max_filesize = 128M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/;max_input_vars =.*/max_input_vars = 5000/' /etc/php/7.4/apache2/php.ini
+	sed -i 's/memory_limit =.*/memory_limit = 512M/' /etc/php/$PHPVER/cli/php.ini
+	sed -i 's/post_max_size =.*/post_max_size = 512M/' /etc/php/$PHPVER/cli/php.ini
+	sed -i 's/upload_max_filesize =.*/upload_max_filesize = 512M/' /etc/php/$PHPVER/cli/php.ini
+	sed -i 's/;max_input_vars =.*/max_input_vars = 6000/' /etc/php/$PHPVER/cli/php.ini
+done
 systemctl reload apache2
 
 
