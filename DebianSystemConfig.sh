@@ -60,6 +60,12 @@ for PHPVER in "${PHPVERS[@]}"; do
 done
 systemctl reload apache2
 
+cd /etc/apache2/sites-available
+# PHPVERS='8.3'
+    <FilesMatch \.php$>
+      # For Apache version 2.4.10 and above, use SetHandler to run PHP as a fastCGI process server
+      SetHandler "proxy:unix:/run/php/php$PHPVER-fpm.sock|fcgi://localhost"
+    </FilesMatch>
 
 # Select php version
 # sudo update-alternatives --config php
