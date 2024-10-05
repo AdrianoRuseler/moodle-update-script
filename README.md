@@ -1,7 +1,7 @@
 # moodle-update-script
-- https://docs.moodle.org/400/en/Administration_via_command_line
+- https://docs.moodle.org/405/en/Administration_via_command_line
 - https://www.vogella.com/tutorials/GitSubmodules/article.html
-- https://docs.moodle.org/400/en/Git_for_Administrators
+- https://docs.moodle.org/405/en/Git_for_Administrators
 
 ## Debian Config
 ```bash
@@ -14,7 +14,7 @@ sudo ./DebianSystemConfig.sh | tee DebianSystemConfig.log
 - https://github.com/AdrianoRuseler/moodle402-plugins
 - https://github.com/AdrianoRuseler/moodle403-plugins
 - https://github.com/AdrianoRuseler/moodle404-plugins
-
+- https://github.com/AdrianoRuseler/moodle405-plugins
   
 ## Moodle Update
 ```bash
