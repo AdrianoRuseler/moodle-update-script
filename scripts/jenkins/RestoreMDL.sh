@@ -134,15 +134,15 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	# If /root/.my.cnf exists then it won't ask for root password
 	if [ -f /root/.my.cnf ]; then
 		echo "Database DROP DATABASE ${DBNAME}..." 
-		mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+		mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
 		echo "Restore DB.." 
 		mariadb ${DBNAME} < $TMPFOLDER$DBFILE
 	# If /root/.my.cnf doesn't exist then it'll ask for password   
 	else
-		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-	fi	
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+		mariadb -u${ADMDBUSER} -p${ADMDBPASS} -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+	fi	 
 else
 	echo "USEDB=pgsql"
 	sudo -i -u postgres pg_dump $DBNAME > $TMPFOLDER.tmp.sql
