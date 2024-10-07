@@ -223,6 +223,9 @@ sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/upgrade.php --non-interacti
 if [[ $? -ne 0 ]]; then # Error in upgrade script
   echo "Error in upgrade script..."
   if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
+  	echo "Database DROP DATABASE ${DBNAME}..." 
+	mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+	mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
   	echo "Restore DB.." 
 	mariadb $DBNAME < $MDLHOME.$DAY.tmpbkp/tmpbkp.sql --skip-ssl
 	sudo rm -rf $MDLHOME.$DAY.tmpbkp/tmpbkp.sql
