@@ -160,11 +160,12 @@ else
 		echo "Folder exists, so remove it..."
 		rm -rf $MDLPLGS
 	fi
-	git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 
 	if [[ ! -v CHECKOUTID ]] || [[ -z "$CHECKOUTID" ]]; then
 		echo "CHECKOUTID is not set or is set to the empty string!"
+		git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 	else
+		git clone --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 		cd $MDLPLGS
 		if git cat-file -e $CHECKOUTID 2>/dev/null; then
 			echo "Exists CheckOut: $CHECKOUTID"
