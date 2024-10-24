@@ -158,7 +158,7 @@ else
 	echo "Check if $MDLPLGS folder exists..."
 	if [ -d "$MDLPLGS" ]; then
 		echo "Folder exists, so remove it..."
-		rm -rf $MDLPLGS
+		rm -rf "$MDLPLGS"
 	fi
 
 	if [[ ! -v CHECKOUTID ]] || [[ -z "$CHECKOUTID" ]]; then
@@ -172,6 +172,14 @@ else
 			git -c advice.detachedHead=false checkout $CHECKOUTID
 			git submodule sync
 			git submodule update --init
+			if [ -d "moodle/mod/hvp" ]; then
+				echo "mod/hvp Exists! So do something..."
+				cd moodle/mod/hvp || return
+				git submodule update --init
+			else
+				echo "mod/hvp dont exists!"
+			fi
+
 		else
 			echo "Missing CheckOut: $CHECKOUTID"
 		fi
