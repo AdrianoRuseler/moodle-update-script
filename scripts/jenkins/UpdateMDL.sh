@@ -2,10 +2,10 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export "$(grep -v '^#' .env | xargs)"
+	export $(grep -v '^#' .env | xargs)
 fi
 
-# export LOCALSITENAME="subsitename"
+# export LOCALSITENAME="mdl42"
 # export MDLBRANCH="MOODLE_404_STABLE"
 # export MDLREPO="https://github.com/moodle/moodle.git"
 # export PLGBRANCH="main"
@@ -27,7 +27,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 # SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export "$(grep -v '^#' $ENVFILE | xargs)"
+	export $(grep -v '^#' $ENVFILE | xargs)
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
