@@ -170,6 +170,7 @@ else
 		if git cat-file -e $CHECKOUTID 2>/dev/null; then
 			echo "Exists CheckOut: $CHECKOUTID"
 			git checkout $CHECKOUTID
+			git switch -c 'tmp'
 		else
 			echo "Missing CheckOut: $CHECKOUTID"
 		fi
