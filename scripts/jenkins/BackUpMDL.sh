@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -19,7 +19,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -58,17 +58,17 @@ else
 fi
 
 # Verifies if PHPVER is installed
-if ! [ -x "$(command -v $PHPVER)" ]; then
+if ! [ -x "$(command -v "$PHPVER")" ]; then
 	echo "Error: $PHPVER is not installed."
 	exit 1
 else
-	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+	sudo -u www-data /usr/bin/"$PHPVER" -version # Gets php version
 	echo ""
 fi
 
 datastr=$(date) # Generates datastr
-echo "" >>$ENVFILE
-echo "# ----- $datastr -----" >>$ENVFILE
+echo "" >>"$ENVFILE"
+echo "# ----- $datastr -----" >>"$ENVFILE"
 
 # Verify for MDLHOME and MDLDATA
 if [[ ! -v MDLHOME ]] || [[ -z "$MDLHOME" ]] || [[ ! -v MDLDATA ]] || [[ -z "$MDLDATA" ]]; then
