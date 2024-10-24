@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -16,10 +16,10 @@ else
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
-SCRIPTDIR=$(pwd)
+# SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -68,7 +68,7 @@ echo $MAHARAVER
 MAHARATARURL=$(curl "https://api.github.com/repos/MaharaProject/mahara/tags" | jq -r '.[0].tarball_url')
 echo $MAHARATARURL
 
-cd /tmp/
+cd /tmp/  || exit
 wget $MAHARATARURL -O mahara.tar.gz
 rm -rf mahara # if exists
 mkdir mahara
@@ -106,7 +106,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
 fi
 
 echo "Removing temporary backup files..."
-cd $LOCALSITEDIR
+cd $LOCALSITEDIR  || exit
 cd ..
 ls -l
 sudo rm -rf $LOCALSITEDIR.$DAY.tmpbkp

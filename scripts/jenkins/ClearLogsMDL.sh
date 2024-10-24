@@ -2,7 +2,7 @@
 
 # Load Environment Variables in .env file
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -19,7 +19,7 @@ fi
 ENVFILE='.'${LOCALSITENAME}'.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -114,7 +114,7 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --enable
 echo "CLI kill_all_sessions..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/kill_all_sessions.php
 
-DBPREFIX=$(cat $MDLHOME/config.php | grep 'prefix' | cut -d\' -f 2) # Gets Moodle DB prefix
+# DBPREFIX=$(cat $MDLHOME/config.php | grep 'prefix' | cut -d\' -f 2) # Gets Moodle DB prefix
 # mysqldump -u [uname] -p db_name table1 table2 > table_backup.sql
 # make database backup
 if [[ "$USEDB" == "mariadb" ]]; then
@@ -122,7 +122,7 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	mysqldump $DBNAME mdl_logstore_standard_log mdl_task_log mdl_upgrade_log >$DBFILE # TODO: verify for table prefix
 else
 	# echo "USEDB=pgsql"
-	sudo -i -u postgres pg_dump $DBNAME mdl_logstore_standard_log mdl_task_log mdl_upgrade_log >$DBFILE # TODO: verify for table prefix
+	sudo -i -u postgres pg_dump $DBNAME mdl_logstore_standard_log mdl_task_log mdl_upgrade_log | sudo tee -a $DBFILE # TODO: verify for table prefix
 fi
 
 ls -l $DBBKP

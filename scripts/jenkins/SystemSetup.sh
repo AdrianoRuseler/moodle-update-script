@@ -4,7 +4,7 @@
 ENVFILE='.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 fi
 
 HOMEDIR=$(pwd)
@@ -110,10 +110,10 @@ touch /var/www/html/index.php
 echo '<?php  phpinfo(); ?>' >>/var/www/html/index.php
 
 systemctl reload apache2
-cd /var/www/html
+cd /var/www/html || exit
 ls -l
 sudo mv index.html index.html.bkp
-cd $HOMEDIR
+cd $HOMEDIR || exit
 
 echo "Install pwgen..."
 # https://www.2daygeek.com/5-ways-to-generate-a-random-strong-password-in-linux-terminal/
@@ -131,8 +131,8 @@ echo "DBADMPASS=\"$DBADMPASS\"" >>$ENVFILE
 echo "mysql root pass is: "$DBROOTPASS
 echo "dbadmin pass is: "$DBROOTPASS
 # Make sure that NOBODY can access the server without a password
-mysql -e "UPDATE mysql.user SET Password = PASSWORD('"$DBROOTPASS"') WHERE User = 'root'"
-mysql -e "CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY '"$DBADMPASS"';"
+mysql -e "UPDATE mysql.user SET Password = PASSWORD('" $DBROOTPASS "') WHERE User = 'root'"
+mysql -e "CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY '" $DBADMPASS "';"
 mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'dbadmin'@'localhost' WITH GRANT OPTION;"
 mysql -e "FLUSH PRIVILEGES"
 
@@ -151,11 +151,11 @@ skip-character-set-client-handshake
 innodb_read_only_compressed=OFF
 
 [mysql]
-default-character-set = utf8mb4" >>/etc/mysql/my.cnf
+default-character-set = utf8mb4" | sudo tee -a /etc/mysql/my.cnf
 
-sudo echo "[client]" >>/root/.my.cnf
-sudo echo 'user="dbadmin"' >>/root/.my.cnf
-sudo echo 'password="'$DBADMPASS'"' >>/root/.my.cnf
+sudo echo "[client]" | sudo tee -a /root/.my.cnf
+sudo echo 'user="dbadmin"' | sudo tee -a /root/.my.cnf
+sudo echo 'password="'$DBADMPASS'"' | sudo tee -a /root/.my.cnf
 cat /root/.my.cnf
 
 sudo systemctl restart mariadb.service
@@ -213,14 +213,14 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--forc
 echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
-cd $HOMEDIR
+cd $HOMEDIR || exit
 mkdir scripts
-cd scripts
+cd scripts || exit
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/UpdateScripts.sh -O UpdateScripts.sh
 chmod a+x UpdateScripts.sh
 ./UpdateScripts.sh
 
-cd $HOMEDIR
+cd $HOMEDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

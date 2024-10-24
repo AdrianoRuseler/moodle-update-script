@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+    export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -20,7 +20,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
     # Load Environment Variables
-    export $(grep -v '^#' $ENVFILE | xargs)
+    export "$(grep -v '^#' $ENVFILE | xargs)"
     echo ""
     echo "##------------ $ENVFILE -----------------##"
     cat $ENVFILE
@@ -81,7 +81,7 @@ else
 fi
 
 # Clone git repository
-cd /tmp
+cd /tmp || exit
 wget "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$YOUR_LICENSE_KEY&suffix=tar.gz" -O GeoIP2-City.tar.gz
 tar -xvzf GeoIP2-City.tar.gz --strip-components 1 -C $GEOIPDIR
 
@@ -90,7 +90,7 @@ rm -rf /tmp/GeoIP2-City.tar.gz
 # Fix permissions
 chown www-data:www-data -R $MDLDATA
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

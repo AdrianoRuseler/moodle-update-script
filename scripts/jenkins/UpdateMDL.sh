@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # export LOCALSITENAME="subsitename"
@@ -24,10 +24,10 @@ else
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
-SCRIPTDIR=$(pwd)
+# SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -132,7 +132,7 @@ fi
 MDLCORE=$LOCALSITENAME'mdlcore'
 MDLPLGS=$LOCALSITENAME'mdlplugins'
 
-cd /tmp
+cd /tmp || exit
 
 echo "Check if $MDLCORE folder exists..."
 if [ -d "$MDLCORE" ]; then
@@ -154,7 +154,7 @@ else
 	else
 		echo "PLGBRANCH has the value: $PLGBRANCH"
 	fi
-	cd /tmp
+	cd /tmp || exit
 	echo "Check if $MDLPLGS folder exists..."
 	if [ -d "$MDLPLGS" ]; then
 		echo "Folder exists, so remove it..."
@@ -166,7 +166,7 @@ else
 		git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 	else
 		git clone --branch=$PLGBRANCH $PLGREPO $MDLPLGS
-		cd $MDLPLGS
+		cd $MDLPLGS || exit
 		if git cat-file -e $CHECKOUTID 2>/dev/null; then
 			echo "Exists CheckOut: $CHECKOUTID"
 			git -c advice.detachedHead=false checkout $CHECKOUTID
@@ -175,7 +175,7 @@ else
 		else
 			echo "Missing CheckOut: $CHECKOUTID"
 		fi
-		cd /tmp
+		cd /tmp || exit
 	fi
 
 	sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
@@ -256,7 +256,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
 fi
 
 echo "Removing temporary backup files..."
-cd $MDLHOME
+cd $MDLHOME || exit
 cd ..
 ls -l
 sudo rm -rf $MDLHOME.$DAY.tmpbkp
@@ -267,7 +267,7 @@ if ! [ -x $MOOSHCMD ]; then
 else
 	echo $MOOSHCMD
 	echo "Update Moodle site name:"
-	cd $MDLHOME
+	cd $MDLHOME || exit
 	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
 	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2)                     # Gets Moodle Version
 	sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"  # !!! error/generalexceptionmessage !!!

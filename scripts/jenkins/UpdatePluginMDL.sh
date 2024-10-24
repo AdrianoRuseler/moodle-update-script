@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # export LOCALSITENAME="oficina"
@@ -22,10 +22,10 @@ else
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
-SCRIPTDIR=$(pwd)
+#SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -115,7 +115,7 @@ else
 	else
 		echo "PLGBRANCH has the value: $PLGBRANCH"
 	fi
-	cd /tmp
+	cd /tmp || exit
 	git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 	#sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
 	#rm -rf /tmp/$MDLPLGS
@@ -139,7 +139,8 @@ sudo cp $MDLHOME $MDLHOME.$DAY.tmpbkp
 
 ls -l $MDLHOME/$PLGPATH
 echo "Delete plugin folder..."
-rm -rf $MDLHOME/$PLGPATH
+rm -rf "${MDLHOME:?}/$PLGPATH"
+
 
 echo "Copy plugin files ..."
 sudo rsync -a /tmp/$MDLPLGS/* $MDLHOME/$PLGPATH/
@@ -172,7 +173,7 @@ if [[ $? -ne 0 ]]; then # Error in upgrade script
 fi
 
 echo "Removing temporary backup files..."
-cd $MDLHOME
+cd $MDLHOME || exit
 cd ..
 ls -l
 sudo rm -rf $MDLHOME.$DAY.tmpbkp

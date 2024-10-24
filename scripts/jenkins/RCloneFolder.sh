@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verifies if rclone is installed

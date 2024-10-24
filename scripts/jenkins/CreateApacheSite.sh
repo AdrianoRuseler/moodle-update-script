@@ -10,7 +10,7 @@
 # Load .env
 if [ -f .env ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 echo ""

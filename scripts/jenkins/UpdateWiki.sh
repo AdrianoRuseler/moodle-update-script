@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -16,10 +16,10 @@ else
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
-SCRIPTDIR=$(pwd)
+# SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -108,10 +108,10 @@ if [ $WIKIVER == $WIKIACTUALVER ]; then
 fi
 
 #WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
-WIKITARURL="https://releases.wikimedia.org/mediawiki/"$WIKIV"/mediawiki-"$WIKIVER".tar.gz"
+WIKITARURL="https://releases.wikimedia.org/mediawiki/" $WIKIV "/mediawiki-" $WIKIVER ".tar.gz"
 echo $WIKITARURL
 
-cd /tmp/
+cd /tmp/ || exit
 wget $WIKITARURL -O mediawiki.tar.gz
 if [[ $? -ne 0 ]]; then
 	echo "Error: wget ${WIKITARURL}"
@@ -147,7 +147,7 @@ echo "fixing file permissions..."
 sudo chown -R www-data:www-data $LOCALSITEDIR
 
 echo "Composer update --no-dev..."
-cd $LOCALSITEDIR
+cd $LOCALSITEDIR || exit
 sudo -u www-data composer update --no-dev
 
 echo "fixing file permissions..."

@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -16,10 +16,10 @@ else
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
-SCRIPTDIR=$(pwd)
+#SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -43,7 +43,7 @@ else
 	exit 1
 fi
 
-cd /tmp/
+cd /tmp/ || exit
 wget https://raw.githubusercontent.com/phpmyadmin/phpmyadmin/STABLE/README -O PMAREADME
 PMAVER=$(sed -n 's/^Version \(.*\)$/\1/p' PMAREADME)
 
@@ -53,7 +53,7 @@ sudo rsync -a phpMyAdmin-$PMAVER-all-languages/ $LOCALSITEDIR
 sudo chown -R www-data:www-data $LOCALSITEDIR
 sudo rm -rf phpMyAdmin-$PMAVER-all-languages phpMyAdmin-$PMAVER-all-languages.tar.xz
 
-cd $LOCALSITEDIR
+cd $LOCALSITEDIR || exit
 
 # https://stackoverflow.com/questions/34539132/updating-phpmyadmin-blowfish-secret-via-bash-shell-script-in-linux
 #randomBlowfishSecret=$(openssl rand -base64 32)

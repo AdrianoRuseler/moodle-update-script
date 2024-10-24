@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -24,19 +24,19 @@ HTMLBKP=$BKPDIR"/html/"                      # moodle html backup folder
 if [[ ! -v BKPNAME ]] || [[ -z "$BKPNAME" ]]; then
 	echo "BKPNAME is not set or is set to the empty string!"
 	# Remove All
-	cd $DBBKP
+	cd $DBBKP || exit
 
 	ls -lh $DBBKP
 	rm -rf *.gz
 	rm -rf *.gz.md5
 
-	cd $DATABKP
+	cd $DATABKP || exit
 
 	ls -lh $DATABKP
 	rm -rf *.gz
 	rm -rf *.gz.md5
 
-	cd $HTMLBKP
+	cd $HTMLBKP || exit
 
 	ls -lh $HTMLBKP
 	rm -rf *.gz

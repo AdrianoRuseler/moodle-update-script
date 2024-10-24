@@ -183,7 +183,7 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	mariadb-dump $DBNAME >$DBFILE
 else
 	# echo "USEDB=pgsql"
-	sudo -i -u postgres pg_dump $DBNAME >$DBFILE
+	sudo -i -u postgres pg_dump $DBNAME | sudo tee -a $DBFILE
 fi
 
 #tar -czf $DBBKPFILE $DBFILE
@@ -214,7 +214,7 @@ ls -lh $HTMLBKP
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

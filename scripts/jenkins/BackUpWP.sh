@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -19,7 +19,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -80,8 +80,8 @@ fi
 if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]]; then
 	echo "DBNAME is not set or is set to the empty string!"
 	DBNAME=$(cat $LOCALSITEDIR/wp-config.php | grep 'DB_NAME' | cut -d\' -f 4)     # Gets WP DB Name
-	DBUSER=$(cat $LOCALSITEDIR/wp-config.php | grep 'DB_USER' | cut -d\' -f 4)     # Gets WP DB User
-	DBPASS=$(cat $LOCALSITEDIR/wp-config.php | grep 'DB_PASSWORD' | cut -d\' -f 4) # Gets WP DB Pass
+	#DBUSER=$(cat $LOCALSITEDIR/wp-config.php | grep 'DB_USER' | cut -d\' -f 4)     # Gets WP DB User
+	#DBPASS=$(cat $LOCALSITEDIR/wp-config.php | grep 'DB_PASSWORD' | cut -d\' -f 4) # Gets WP DB Pass
 	echo "DBNAME has been found in wp-config.php: $DBNAME"
 else
 	echo "DBNAME has the value: $DBNAME"
@@ -150,7 +150,7 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	mariadb-dump $DBNAME >$DBFILE
 else
 	# echo "USEDB=pgsql"
-	sudo -i -u postgres pg_dump $DBNAME >$DBFILE
+	sudo -i -u postgres pg_dump $DBNAME | sudo tee -a $DBFILE
 fi
 
 # tar -czf $DBBKPFILE $DBFILE
@@ -167,7 +167,7 @@ md5sum -c $HTMLBKPFILE.md5
 
 ls -lh $HTMLBKP
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -18,7 +18,7 @@ fi
 ENVFILE='.'${LOCALSITENAME}'.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -145,7 +145,7 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	fi
 else
 	echo "USEDB=pgsql"
-	sudo -i -u postgres pg_dump $DBNAME >$TMPFOLDER.tmp.sql
+	sudo -i -u postgres pg_dump $DBNAME | sudo tee $TMPFOLDER.tmp.sql
 	touch /tmp/ClearPGDBUSER.sql
 	echo $'DROP DATABASE '${DBNAME}$';' >>/tmp/ClearPGDBUSER.sql
 	echo $'CREATE DATABASE '${DBNAME}$';' >>/tmp/ClearPGDBUSER.sql

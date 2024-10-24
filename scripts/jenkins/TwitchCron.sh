@@ -28,7 +28,7 @@ fi
 
 NAME=$(date +\%Y-\%m-\%d-\%H.\%M)
 
-cd $FOLDER
+cd $FOLDER || exit
 
 if [ -f twitchrunning.txt ]; then
     echo "twitchrunning.txt exists"
@@ -45,7 +45,7 @@ else
     youtube-dl -f bestaudio -x --audio-format m4a --output $NAME.m4a
 fi
 
-*/1 * * * * /root/twitchruseler.sh
+# */1 * * * * /root/twitchruseler.sh
 
 HOD=$(date +%H)
 if ((15 <= 10#$H && 10#$H < 23)); then

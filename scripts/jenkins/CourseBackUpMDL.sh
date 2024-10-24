@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -18,7 +18,7 @@ fi
 ENVFILE='.'${LOCALSITENAME}'.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -83,7 +83,7 @@ else
 	echo "COURSEIDENTIFYER=\"$COURSEIDENTIFYER\"" >>$ENVFILE
 fi
 
-COURSEBKPDIR="/home/ubuntu/backups/"$LOCALSITENAME"/courses/" # moodle courses backup folder
+COURSEBKPDIR="/home/ubuntu/backups/" $LOCALSITENAME "/courses/" # moodle courses backup folder
 
 # Verify if folder NOT exists
 if [[ ! -d "$COURSEBKPDIR" ]]; then

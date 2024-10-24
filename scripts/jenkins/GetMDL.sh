@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -20,7 +20,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -75,7 +75,7 @@ if [ -z "$(ls -A $MDLHOME)" ]; then
 	echo "$MDLHOME is Empty"
 else
 	echo "$MDLHOME is Not Empty"
-	rm -rf $MDLHOME/*
+	rm -rf "${MDLHOME:?}/"*
 fi
 
 # Empty MDLDATA
@@ -83,7 +83,7 @@ if [ -z "$(ls -A $MDLDATA)" ]; then
 	echo "$MDLDATA is Empty"
 else
 	echo "$MDLDATA is Not Empty"
-	rm -rf $MDLDATA/*
+	rm -rf "${MDLDATA:?}/"*
 fi
 
 # export MDLBRANCH="MOODLE_311_STABLE"
@@ -107,7 +107,7 @@ else
 fi
 
 # Clone git repository
-cd /tmp
+cd /tmp || exit
 git clone --depth=1 --branch=$MDLBRANCH $MDLREPO mdlcore
 
 mv /tmp/mdlcore/* $MDLHOME
@@ -118,7 +118,7 @@ chmod 740 $MDLHOME/admin/cli/cron.php
 chown www-data:www-data -R $MDLHOME
 chown www-data:www-data -R $MDLDATA
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

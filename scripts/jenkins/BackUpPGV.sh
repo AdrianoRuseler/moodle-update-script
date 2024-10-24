@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -19,7 +19,7 @@ ENVFILE='.'${LOCALSITENAME}'.env'
 SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -76,8 +76,8 @@ fi
 if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]]; then
 	echo "DBNAME is not set or is set to the empty string!"
 	DBNAME=$(cat $LOCALSITEDIR/config.php | grep 'DBNAME' | cut -d\' -f 2) # Gets PGV DB Name
-	DBUSER=$(cat $LOCALSITEDIR/config.php | grep 'DBUSER' | cut -d\' -f 2) # Gets PGV DB User
-	DBPASS=$(cat $LOCALSITEDIR/config.php | grep 'DBPASS' | cut -d\' -f 2) # Gets PGV DB Pass
+#	DBUSER=$(cat $LOCALSITEDIR/config.php | grep 'DBUSER' | cut -d\' -f 2) # Gets PGV DB User
+#	DBPASS=$(cat $LOCALSITEDIR/config.php | grep 'DBPASS' | cut -d\' -f 2) # Gets PGV DB Pass
 	echo "DBNAME has been found in config.php: $DBNAME"
 else
 	echo "DBNAME has the value: $DBNAME"
@@ -146,7 +146,7 @@ if [[ "$USEDB" == "mariadb" ]]; then
 	mariadb-dump $DBNAME >$DBFILE
 else
 	# echo "USEDB=pgsql"
-	sudo -i -u postgres pg_dump $DBNAME >$DBFILE
+	sudo -i -u postgres pg_dump $DBNAME | sudo tee -a $DBFILE
 fi
 
 # Zip files
@@ -164,7 +164,7 @@ md5sum -c $HTMLBKPFILE.md5
 
 ls -lh $BKPDIR
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

@@ -6,7 +6,7 @@ SCRIPTDIR=$(pwd)
 datastr=$(date) # Generates datastr
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -104,7 +104,7 @@ if [ -z "$(ls -A $MDLHOME)" ]; then
 	echo "$MDLHOME is Empty"
 else
 	echo "$MDLHOME is Not Empty"
-	rm -rf $MDLHOME/*
+	rm -rf "${MDLHOME:?}/"*
 fi
 
 # Empty MDLDATA
@@ -112,7 +112,7 @@ if [ -z "$(ls -A $MDLDATA)" ]; then
 	echo "$MDLDATA is Empty"
 else
 	echo "$MDLDATA is Not Empty"
-	rm -rf $MDLDATA/*
+	rm -rf "${MDLDATA:?}/"*
 fi
 
 # Empty MDLTMP
@@ -120,7 +120,7 @@ if [ -z "$(ls -A $MDLTMP)" ]; then
 	echo "$MDLTMP is Empty"
 else
 	echo "$MDLTMP is Not Empty"
-	rm -rf $MDLTMP/*
+	rm -rf "${MDLTMP:?}/"*
 fi
 
 exit 0 # TODO
@@ -246,7 +246,7 @@ echo ""
 echo "##------------------------------------------------##"
 echo ""
 
-cd $SCRIPTDIR
+cd $SCRIPTDIR || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE

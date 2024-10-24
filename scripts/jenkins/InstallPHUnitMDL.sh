@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+	export "$(grep -v '^#' .env | xargs)"
 fi
 
 # Verify for LOCALSITENAME
@@ -30,7 +30,7 @@ fi
 ENVFILE='.'${LOCALSITENAME}'.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
+	export "$(grep -v '^#' $ENVFILE | xargs)"
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE
@@ -135,7 +135,7 @@ sudo -u www-data composer -V
 
 # chown www-data:www-data -R /var/www
 
-cd $MDLHOME
+cd $MDLHOME || exit
 sudo -u www-data composer install
 
 echo "Initialise the test environment..."
@@ -144,7 +144,7 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/tool/phpunit/cli/init.php
 echo "Let´s run some test:"
 vendor/bin/phpunit --testsuite core_favourites_testsuite
 
-cd ~
+cd ~ || exit
 echo ""
 echo "##------------ $ENVFILE -----------------##"
 cat $ENVFILE
