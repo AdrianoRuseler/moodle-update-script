@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # Load Environment Variables in .env file
-if [ -f .env ]; then	
+if [ -f .env ]; then
 	export $(grep -v '^#' .env | xargs)
 fi
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string"
-    echo "Choose site to use:"
+	echo "LOCALSITENAME is not set or is set to the empty string"
+	echo "Choose site to use:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITENAME="
-    exit 1
+	exit 1
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"	
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
@@ -30,10 +30,10 @@ fi
 
 # Verify for MDLHOME
 if [[ ! -v MDLHOME ]] || [[ -z "$MDLHOME" ]]; then
-    echo "MDLHOME is not set or is set to the empty string!"
-    exit 1
+	echo "MDLHOME is not set or is set to the empty string!"
+	exit 1
 else
-    echo "MDLHOME has the value: $MDLHOME"	
+	echo "MDLHOME has the value: $MDLHOME"
 fi
 
 mdlver=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
@@ -58,7 +58,3 @@ sudo -u www-data /usr/bin/php $MDLHOME/admin/tool/task/cli/schedule_task.php --e
 
 echo "disable the maintenance mode..."
 sudo -u www-data /usr/bin/php $MDLHOME/admin/cli/maintenance.php --disable
-
-
-
-

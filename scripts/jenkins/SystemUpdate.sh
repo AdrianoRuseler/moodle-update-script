@@ -16,12 +16,8 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--forc
 echo "Autoremove and Autoclean System..."
 sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
-
 echo ""
-date # Gets date
+date   # Gets date
 uptime # Gets Up time
 
 sudo shutdown -r
-
-
-

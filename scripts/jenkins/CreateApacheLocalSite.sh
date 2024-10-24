@@ -14,60 +14,58 @@ fi
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string"
+	echo "LOCALSITENAME is not set or is set to the empty string"
 	RAMDONNAME=$(pwgen 8 -sv1A0) # Generates ramdon name
-	LOCALSITENAME=${RAMDONNAME} # Generates ramdon site name
+	LOCALSITENAME=${RAMDONNAME}  # Generates ramdon site name
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"	
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
-
 
 # Verify for SITETYPE;  MDL, PMA, PHP, ...
 if [[ ! -v SITETYPE ]] || [[ -z "$SITETYPE" ]]; then
-    echo "SITETYPE is not set or is set to the empty string!"
+	echo "SITETYPE is not set or is set to the empty string!"
 	SITETYPE="PHP"
 fi
 
-
 datastr=$(date) # Generates datastr
 ENVFILE='.'${LOCALSITENAME}'.env'
-echo "" >> $ENVFILE
-echo "# ----- $datastr -----" >> $ENVFILE
-echo "LOCALSITENAME=\"$LOCALSITENAME\"" >> $ENVFILE
+echo "" >>$ENVFILE
+echo "# ----- $datastr -----" >>$ENVFILE
+echo "LOCALSITENAME=\"$LOCALSITENAME\"" >>$ENVFILE
 
 # Verify for LOCALSITEURL
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
-    echo "LOCALSITEURL is not set or is set to the empty string"
+	echo "LOCALSITEURL is not set or is set to the empty string"
 	LOCALSITEURL=${LOCALSITENAME}'.local' # Generates ramdon site name
-	echo "LOCALSITEURL=\"$LOCALSITEURL\"" >> $ENVFILE
+	echo "LOCALSITEURL=\"$LOCALSITEURL\"" >>$ENVFILE
 else
-    echo "LOCALSITEURL has the value: $LOCALSITEURL"
+	echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
 # Verify for LOCALSITEFOLDER
 if [[ ! -v LOCALSITEFOLDER ]] || [[ -z "$LOCALSITEFOLDER" ]]; then
-    echo "LOCALSITEFOLDER is not set or is set to the empty string"
+	echo "LOCALSITEFOLDER is not set or is set to the empty string"
 	LOCALSITEFOLDER=${LOCALSITENAME}
-	echo "LOCALSITEFOLDER=\"$LOCALSITEFOLDER\"" >> $ENVFILE
+	echo "LOCALSITEFOLDER=\"$LOCALSITEFOLDER\"" >>$ENVFILE
 else
-    echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
+	echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
 fi
 
 # Verify for LOCALSITEDIR
 if [[ ! -v LOCALSITEDIR ]] || [[ -z "$LOCALSITEDIR" ]]; then
-    echo "LOCALSITEDIR is not set or is set to the empty string"
+	echo "LOCALSITEDIR is not set or is set to the empty string"
 	LOCALSITEDIR='/var/www/html/'${LOCALSITENAME} # Site folder location
-	echo "LOCALSITEDIR=\"$LOCALSITEDIR\"" >> $ENVFILE
+	echo "LOCALSITEDIR=\"$LOCALSITEDIR\"" >>$ENVFILE
 else
-    echo "LOCALSITEDIR has the value: $LOCALSITEDIR"
+	echo "LOCALSITEDIR has the value: $LOCALSITEDIR"
 fi
 
 # Verify if folder exists
 if [[ -d "$LOCALSITEDIR" ]]; then
 	echo "$LOCALSITEDIR exists on your filesystem."
-    exit 1
+	exit 1
 else
-    echo "$LOCALSITEFOLDER NOT exists on your filesystem."
+	echo "$LOCALSITEFOLDER NOT exists on your filesystem."
 fi
 
 # create site folder
@@ -75,65 +73,66 @@ mkdir ${LOCALSITEDIR}
 
 # Create certificate
 openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /etc/ssl/private/${LOCALSITEURL}-selfsigned.key \
- -newkey rsa:2048 -nodes -sha256 \
- -subj '/CN='${LOCALSITEURL}$'' -extensions EXT -config <( \
-  printf "[dn]\nCN='${LOCALSITEURL}$'\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:'${LOCALSITEURL}$'\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
-  
+	-newkey rsa:2048 -nodes -sha256 \
+	-subj '/CN='${LOCALSITEURL}$'' -extensions EXT -config <(
+		printf "[dn]\nCN='${LOCALSITEURL}$'\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:'${LOCALSITEURL}$'\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth"
+	)
+
 # Create new conf files
 case $SITETYPE in
-  MDL)
-    echo "Site type is MDL" # 
-	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf 
+MDL)
+	echo "Site type is MDL" #
+	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/mdl-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 	;;
-  PMA)
-    echo "Site type is PMA"	
+PMA)
+	echo "Site type is PMA"
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/pma-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;	
-  PHP)
-    echo "Site type is PHP"
+	;;
+PHP)
+	echo "Site type is PHP"
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/php-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;	
-  HTPASSWD)
-    echo "Site type is HTPASSWD"
+	;;
+HTPASSWD)
+	echo "Site type is HTPASSWD"
 	SITEUSER=$LOCALSITENAME # Use same generated ramdon user name
-	# Verifies if pwgen is installed	
+	# Verifies if pwgen is installed
 	if ! [ -x "$(command -v pwgen)" ]; then
 		echo 'Error: pwgen is not installed.'
-				SITEPASS=$LOCALSITENAME # Use same generated ramdon user name
+		SITEPASS=$LOCALSITENAME # Use same generated ramdon user name
 	else
 		echo 'pwgen is installed!'
 		SITEPASS=$(pwgen -s 14 1) # Generates ramdon password for db user
 	fi
 	echo "SITEUSER: $SITEUSER"
 	echo "SITEPASS: $SITEPASS"
-	echo ""   # 
+	echo "" #
 	htpasswd -b -c /etc/apache2/.${LOCALSITENAME}.htpasswd ${SITEUSER} ${SITEPASS}
 	# Save Environment Variables
-	echo "" >> $ENVFILE
-	echo "# Site credentials" >> $ENVFILE
-	echo "SITEUSER=\"$SITEUSER\"" >> $ENVFILE
-	echo "SITEPASS=\"$SITEPASS\"" >> $ENVFILE
+	echo "" >>$ENVFILE
+	echo "# Site credentials" >>$ENVFILE
+	echo "SITEUSER=\"$SITEUSER\"" >>$ENVFILE
+	echo "SITEPASS=\"$SITEPASS\"" >>$ENVFILE
 
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/htpasswd-default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    sed -i 's/changetousername/'${LOCALSITENAME}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-	;;	
-  *)
-    echo "Site type is unknown"
+	sed -i 's/changetousername/'${LOCALSITENAME}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
+	;;
+*)
+	echo "Site type is unknown"
 	wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/default-ssl.conf -O /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
-    ;;
+	;;
 esac
 
 # PHP version to use
 if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
-    echo "PHPVER is not set or is set to the empty string!"
+	echo "PHPVER is not set or is set to the empty string!"
 else
-    echo "PHPVER has the value: $PHPVER"
-	# Verifies if PHPVER is installed	
+	echo "PHPVER has the value: $PHPVER"
+	# Verifies if PHPVER is installed
 	if ! [ -x "$(command -v $PHPVER)" ]; then
 		echo "Error: $PHPVER is not installed."
 	else
-		sudo -u www-data /usr/bin/$PHPVER -version # Gets php version 
-		echo "PHPVER=\"$PHPVER\"" >> $ENVFILE
+		sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+		echo "PHPVER=\"$PHPVER\"" >>$ENVFILE
 		# For Apache version 2.4.10 and above, use SetHandler to run PHP as a fastCGI process server
 		sed -i '/SetHandlerInsert$/a \\n\t\t\t</FilesMatch>' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
 		sed -i '/SetHandlerInsert$/a \\t\t\t\tSetHandler "proxy:unix:/run/php/'${PHPVER}$'-fpm.sock|fcgi://localhost"' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
@@ -141,11 +140,10 @@ else
 
 		# populate site folder with index.php and phpinfo
 		touch ${LOCALSITEDIR}/index.php
-		echo '<?php  phpinfo(); ?>' >> ${LOCALSITEDIR}/index.php
+		echo '<?php  phpinfo(); ?>' >>${LOCALSITEDIR}/index.php
 		# cp /var/www/html/index.html /var/www/html/$LOCALSITENAME/index.html
 	fi
 fi
-
 
 # Change site folder and name
 sed -i 's/\/var\/www\/html/\/var\/www\/html\/'${LOCALSITEFOLDER}$'/' /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf
@@ -176,7 +174,6 @@ IP4STR=$(ip -4 addr show enp0s3 | grep -oP "(?<=inet ).*(?=/)")
 
 echo "Add $IP4STR $LOCALSITEURL to %WINDIR%\System32\drivers\etc\hosts or run as admin:"
 echo "echo $IP4STR $LOCALSITEURL >> %WINDIR%\System32\drivers\etc\hosts"
-
 
 echo ""
 echo "##------------ NEW SITE URL -----------------##"

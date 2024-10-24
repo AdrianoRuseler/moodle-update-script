@@ -11,12 +11,12 @@ HOMEDIR=$(pwd)
 #sudo hostnamectl set-hostname server.local
 
 datastr=$(date) # Generates datastr
-echo "" >> $ENVFILE
-echo "# ----- $datastr -----" >> $ENVFILE
-echo "HOMEDIR=\"$HOMEDIR\"" >> $ENVFILE
+echo "" >>$ENVFILE
+echo "# ----- $datastr -----" >>$ENVFILE
+echo "HOMEDIR=\"$HOMEDIR\"" >>$ENVFILE
 
 echo "Update and Upgrade System..."
-sudo apt-get update 
+sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
 
 echo "Autoremove and Autoclean System..."
@@ -28,7 +28,7 @@ sudo sed -i '/^#.* en_US.* /s/^#//' /etc/locale.gen
 sudo sed -i '/^#.* en_AU.* /s/^#//' /etc/locale.gen
 sudo locale-gen
 
-echo "Set timezone and locale..." 
+echo "Set timezone and locale..."
 timedatectl set-timezone America/Sao_Paulo
 update-locale LANG=pt_BR.UTF-8 # Requires reboot
 
@@ -42,13 +42,14 @@ sed -i '/combined/a \\n\tRewriteEngine On \n\tRewriteCond %{HTTPS} off \n\tRewri
 
 echo "Create selfsigned certificate..."
 LOCALSITEURL=$(hostname)
-echo "LOCALSITEURL=\"$LOCALSITEURL\"" >> $ENVFILE
+echo "LOCALSITEURL=\"$LOCALSITEURL\"" >>$ENVFILE
 
 openssl req -x509 -out /etc/ssl/certs/${LOCALSITEURL}-selfsigned.crt -keyout /etc/ssl/private/${LOCALSITEURL}-selfsigned.key \
- -newkey rsa:2048 -nodes -sha256 \
- -subj '/CN='${LOCALSITEURL}$'' -extensions EXT -config <( \
-  printf "[dn]\nCN='${LOCALSITEURL}$'\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:'${LOCALSITEURL}$'\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
-  
+	-newkey rsa:2048 -nodes -sha256 \
+	-subj '/CN='${LOCALSITEURL}$'' -extensions EXT -config <(
+		printf "[dn]\nCN='${LOCALSITEURL}$'\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:'${LOCALSITEURL}$'\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth"
+	)
+
 echo "Change default site certificate..."
 sed -i 's/ssl-cert-snakeoil.pem/'${LOCALSITEURL}$'-selfsigned.crt/' /etc/apache2/sites-available/default-ssl.conf
 sed -i 's/ssl-cert-snakeoil.key/'${LOCALSITEURL}$'-selfsigned.key/' /etc/apache2/sites-available/default-ssl.conf
@@ -106,7 +107,7 @@ systemctl reload apache2
 
 # populate site folder with index.php and phpinfo
 touch /var/www/html/index.php
-echo '<?php  phpinfo(); ?>' >> /var/www/html/index.php
+echo '<?php  phpinfo(); ?>' >>/var/www/html/index.php
 
 systemctl reload apache2
 cd /var/www/html
@@ -122,11 +123,10 @@ echo "Install MariaDB..."
 curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
 sudo apt-get install mariadb-server mariadb-client mariadb-backup
 
-
 DBROOTPASS=$(pwgen -s 16 1) # Generates ramdon password for db root user
-DBADMPASS=$DBROOTPASS # Generates ramdon password for db admin
-echo "DBROOTPASS=\"$DBROOTPASS\"" >> $ENVFILE
-echo "DBADMPASS=\"$DBADMPASS\"" >> $ENVFILE
+DBADMPASS=$DBROOTPASS       # Generates ramdon password for db admin
+echo "DBROOTPASS=\"$DBROOTPASS\"" >>$ENVFILE
+echo "DBADMPASS=\"$DBADMPASS\"" >>$ENVFILE
 
 echo "mysql root pass is: "$DBROOTPASS
 echo "dbadmin pass is: "$DBROOTPASS
@@ -151,11 +151,11 @@ skip-character-set-client-handshake
 innodb_read_only_compressed=OFF
 
 [mysql]
-default-character-set = utf8mb4" >> /etc/mysql/my.cnf
+default-character-set = utf8mb4" >>/etc/mysql/my.cnf
 
-sudo echo "[client]" >> /root/.my.cnf
-sudo echo 'user="dbadmin"' >> /root/.my.cnf
-sudo echo 'password="'$DBADMPASS'"' >> /root/.my.cnf
+sudo echo "[client]" >>/root/.my.cnf
+sudo echo 'user="dbadmin"' >>/root/.my.cnf
+sudo echo 'password="'$DBADMPASS'"' >>/root/.my.cnf
 cat /root/.my.cnf
 
 sudo systemctl restart mariadb.service
@@ -178,7 +178,6 @@ sudo systemctl restart mariadb.service
 # sudo nano /etc/redis/redis.conf
 # sudo systemctl restart redis-server.service
 
-
 # https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 #wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
 #echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
@@ -192,7 +191,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -qq slapd ldap-utils ldapscripts
 LDAPROOTPASS=$(pwgen -s 16 1) # Generates ramdon password for db root user
 echo "LDAP root pass is: "$LDAPROOTPASS
 slappasswd -s $LDAPROOTPASS
-echo "LDAPROOTPASS=\"$LDAPROOTPASS\"" >> $ENVFILE
+echo "LDAPROOTPASS=\"$LDAPROOTPASS\"" >>$ENVFILE
 
 echo "Install Doker and compose..."
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -208,7 +207,7 @@ curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 echo "Update and Upgrade System..."
-sudo apt-get update 
+sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef
 
 echo "Autoremove and Autoclean System..."

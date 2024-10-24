@@ -13,13 +13,13 @@ if [ -f .env ]; then
 fi
 
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string!"
+	echo "LOCALSITENAME is not set or is set to the empty string!"
 	echo "Choose site to disable:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITENAME="
 	exit 1
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
@@ -35,17 +35,17 @@ if [ -f $ENVFILE ]; then
 fi
 
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
-    echo "LOCALSITEURL is not set or is set to the empty string!"
-    LOCALSITEURL=${LOCALSITENAME}'.local'
+	echo "LOCALSITEURL is not set or is set to the empty string!"
+	LOCALSITEURL=${LOCALSITENAME}'.local'
 else
-    echo "LOCALSITEURL has the value: $LOCALSITEURL"
+	echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
 if [[ ! -v LOCALSITEFOLDER ]] || [[ -z "$LOCALSITEFOLDER" ]]; then
-    echo "LOCALSITEFOLDER is not set or is set to the empty string!"
-     LOCALSITEFOLDER=${LOCALSITENAME}
+	echo "LOCALSITEFOLDER is not set or is set to the empty string!"
+	LOCALSITEFOLDER=${LOCALSITENAME}
 else
-    echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
+	echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
 fi
 
 # systemctl status apache2.service --no-pager --lines=2

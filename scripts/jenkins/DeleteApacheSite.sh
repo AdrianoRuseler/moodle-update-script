@@ -26,13 +26,13 @@ mariadb --version # Gets mariadb version
 echo ""
 
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string!"
+	echo "LOCALSITENAME is not set or is set to the empty string!"
 	echo "Choose site to disable:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITENAME="
 	exit 1
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
@@ -49,18 +49,18 @@ fi
 
 # Verify for LOCALSITEURL
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
-    echo "LOCALSITEURL is not set or is set to the empty string"
+	echo "LOCALSITEURL is not set or is set to the empty string"
 	LOCALSITEURL=${LOCALSITENAME}'.adrianoruseler.com' # Generates ramdon site name
-	echo "LOCALSITEURL=\"$LOCALSITEURL\"" >> $ENVFILE
+	echo "LOCALSITEURL=\"$LOCALSITEURL\"" >>$ENVFILE
 else
-    echo "LOCALSITEURL has the value: $LOCALSITEURL"
+	echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
 if [[ ! -v LOCALSITEFOLDER ]] || [[ -z "$LOCALSITEFOLDER" ]]; then
-    echo "LOCALSITEFOLDER is not set or is set to the empty string!"
-     LOCALSITEFOLDER=${LOCALSITENAME}
+	echo "LOCALSITEFOLDER is not set or is set to the empty string!"
+	LOCALSITEFOLDER=${LOCALSITENAME}
 else
-    echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
+	echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
 fi
 
 # systemctl status apache2.service --no-pager --lines=2
@@ -89,10 +89,9 @@ rm -rf /var/www/html/${LOCALSITEFOLDER}
 
 # If /etc/apache2/.${LOCALSITENAME}.htpasswd exists then delete it
 if [ -f /etc/apache2/.${LOCALSITENAME}.htpasswd ]; then
-	echo "/etc/apache2/.${LOCALSITENAME}.htpasswd exists"  
+	echo "/etc/apache2/.${LOCALSITENAME}.htpasswd exists"
 	rm -rf /etc/apache2/.${LOCALSITENAME}.htpasswd
 fi
-
 
 echo ""
 echo "##------------ SITES ENABLED -----------------##"

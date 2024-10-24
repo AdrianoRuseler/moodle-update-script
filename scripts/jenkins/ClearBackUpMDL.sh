@@ -1,29 +1,29 @@
 #!/bin/bash
 
 # Load Environment Variables
-if [ -f .env ]; then	
+if [ -f .env ]; then
 	export $(grep -v '^#' .env | xargs)
 fi
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string!"
+	echo "LOCALSITENAME is not set or is set to the empty string!"
 	echo "Choose site to use:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITENAME=teste"
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"	
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
-BKPDIR="/home/ubuntu/backups/"$LOCALSITENAME  # moodle backup folder
-DBBKP=$BKPDIR"/db/" # moodle database backup folder
-DATABKP=$BKPDIR"/data/"  # moodle data backup folder
-HTMLBKP=$BKPDIR"/html/"  # moodle html backup folder
+BKPDIR="/home/ubuntu/backups/"$LOCALSITENAME # moodle backup folder
+DBBKP=$BKPDIR"/db/"                          # moodle database backup folder
+DATABKP=$BKPDIR"/data/"                      # moodle data backup folder
+HTMLBKP=$BKPDIR"/html/"                      # moodle html backup folder
 
 # Verify for BKPNAME -- Not set on .env file
 if [[ ! -v BKPNAME ]] || [[ -z "$BKPNAME" ]]; then
-    echo "BKPNAME is not set or is set to the empty string!"
-    # Remove All
+	echo "BKPNAME is not set or is set to the empty string!"
+	# Remove All
 	cd $DBBKP
 
 	ls -lh $DBBKP
@@ -41,13 +41,13 @@ if [[ ! -v BKPNAME ]] || [[ -z "$BKPNAME" ]]; then
 	ls -lh $HTMLBKP
 	rm -rf *.gz
 	rm -rf *.gz.md5
-	
+
 else
-    echo "BKPNAME has the value: $BKPNAME"	
+	echo "BKPNAME has the value: $BKPNAME"
 	# Remove selected
 	rm -rf $DBBKP$BKPNAME.sql
-	rm -rf $DBBKP$BKPNAME.sql.md5	
-	
+	rm -rf $DBBKP$BKPNAME.sql.md5
+
 	rm -rf $DBBKP$BKPNAME.tar.gz
 	rm -rf $DBBKP$BKPNAME.tar.gz.md5
 
@@ -57,8 +57,3 @@ else
 	rm -rf $HTMLBKP$BKPNAME.tar.gz
 	rm -rf $HTMLBKP$BKPNAME.tar.gz.md5
 fi
-
-
-
-
-

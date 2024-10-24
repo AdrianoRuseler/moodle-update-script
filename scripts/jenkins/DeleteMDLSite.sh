@@ -13,13 +13,13 @@ if [ -f .env ]; then
 fi
 
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string!"
+	echo "LOCALSITENAME is not set or is set to the empty string!"
 	echo "Choose site to disable:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITENAME="
 	exit 1
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
@@ -35,10 +35,10 @@ if [ -f $ENVFILE ]; then
 fi
 
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
-    echo "LOCALSITEURL is not set or is set to the empty string!"
-    LOCALSITEURL=${LOCALSITENAME}'.local'
+	echo "LOCALSITEURL is not set or is set to the empty string!"
+	LOCALSITEURL=${LOCALSITENAME}'.local'
 else
-    echo "LOCALSITEURL has the value: $LOCALSITEURL"
+	echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
 if [ -f /etc/apache2/sites-available/${LOCALSITEURL}-ssl.conf ]; then
@@ -53,10 +53,10 @@ else
 fi
 
 if [[ ! -v LOCALSITEFOLDER ]] || [[ -z "$LOCALSITEFOLDER" ]]; then
-    echo "LOCALSITEFOLDER is not set or is set to the empty string!"
-     LOCALSITEFOLDER=${LOCALSITENAME}
+	echo "LOCALSITEFOLDER is not set or is set to the empty string!"
+	LOCALSITEFOLDER=${LOCALSITENAME}
 else
-    echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
+	echo "LOCALSITEFOLDER has the value: $LOCALSITEFOLDER"
 fi
 
 # Enable site
@@ -72,8 +72,8 @@ rm -rf /var/www/html/${LOCALSITEFOLDER}
 
 # If /root/.my.cnf exists then it won't ask for root password
 if [ -f /root/.my.cnf ]; then
-   echo "/root/.my.cnf exists"
-# If /root/.my.cnf doesn't exist then it'll ask for password   
+	echo "/root/.my.cnf exists"
+# If /root/.my.cnf doesn't exist then it'll ask for password
 else
 	echo "Create file /root/.my.cnf with credentials!"
 	exit 1
@@ -81,20 +81,19 @@ fi
 
 # Verify for DB Credentials
 if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]] || [[ ! -v DBUSER ]] || [[ -z "$DBUSER" ]]; then
-    echo "DB credentials are not set or some are set to the empty string!"
+	echo "DB credentials are not set or some are set to the empty string!"
 else
-    echo "DBNAME has the value: $DBNAME"	
+	echo "DBNAME has the value: $DBNAME"
 	echo "DBUSER has the value: $DBUSER"
 	mariadb -e "DROP DATABASE ${DBNAME};" --skip-ssl
 	mariadb -e "DROP USER ${DBUSER}@localhost;" --skip-ssl
 fi
 
-
 # Verify for PHPUnit DB Credentials
 if [[ ! -v PHPUNITDBNAME ]] || [[ -z "$PHPUNITDBNAME" ]] || [[ ! -v PHPUNITDBUSER ]] || [[ -z "$PHPUNITDBUSER" ]]; then
-    echo "PHPUnit DB credentials are not set or some are set to the empty string!"
+	echo "PHPUnit DB credentials are not set or some are set to the empty string!"
 else
-    echo "PHPUNITDBNAME has the value: $PHPUNITDBNAME"	
+	echo "PHPUNITDBNAME has the value: $PHPUNITDBNAME"
 	echo "PHPUNITDBUSER has the value: $PHPUNITDBUSER"
 	mariadb -e "DROP DATABASE ${PHPUNITDBNAME};" --skip-ssl
 	mariadb -e "DROP USER ${PHPUNITDBUSER}@localhost;" --skip-ssl
@@ -102,9 +101,9 @@ fi
 
 # Verify for MDLHOME and MDLDATA
 if [[ ! -v MDLHOME ]] || [[ -z "$MDLHOME" ]] || [[ ! -v MDLDATA ]] || [[ -z "$MDLDATA" ]]; then
-    echo "MDLHOME or MDLDATA is not set or is set to the empty string!"
+	echo "MDLHOME or MDLDATA is not set or is set to the empty string!"
 else
-    echo "MDLHOME has the value: $MDLHOME"	
+	echo "MDLHOME has the value: $MDLHOME"
 	echo "MDLDATA has the value: $MDLDATA"
 	# Verify if folder exists
 	if [[ -d "$MDLHOME" ]] || [[ -d "$MDLDATA" ]]; then
@@ -117,11 +116,11 @@ else
 	fi
 fi
 
-# Verify for PHPUNITDATA 
+# Verify for PHPUNITDATA
 if [[ ! -v PHPUNITDATA ]] || [[ -z "$PHPUNITDATA" ]]; then
-    echo "PHPUNITDATA is not set or is set to the empty string!"
+	echo "PHPUNITDATA is not set or is set to the empty string!"
 else
-    echo "PHPUNITDATA has the value: $PHPUNITDATA"	
+	echo "PHPUNITDATA has the value: $PHPUNITDATA"
 	# Verify if folder exists
 	if [[ -d "$PHPUNITDATA" ]]; then
 		echo "$PHPUNITDATA exists on your filesystem."
@@ -131,7 +130,6 @@ else
 		echo "$PHPUNITDATA NOT exists on your filesystem."
 	fi
 fi
-
 
 echo ""
 echo "##------------ SITES ENABLED -----------------##"

@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Load Environment Variables
-if [ -f .env ]; then	
+if [ -f .env ]; then
 	export $(grep -v '^#' .env | xargs)
 fi
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-    echo "LOCALSITENAME is not set or is set to the empty string!"
+	echo "LOCALSITENAME is not set or is set to the empty string!"
 	echo "Choose site to use:"
 	ls /etc/apache2/sites-enabled/
 	echo "export LOCALSITEFOLDER="
 else
-    echo "LOCALSITENAME has the value: $LOCALSITENAME"	
+	echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
@@ -29,17 +29,17 @@ if [ -f $ENVFILE ]; then
 fi
 
 if [[ ! -v LOCALSITEURL ]] || [[ -z "$LOCALSITEURL" ]]; then
-    echo "LOCALSITEURL is not set or is set to the empty string!"
+	echo "LOCALSITEURL is not set or is set to the empty string!"
 	LOCALSITEURL=${LOCALSITENAME}'.local' # Generates ramdon site name
 else
-    echo "LOCALSITEURL has the value: $LOCALSITEURL"
+	echo "LOCALSITEURL has the value: $LOCALSITEURL"
 fi
 
 # Verify if folder exists
 if [[ -d "$LOCALSITEDIR" ]]; then
 	echo "$LOCALSITEDIR exists on your filesystem."
 else
-    echo "LOCALSITEDIR NOT exists on your filesystem."
+	echo "LOCALSITEDIR NOT exists on your filesystem."
 	exit 1
 fi
 
@@ -59,7 +59,6 @@ cd $LOCALSITEDIR
 #randomBlowfishSecret=$(openssl rand -base64 32)
 randomBlowfishSecret=$(openssl rand -base64 24) # The secret passphrase in configuration (blowfish_secret) is not the correct length. It should be 32 bytes long.
 
-sed -e "s|cfg\['blowfish_secret'\] = ''|cfg['blowfish_secret'] = '$randomBlowfishSecret'|" config.sample.inc.php > config.inc.php
+sed -e "s|cfg\['blowfish_secret'\] = ''|cfg['blowfish_secret'] = '$randomBlowfishSecret'|" config.sample.inc.php >config.inc.php
 
 # sudo systemctl restart mariadb.service
-
