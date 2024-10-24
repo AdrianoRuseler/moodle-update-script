@@ -2,7 +2,7 @@
 
 # Load Environment Variables in .env file
 if [ -f .env ]; then
-    export "$(grep -v '^#' .env | xargs)"
+    export $(grep -v '^#' .env | xargs)
 fi
 
 # Verify for LOCALSITENAME
@@ -31,7 +31,7 @@ grep -v '^#' $ENVFILE | sed -n '1!G;h;$p' | awk -F "=" '!a[$1]++' | sed -n '1!G;
 echo "" >>$NEWENVFILE
 echo "# ------------ CleanUpEnvFile ---------------" >>$ENVFILE
 
-export "$(grep -v '^#' $NEWENVFILE | xargs)"
+export $(grep -v '^#' $NEWENVFILE | xargs)
 
 # Verify if files exists
 if [[ -f "$DBBKPFILE" ]] && [[ -f "$DATABKPFILE" ]] && [[ -f "$HTMLBKPFILE" ]]; then

@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export "$(grep -v '^#' .env | xargs)"
+	export $(grep -v '^#' .env | xargs)
 fi
 
 # Verify for LOCALSITENAME
@@ -30,7 +30,7 @@ fi
 ENVFILE='.'${LOCALSITENAME}'.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export "$(grep -v '^#' $ENVFILE | xargs)"
+	export $(grep -v '^#' $ENVFILE | xargs)
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE

@@ -6,7 +6,7 @@ SCRIPTDIR=$(pwd)
 datastr=$(date) # Generates datastr
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export "$(grep -v '^#' $ENVFILE | xargs)"
+	export $(grep -v '^#' $ENVFILE | xargs)
 	echo ""
 	echo "##------------ $ENVFILE -----------------##"
 	cat $ENVFILE

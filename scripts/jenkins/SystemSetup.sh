@@ -4,7 +4,7 @@
 ENVFILE='.env'
 if [ -f $ENVFILE ]; then
 	# Load Environment Variables
-	export "$(grep -v '^#' $ENVFILE | xargs)"
+	export $(grep -v '^#' $ENVFILE | xargs)
 fi
 
 HOMEDIR=$(pwd)
