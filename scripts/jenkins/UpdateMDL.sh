@@ -165,12 +165,13 @@ else
 		echo "CHECKOUTID is not set or is set to the empty string!"
 		git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 	else
-		git clone --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+		git clone --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 		cd $MDLPLGS
 		if git cat-file -e $CHECKOUTID 2>/dev/null; then
 			echo "Exists CheckOut: $CHECKOUTID"
 			git checkout $CHECKOUTID
-			git switch -c 'tmp'
+			git submodule sync
+			git submodule update --init
 		else
 			echo "Missing CheckOut: $CHECKOUTID"
 		fi
