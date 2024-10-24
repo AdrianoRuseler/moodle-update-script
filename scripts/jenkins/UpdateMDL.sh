@@ -169,7 +169,7 @@ else
 		cd $MDLPLGS
 		if git cat-file -e $CHECKOUTID 2>/dev/null; then
 			echo "Exists CheckOut: $CHECKOUTID"
-			git checkout $CHECKOUTID
+			git -c advice.detachedHead=false checkout $CHECKOUTID
 			git submodule sync
 			git submodule update --init
 		else
