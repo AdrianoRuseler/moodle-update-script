@@ -244,20 +244,22 @@ rm -rfv $BKPDIR
 #md5sum $DATABKPFILE >$DATABKPFILE.md5
 #md5sum -c $DATABKPFILE.md5
 
+FOLDERS=('antivirus_quarantine' 'cache' 'filedir' 'geoip' 'lang' 'localcache' 'models' 'muc' 'sessions' 'temp' 'trashdir')
+
 #ls -lh $DATABKP
 #tmpf=/mnt/nvme1n1p1/datadev
 
-FOLDERS=("$MDLDATA/"*)
+#FOLDERS=("$MDLDATA/"*)
 for MDLDATADIR in "${FOLDERS[@]}"; do
     FOLDER=$(basename "$MDLDATADIR")
-    DATABKPFILE=$DATABKP$FOLDER$BKPNAME.7z
+    DATABKPFILE=$DATABKP$FOLDER.7z
     echo $FOLDER' 7z...'
     7z a $DATABKPFILE $MDLDATADIR
     md5sum $DATABKPFILE >$DATABKPFILE.md5
     md5sum -c $DATABKPFILE.md5
     ls -lh $DATABKP
     echo $FOLDER' rclone copy...'
-    rclone copy --transfers 1 $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME
+    rclone copy --transfers 1 $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME$BKPNAME
     rclone lsd $DESTNAME:$DESTPATH$LOCALSITENAME
     rm -rfv $BKPDIR
 done
