@@ -135,3 +135,7 @@ chmod a+x BackUpWT.sh
 rm BackUpPGV.sh
 wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpPGV.sh
 chmod a+x BackUpPGV.sh
+
+rm BackUpRCloneMDL.sh
+wget https://raw.githubusercontent.com/AdrianoRuseler/moodle-update-script/master/scripts/jenkins/BackUpRCloneMDL.sh
+chmod a+x BackUpRCloneMDL.sh
