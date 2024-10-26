@@ -252,14 +252,14 @@ FOLDERS=('antivirus_quarantine' 'cache' 'filedir' 'geoip' 'lang' 'localcache' 'm
 #FOLDERS=("$MDLDATA/"*)
 for MDLDATADIR in "${FOLDERS[@]}"; do
     FOLDER=$(basename "$MDLDATADIR")
-    DATABKPFILE=$DATABKP$FOLDER.7z
+    DATABKPFILE=$DATABKP$BKPNAME'/'$FOLDER.7z
     echo $FOLDER' 7z...'
     7z a $DATABKPFILE $MDLDATADIR
     md5sum $DATABKPFILE >$DATABKPFILE.md5
     md5sum -c $DATABKPFILE.md5
     ls -lh $DATABKP
     echo $FOLDER' rclone copy...'
-    rclone copy --transfers 1 $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME$BKPNAME
+    rclone copy --transfers 1 $BKPDIR $DESTNAME:$DESTPATH$LOCALSITENAME
     rclone lsd $DESTNAME:$DESTPATH$LOCALSITENAME
     rm -rfv $BKPDIR
 done
