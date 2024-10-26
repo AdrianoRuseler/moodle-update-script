@@ -250,11 +250,11 @@ FOLDERS=('antivirus_quarantine' 'cache' 'filedir' 'geoip' 'lang' 'localcache' 'm
 #tmpf=/mnt/nvme1n1p1/datadev
 
 #FOLDERS=("$MDLDATA/"*)
-for MDLDATADIR in "${FOLDERS[@]}"; do
-    FOLDER=$(basename "$MDLDATADIR")
+for FOLDER in "${FOLDERS[@]}"; do
+ #   FOLDER=$(basename "$MDLDATADIR")
     DATABKPFILE=$DATABKP$BKPNAME'/'$FOLDER.7z
     echo $FOLDER' 7z...'
-    7z a $DATABKPFILE $MDLDATADIR
+    7z a $DATABKPFILE $MDLDATA'/'$FOLDER
     md5sum $DATABKPFILE >$DATABKPFILE.md5
     md5sum -c $DATABKPFILE.md5
     ls -lh $DATABKP
