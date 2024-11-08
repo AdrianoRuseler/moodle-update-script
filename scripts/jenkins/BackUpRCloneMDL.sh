@@ -240,9 +240,10 @@ rm -rfv $BKPDIR
 # --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"}
 #tar -czf $DATABKPFILE --exclude={"$MDLDATA/cache","$MDLDATA/localcache","$MDLDATA/sessions","$MDLDATA/temp","$MDLDATA/trashdir"} $MDLDATA
 #tar -czf $DATABKPFILE $MDLDATA
-#7z a $DATABKPFILE $MDLDATA
-#md5sum $DATABKPFILE >$DATABKPFILE.md5
-#md5sum -c $DATABKPFILE.md5
+7z a -x'!filedir' $DATABKPFILE $MDLDATA
+md5sum $DATABKPFILE >$DATABKPFILE.md5
+md5sum -c $DATABKPFILE.md5
+ls -lh $DATABKP
 
 FOLDERS=('antivirus_quarantine' 'cache' 'filedir' 'geoip' 'lang' 'localcache' 'models' 'muc' 'sessions' 'temp' 'trashdir')
 
