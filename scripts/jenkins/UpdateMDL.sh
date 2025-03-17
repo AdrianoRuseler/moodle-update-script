@@ -141,7 +141,7 @@ if [ -d "$MDLCORE" ]; then
 fi
 
 echo "Cloning repository from $MDLREPO..."
-git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE 2>/tmp/git_clone_error.log
+git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE >/tmp/git_clone_error.log
 
 # Check if clone was successful
 if [ $? -eq 0 ]; then
@@ -157,14 +157,12 @@ if [ $? -eq 0 ]; then
         git status
     else
         echo "Error: Cloned directory exists but is not a valid Git repository"
-        cleanup
         exit 1
     fi
 else
     echo "Error: Failed to clone repository"
     echo "Error details:"
     cat /tmp/git_clone_error.log
-    cleanup
     exit 1
 fi
 
