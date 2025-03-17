@@ -141,15 +141,16 @@ if [ -d "$MDLCORE" ]; then
 fi
 
 echo "Cloning repository from $MDLREPO..."
-git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE >/tmp/git_clone_error.log
+git config --global http.version HTTP/1.1
+git config --global http.postBuffer 524288000  # 500 MB
+git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
 
 # Check if clone was successful
 if [ $? -eq 0 ]; then
-    echo "✓ Successfully cloned repository to '$MDLCORE'"
-
+    echo "Successfully cloned repository to '$MDLCORE'"
     # Additional verification: check if .git directory exists
     if [ -d "$MDLCORE/.git" ]; then
-        echo "✓ Git repository verification successful"
+        echo "Git repository verification successful"
         
         # Show repository information
         echo "Repository information:"
@@ -161,12 +162,11 @@ if [ $? -eq 0 ]; then
     fi
 else
     echo "Error: Failed to clone repository"
-    echo "Error details:"
-    cat /tmp/git_clone_error.log
     exit 1
 fi
 
 # Verify for Moodle Plugins
+git config --global --unset http.version
 cd /tmp || exit
 if [[ ! -v PLGREPO ]] || [[ -z "$PLGREPO" ]]; then
 	echo "PLGREPO is not set or is set to the empty string"
