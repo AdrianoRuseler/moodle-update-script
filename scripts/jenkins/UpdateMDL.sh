@@ -140,9 +140,36 @@ if [ -d "$MDLCORE" ]; then
 	rm -rf $MDLCORE
 fi
 
-git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
+echo "Cloning repository from $MDLREPO..."
+git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE 2>/tmp/git_clone_error.log
 
-# Verify for Moodle Branch
+# Check if clone was successful
+if [ $? -eq 0 ]; then
+    echo "✓ Successfully cloned repository to '$MDLCORE'"
+
+    # Additional verification: check if .git directory exists
+    if [ -d "$MDLCORE/.git" ]; then
+        echo "✓ Git repository verification successful"
+        
+        # Show repository information
+        echo "Repository information:"
+        cd "$MDLCORE" || exit
+        git status
+    else
+        echo "Error: Cloned directory exists but is not a valid Git repository"
+        cleanup
+        exit 1
+    fi
+else
+    echo "Error: Failed to clone repository"
+    echo "Error details:"
+    cat /tmp/git_clone_error.log
+    cleanup
+    exit 1
+fi
+
+# Verify for Moodle Plugins
+cd /tmp || exit
 if [[ ! -v PLGREPO ]] || [[ -z "$PLGREPO" ]]; then
 	echo "PLGREPO is not set or is set to the empty string"
 else
