@@ -49,6 +49,7 @@ if [[ -d "$MDLDATA" ]]; then
 	echo "$MDLDATA exists on your filesystem."
 	rm -rf $MDLDATA
 	mkdir $MDLDATA
+	sudo chown -R www-data:www-data $MDLDATA
 else
 	echo "$MDLDATA NOT exists on your filesystem."
 	exit 1
