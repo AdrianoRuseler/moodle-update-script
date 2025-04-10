@@ -83,30 +83,94 @@ if ! [ -x "$(command -v jq)" ]; then
 	exit 1
 fi
 
-echo ""
-echo "##------------ GET MEDIAWIKI -----------------##"
-
-# URL of the MediaWiki releases directory
-URL="https://releases.wikimedia.org/mediawiki/"
-
-# Fetch the directory listing and extract version numbers
-# -s: silent mode, no progress output
-# grep -o: only output matching parts
-# '[0-1]\.[0-9]\+' matches patterns like 1.43, 0.9, etc.
-VERSIONS=$(curl -s "$URL" | grep -o '[0-1]\.[0-9]\+' | sort -V | uniq)
-
-# Get the latest version (last line after sorting)
-LATEST_VERSION=$(echo "$VERSIONS" | tail -n 1)
-
-# Check if we successfully found a version
-if [ -z "$LATEST_VERSION" ]; then
-    echo "Error: Could not determine the latest MediaWiki version."
+# Check if curl is installed
+if ! command -v curl &> /dev/null; then
+    echo "Error: curl is not installed. Please install curl first."
     exit 1
 fi
 
-# Output the latest version
-echo "The latest MediaWiki version is: $LATEST_VERSION"
+# Check if git is installed
+if ! command -v git &> /dev/null; then
+    echo "Error: Git is not installed. Please install Git first."
+    exit 1
+fi
 
+
+echo ""
+echo "##------------ GET MEDIAWIKI -----------------##"
+
+# URL of the MediaWiki core repository
+REPO_URL="https://gerrit.wikimedia.org/r/mediawiki/core"
+
+echo "Fetching branch names from $REPO_URL..."
+
+# Get branches, filter for REL1_, sort numerically, and get the highest up to REL1_43
+HIGHEST_BRANCH=$(git ls-remote --heads "$REPO_URL" |
+    awk '{print $2}' |
+    sed 's#refs/heads/##' |
+    grep '^REL1_[0-9]\+$' |
+    sort -t_ -k2 -n |
+    tail -n 1)
+
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch branch names"
+    exit 1
+fi
+
+if [ -z "$HIGHEST_BRANCH" ]; then
+    echo "No REL1_XX branches"
+else
+    echo "Highest release branch: $HIGHEST_BRANCH"
+    # Convert REL1_43 to 1.43
+    VERSION=$(echo "$HIGHEST_BRANCH" | sed 's/REL1_/1./')
+    echo "Highest release version: $VERSION"
+fi
+
+# URL for the release directory
+RELEASE_URL="https://releases.wikimedia.org/mediawiki/$VERSION"
+
+echo "Looking for .tar.gz files in $RELEASE_URL..."
+
+# Fetch and filter .tar.gz files
+TAR_FILES=$(curl -s "$RELEASE_URL/" |
+    grep -o 'href="[^"]*\.tar\.gz"' |
+    sed 's/href="//' |
+    sed 's/"//')
+
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch files from $RELEASE_URL"
+    exit 1
+fi
+
+
+
+if [ -z "$TAR_FILES" ]; then
+    echo "No .tar.gz files found in $RELEASE_URL"
+    exit 1
+else
+    # Sort by version number to find the highest subversion
+    HIGHEST_TAR=$(echo "$TAR_FILES" |
+        grep "^mediawiki-$VERSION\." |
+        sort -t. -k3 -n |
+        tail -n 1)
+
+    if [ -z "$HIGHEST_TAR" ]; then
+        # Fallback to base version if no subversions exist
+        HIGHEST_TAR=$(echo "$TAR_FILES" |
+            grep "^mediawiki-$VERSION\.tar\.gz$" |
+            head -n 1)
+    fi
+
+    if [ -z "$HIGHEST_TAR" ]; then
+        echo "No matching mediawiki-$VERSION*.tar.gz files found"
+        exit 1
+    else
+        # Generate full download URL
+        DOWNLOAD_URL="$RELEASE_URL/$HIGHEST_TAR"
+        echo "Highest subversion .tar.gz file: $HIGHEST_TAR"
+        echo "Download URL: $DOWNLOAD_URL"
+    fi
+fi
 
 # Check if the latest version is already installed
 # Get actual wiki version (adjust path to Defines.php as needed)
@@ -115,7 +179,7 @@ WIKIACTUALVER=$(grep "MW_VERSION" "$LOCALSITEDIR/includes/Defines.php" | sed -nr
 echo "$WIKIACTUALVER"
 
 # Compare versions
-if [ "$LATEST_VERSION" = "$WIKIACTUALVER" ]; then
+if [ "$VERSION" = "$WIKIACTUALVER" ]; then
     echo "Version is up to date"
     if [[ ${SYSUPGRADE:-0} -ne 0 ]]; then
         echo "Force update!!"
@@ -124,10 +188,6 @@ if [ "$LATEST_VERSION" = "$WIKIACTUALVER" ]; then
         exit 0
     fi
 fi
-
-# Construct the download URL for the latest version
-DOWNLOAD_URL="${URL}${LATEST_VERSION}/mediawiki-${LATEST_VERSION}.tar.gz"
-echo "Download URL: $DOWNLOAD_URL"
 
 cd /tmp/ || exit 1
 wget "$DOWNLOAD_URL" -O mediawiki.tar.gz
