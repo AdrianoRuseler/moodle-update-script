@@ -86,19 +86,36 @@ fi
 echo ""
 echo "##------------ GET MEDIAWIKI -----------------##"
 
-# Get latest wiki version from GitHub API
-WIKIVER=$(curl -s "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[0].name')
-echo "$WIKIVER"
-WIKIV=$(echo "$WIKIVER" | cut -d. -f1-2)
-echo "$WIKIV"
+# URL of the MediaWiki releases directory
+URL="https://releases.wikimedia.org/mediawiki/"
 
+# Fetch the directory listing and extract version numbers
+# -s: silent mode, no progress output
+# grep -o: only output matching parts
+# '[0-1]\.[0-9]\+' matches patterns like 1.43, 0.9, etc.
+VERSIONS=$(curl -s "$URL" | grep -o '[0-1]\.[0-9]\+' | sort -V | uniq)
+
+# Get the latest version (last line after sorting)
+LATEST_VERSION=$(echo "$VERSIONS" | tail -n 1)
+
+# Check if we successfully found a version
+if [ -z "$LATEST_VERSION" ]; then
+    echo "Error: Could not determine the latest MediaWiki version."
+    exit 1
+fi
+
+# Output the latest version
+echo "The latest MediaWiki version is: $LATEST_VERSION"
+
+
+# Check if the latest version is already installed
 # Get actual wiki version (adjust path to Defines.php as needed)
 #LOCALSITEDIR="/path/to/your/mediawiki"
 WIKIACTUALVER=$(grep "MW_VERSION" "$LOCALSITEDIR/includes/Defines.php" | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
 echo "$WIKIACTUALVER"
 
 # Compare versions
-if [ "$WIKIVER" = "$WIKIACTUALVER" ]; then
+if [ "$LATEST_VERSION" = "$WIKIACTUALVER" ]; then
     echo "Version is up to date"
     if [[ ${SYSUPGRADE:-0} -ne 0 ]]; then
         echo "Force update!!"
@@ -108,13 +125,14 @@ if [ "$WIKIVER" = "$WIKIACTUALVER" ]; then
     fi
 fi
 
-WIKITARURL=$(curl -s "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[0].tarball_url')
-echo "$WIKITARURL"
+# Construct the download URL for the latest version
+DOWNLOAD_URL="${URL}${LATEST_VERSION}/mediawiki-${LATEST_VERSION}.tar.gz"
+echo "Download URL: $DOWNLOAD_URL"
 
 cd /tmp/ || exit 1
-wget "$WIKITARURL" -O mediawiki.tar.gz
+wget "$DOWNLOAD_URL" -O mediawiki.tar.gz
 if [[ $? -ne 0 ]]; then
-    echo "Error: wget ${WIKITARURL}"
+    echo "Error: wget ${DOWNLOAD_URL}"
     exit 1
 fi
 
