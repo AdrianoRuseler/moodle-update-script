@@ -86,37 +86,40 @@ fi
 echo ""
 echo "##------------ GET MEDIAWIKI -----------------##"
 
-# https://stackoverflow.com/questions/29109673/is-there-a-way-to-get-the-latest-tag-of-a-given-repo-using-github-api-v3
-# Get latest wiki version
-WIKIVER=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].name')
-echo $WIKIVER
-WIKIV=$(echo $WIKIVER | cut -d. -f1-2)
-#echo $WIKIV
+# Get latest wiki version from GitHub API
+WIKIVER=$(curl -s "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[0].name')
+echo "$WIKIVER"
+WIKIV=$(echo "$WIKIVER" | cut -d. -f1-2)
+echo "$WIKIV"
 
-# Get actual wiki version
-WIKIACTUALVER=$(cat $LOCALSITEDIR/includes/Defines.php | grep "MW_VERSION" | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
-echo $WIKIACTUALVER
+# Get actual wiki version (adjust path to Defines.php as needed)
+#LOCALSITEDIR="/path/to/your/mediawiki"
+WIKIACTUALVER=$(grep "MW_VERSION" "$LOCALSITEDIR/includes/Defines.php" | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+echo "$WIKIACTUALVER"
 
-if [ $WIKIVER == $WIKIACTUALVER ]; then
-	echo "Version is up to date"
-	if [[ $SYSUPGRADE -ne 0 ]]; then
-		echo "Force update!!"
-	else
-		echo "Dont force update!"
-		exit 0
-	fi
+# Compare versions
+if [ "$WIKIVER" = "$WIKIACTUALVER" ]; then
+    echo "Version is up to date"
+    if [[ ${SYSUPGRADE:-0} -ne 0 ]]; then
+        echo "Force update!!"
+    else
+        echo "Dont force update!"
+        exit 0
+    fi
 fi
 
-#WIKITARURL=$(curl "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[2].tarball_url')
-WIKITARURL="https://releases.wikimedia.org/mediawiki/" $WIKIV "/mediawiki-" $WIKIVER ".tar.gz"
-echo $WIKITARURL
+# Construct and download the tarball
+WIKITARURL="https://releases.wikimedia.org/mediawiki/${WIKIV}/mediawiki-${WIKIVER}.tar.gz"
+echo "$WIKITARURL"
 
-cd /tmp/ || exit
-wget $WIKITARURL -O mediawiki.tar.gz
+cd /tmp/ || exit 1
+wget "$WIKITARURL" -O mediawiki.tar.gz
 if [[ $? -ne 0 ]]; then
-	echo "Error: wget ${WIKITARURL}"
-	exit 1
+    echo "Error: wget ${WIKITARURL}"
+    exit 1
 fi
+
+echo "Download complete!"
 
 rm -rf mediawiki # if exists
 mkdir mediawiki
