@@ -108,8 +108,7 @@ if [ "$WIKIVER" = "$WIKIACTUALVER" ]; then
     fi
 fi
 
-# Construct and download the tarball
-WIKITARURL="https://releases.wikimedia.org/mediawiki/${WIKIV}/mediawiki-${WIKIVER}.tar.gz"
+WIKITARURL=$(curl -s "https://api.github.com/repos/wikimedia/mediawiki/tags" | jq -r '.[0].tarball_url')
 echo "$WIKITARURL"
 
 cd /tmp/ || exit 1
