@@ -2,7 +2,7 @@
 
 # Load Environment Variables
 if [ -f .env ]; then
-	export $(grep -v '^#' .env | xargs)
+    export $(grep -v '^#' .env | xargs)
 fi
 
 # export LOCALSITENAME="mdl42"
@@ -15,25 +15,25 @@ fi
 
 # Verify for LOCALSITENAME
 if [[ ! -v LOCALSITENAME ]] || [[ -z "$LOCALSITENAME" ]]; then
-	echo "LOCALSITENAME is not set or is set to the empty string!"
-	echo "Choose site to use:"
-	ls /etc/apache2/sites-enabled/
-	echo "export LOCALSITEFOLDER="
+    echo "LOCALSITENAME is not set or is set to the empty string!"
+    echo "Choose site to use:"
+    ls /etc/apache2/sites-enabled/
+    echo "export LOCALSITEFOLDER="
 else
-	echo "LOCALSITENAME has the value: $LOCALSITENAME"
+    echo "LOCALSITENAME has the value: $LOCALSITENAME"
 fi
 
 ENVFILE='.'${LOCALSITENAME}'.env'
 # SCRIPTDIR=$(pwd)
 if [ -f $ENVFILE ]; then
-	# Load Environment Variables
-	export $(grep -v '^#' $ENVFILE | xargs)
-	echo ""
-	echo "##------------ $ENVFILE -----------------##"
-	cat $ENVFILE
-	echo "##------------ $ENVFILE -----------------##"
-	echo ""
-#	rm $ENVFILE
+    # Load Environment Variables
+    export $(grep -v '^#' $ENVFILE | xargs)
+    echo ""
+    echo "##------------ $ENVFILE -----------------##"
+    cat $ENVFILE
+    echo "##------------ $ENVFILE -----------------##"
+    echo ""
+    #	rm $ENVFILE
 fi
 
 echo ""
@@ -51,68 +51,68 @@ echo ""
 
 # PHP version to use
 if [[ ! -v PHPVER ]] || [[ -z "$PHPVER" ]]; then
-	echo "PHPVER is not set or is set to the empty string!"
-	PHPVER='php' # Uses default version
+    echo "PHPVER is not set or is set to the empty string!"
+    PHPVER='php' # Uses default version
 else
-	echo "PHPVER has the value: $PHPVER"
+    echo "PHPVER has the value: $PHPVER"
 fi
 
 # Verifies if PHPVER is installed
 if ! [ -x "$(command -v $PHPVER)" ]; then
-	echo "Error: $PHPVER is not installed."
-	exit 1
+    echo "Error: $PHPVER is not installed."
+    exit 1
 else
-	sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
-	echo ""
+    sudo -u www-data /usr/bin/$PHPVER -version # Gets php version
+    echo ""
 fi
 
 echo "##------------ MDL INFO -----------------##"
 
 # Verify for MDLHOME and MDLDATA
 if [[ ! -v MDLHOME ]] || [[ -z "$MDLHOME" ]] || [[ ! -v MDLDATA ]] || [[ -z "$MDLDATA" ]]; then
-	echo "MDLHOME or MDLDATA is not set or is set to the empty string!"
-	exit 1
+    echo "MDLHOME or MDLDATA is not set or is set to the empty string!"
+    exit 1
 else
-	echo "MDLHOME has the value: $MDLHOME"
-	echo "MDLDATA has the value: $MDLDATA"
+    echo "MDLHOME has the value: $MDLHOME"
+    echo "MDLDATA has the value: $MDLDATA"
 fi
 
 # Verify if folder and config.php exists
 if [[ -d "$MDLHOME" ]] && [[ -d "$MDLDATA" ]]; then
-	echo "$MDLHOME and $MDLDATA exists on your filesystem."
-	if [ -f "$MDLHOME/config.php" ]; then
-		echo "$MDLHOME/config.php exists!"
-	else
-		echo "$MDLHOME/config.php does not exist!"
-		exit 1
-	fi
+    echo "$MDLHOME and $MDLDATA exists on your filesystem."
+    if [ -f "$MDLHOME/config.php" ]; then
+        echo "$MDLHOME/config.php exists!"
+    else
+        echo "$MDLHOME/config.php does not exist!"
+        exit 1
+    fi
 else
-	echo "$MDLHOME or $MDLDATA NOT exists on your filesystem."
-	exit 1
+    echo "$MDLHOME or $MDLDATA NOT exists on your filesystem."
+    exit 1
 fi
 
 # Verify for Moodle Branch
 if [[ ! -v MDLBRANCH ]] || [[ -z "$MDLBRANCH" ]]; then
-	echo "MDLBRANCH is not set or is set to the empty string"
-	exit 1
+    echo "MDLBRANCH is not set or is set to the empty string"
+    exit 1
 else
-	echo "MDLBRANCH has the value: $MDLBRANCH"
+    echo "MDLBRANCH has the value: $MDLBRANCH"
 fi
 
 # Verify for Moodle Repository
 if [[ ! -v MDLREPO ]] || [[ -z "$MDLREPO" ]]; then
-	echo "MDLREPO is not set or is set to the empty string"
-	exit 1
+    echo "MDLREPO is not set or is set to the empty string"
+    exit 1
 else
-	echo "MDLREPO has the value: $MDLREPO"
+    echo "MDLREPO has the value: $MDLREPO"
 fi
 
 # Verify for Moodle DB name
 if [[ ! -v DBNAME ]] || [[ -z "$DBNAME" ]]; then
-	echo "DBNAME is not set or is set to the empty string"
-	exit 1
+    echo "DBNAME is not set or is set to the empty string"
+    exit 1
 else
-	echo "DBNAME has the value: $DBNAME"
+    echo "DBNAME has the value: $DBNAME"
 fi
 
 echo "Check for free space in $MDLHOME ..."
@@ -121,11 +121,11 @@ FREESPACE=$(df "$MDLHOME" | awk 'NR==2 { print $4 }')
 echo "Free space: $FREESPACE"
 echo "Req. space: $REQSPACE"
 if [[ $FREESPACE -le REQSPACE ]]; then
-	echo "NOT enough Space!!"
-	echo "##------------------------ FAIL -------------------------##"
-	exit 1
+    echo "NOT enough Space!!"
+    echo "##------------------------ FAIL -------------------------##"
+    exit 1
 else
-	echo "Enough Space!!"
+    echo "Enough Space!!"
 fi
 
 # Clone git repository
@@ -136,8 +136,8 @@ cd /tmp || exit
 
 echo "Check if $MDLCORE folder exists..."
 if [ -d "$MDLCORE" ]; then
-	echo "Folder exists, so remove it..."
-	rm -rf $MDLCORE
+    echo "Folder exists, so remove it..."
+    rm -rf $MDLCORE
 fi
 
 echo "Cloning repository from $MDLREPO..."
@@ -169,50 +169,50 @@ fi
 git config --global --unset http.version
 cd /tmp || exit
 if [[ ! -v PLGREPO ]] || [[ -z "$PLGREPO" ]]; then
-	echo "PLGREPO is not set or is set to the empty string"
+    echo "PLGREPO is not set or is set to the empty string"
 else
-	echo "PLGREPO has the value: $PLGREPO"
-	# Verify for Moodle Repository
-	if [[ ! -v PLGBRANCH ]] || [[ -z "$PLGBRANCH" ]]; then
-		echo "PLGBRANCH is not set or is set to the empty string"
-		export PLGBRANCH="main"
-	else
-		echo "PLGBRANCH has the value: $PLGBRANCH"
-	fi
-	cd /tmp || exit
-	echo "Check if $MDLPLGS folder exists..."
-	if [ -d "$MDLPLGS" ]; then
-		echo "Folder exists, so remove it..."
-		rm -rf "$MDLPLGS"
-	fi
-
-	if [[ ! -v CHECKOUTID ]] || [[ -z "$CHECKOUTID" ]]; then
-		echo "CHECKOUTID is not set or is set to the empty string!"
-		git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
-	else
-		git clone --branch=$PLGBRANCH $PLGREPO $MDLPLGS
-		cd $MDLPLGS || exit
-		if git cat-file -e $CHECKOUTID 2>/dev/null; then
-			echo "Exists CheckOut: $CHECKOUTID"
-			git -c advice.detachedHead=false checkout $CHECKOUTID
-			git submodule sync
-			git submodule update --init
-			if [ -d "moodle/mod/hvp" ]; then
-				echo "mod/hvp Exists! So do something..."
-				cd moodle/mod/hvp || return
-				git submodule update --init
-			else
-				echo "mod/hvp dont exists!"
-			fi
-
-		else
-			echo "Missing CheckOut: $CHECKOUTID"
-		fi
-		cd /tmp || exit
-	fi
-
-	sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
-	rm -rf /tmp/$MDLPLGS
+    echo "PLGREPO has the value: $PLGREPO"
+    # Verify for Moodle Repository
+    if [[ ! -v PLGBRANCH ]] || [[ -z "$PLGBRANCH" ]]; then
+        echo "PLGBRANCH is not set or is set to the empty string"
+        export PLGBRANCH="main"
+    else
+        echo "PLGBRANCH has the value: $PLGBRANCH"
+    fi
+    cd /tmp || exit
+    echo "Check if $MDLPLGS folder exists..."
+    if [ -d "$MDLPLGS" ]; then
+        echo "Folder exists, so remove it..."
+        rm -rf "$MDLPLGS"
+    fi
+    
+    if [[ ! -v CHECKOUTID ]] || [[ -z "$CHECKOUTID" ]]; then
+        echo "CHECKOUTID is not set or is set to the empty string!"
+        git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+    else
+        git clone --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+        cd $MDLPLGS || exit
+        if git cat-file -e $CHECKOUTID 2>/dev/null; then
+            echo "Exists CheckOut: $CHECKOUTID"
+            git -c advice.detachedHead=false checkout $CHECKOUTID
+            git submodule sync
+            git submodule update --init
+            if [ -d "moodle/mod/hvp" ]; then
+                echo "mod/hvp Exists! So do something..."
+                cd moodle/mod/hvp || return
+                git submodule update --init
+            else
+                echo "mod/hvp dont exists!"
+            fi
+            
+        else
+            echo "Missing CheckOut: $CHECKOUTID"
+        fi
+        cd /tmp || exit
+    fi
+    
+    sudo rsync -a /tmp/$MDLPLGS/moodle/* /tmp/$MDLCORE/
+    rm -rf /tmp/$MDLPLGS
 fi
 
 echo "stop cron..."
@@ -267,25 +267,25 @@ sudo chmod -R 0755 $MDLHOME
 echo "Upgrading Moodle Core started..."
 sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/upgrade.php --non-interactive --allow-unstable
 if [[ $? -ne 0 ]]; then # Error in upgrade script
-	echo "Error in upgrade script..."
-	if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
-		echo "Database DROP DATABASE ${DBNAME}..."
-		mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
-		mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
-		echo "Restore DB.."
-		mariadb $DBNAME --skip-ssl <$MDLHOME.$DAY.tmpbkp/tmpbkp.sql
-		sudo rm -rf $MDLHOME.$DAY.tmpbkp/tmpbkp.sql
-		echo "restoring old files..."
-		sudo rm -rf $MDLHOME                  # Remove new files
-		sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
-	fi
-
-	echo "Disable the maintenance mode..."
-	sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
-	echo "##------------------------ FAIL -------------------------##"
-	echo "start cron..."
-	sudo service cron start
-	exit 1
+    echo "Error in upgrade script..."
+    if [ -d "$MDLHOME.$DAY.tmpbkp" ]; then # If exists
+        echo "Database DROP DATABASE ${DBNAME}..."
+        mariadb -e "DROP DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+        mariadb -e "CREATE DATABASE ${DBNAME} /*\!40100 DEFAULT CHARACTER SET utf8 */;" --skip-ssl
+        echo "Restore DB.."
+        mariadb $DBNAME --skip-ssl <$MDLHOME.$DAY.tmpbkp/tmpbkp.sql
+        sudo rm -rf $MDLHOME.$DAY.tmpbkp/tmpbkp.sql
+        echo "restoring old files..."
+        sudo rm -rf $MDLHOME                  # Remove new files
+        sudo mv $MDLHOME.$DAY.tmpbkp $MDLHOME # restore old files
+    fi
+    
+    echo "Disable the maintenance mode..."
+    sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/maintenance.php --disable
+    echo "##------------------------ FAIL -------------------------##"
+    echo "start cron..."
+    sudo service cron start
+    exit 1
 fi
 
 echo "Removing temporary backup files..."
@@ -296,15 +296,23 @@ sudo rm -rf $MDLHOME.$DAY.tmpbkp
 
 MOOSHCMD=$(command -v moosh) # Find moosh
 if ! [ -x $MOOSHCMD ]; then
-	echo 'Error: moosh is not installed.'
+    echo 'Error: moosh is not installed.'
 else
-	echo $MOOSHCMD
-	echo "Update Moodle site name:"
-	cd $MDLHOME || exit
-	#mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
-	mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2)                     # Gets Moodle Version
-	sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"  # !!! error/generalexceptionmessage !!!
-	sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+    echo $MOOSHCMD
+    echo "Update Moodle site name:"
+    cd $MDLHOME || exit
+    #mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
+    
+    if [ -d "$MDLHOME/public" ]; then
+        echo "The 'public' folder exists at $MDLHOME."
+        mdlrelease=$(cat $MDLHOME/public/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
+    else
+        echo "The 'public' folder does NOT exist at $MDLHOME."
+        mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
+    fi
+    mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2)                     # Gets Moodle Version
+    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"  # !!! error/generalexceptionmessage !!!
+    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
 fi
 
 echo "Disable the maintenance mode..."
@@ -315,11 +323,11 @@ sudo service cron start
 
 # Verify for Moodle third-party plugins
 if [[ ! -v PLGREPO ]] || [[ -z "$PLGREPO" ]]; then
-	echo "No third-party installed plugins!"
+    echo "No third-party installed plugins!"
 else
-	echo "Prints tab-separated list of all third-party installed plugins..."
-	sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php --show-contrib
-
-	echo "Prints tab-separated list of all missing from disk plugins..."
-	sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php --show-missing
+    echo "Prints tab-separated list of all third-party installed plugins..."
+    sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php --show-contrib
+    
+    echo "Prints tab-separated list of all missing from disk plugins..."
+    sudo -u www-data /usr/bin/$PHPVER $MDLHOME/admin/cli/uninstall_plugins.php --show-missing
 fi
