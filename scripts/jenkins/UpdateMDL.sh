@@ -310,7 +310,7 @@ else
         echo "The 'public' folder does NOT exist at $MDLHOME."
         mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
     fi
-    mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2)                     # Gets Moodle Version
+    echo "Moodle release: $mdlrelease"
     sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"  # !!! error/generalexceptionmessage !!!
     sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
 fi
