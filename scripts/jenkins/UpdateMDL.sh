@@ -301,18 +301,18 @@ else
     echo $MOOSHCMD
     echo "Update Moodle site name:"
     cd $MDLHOME || exit
-    #mdlrelease=$(moosh -n config-get core release) # !!! error/generalexceptionmessage !!!
-    
+    # Check if 'public' folder exists    
     if [ -d "$MDLHOME/public" ]; then
         echo "The 'public' folder exists at $MDLHOME."
         mdlrelease=$(cat $MDLHOME/public/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
+        cd public || exit
     else
         echo "The 'public' folder does NOT exist at $MDLHOME."
         mdlrelease=$(cat $MDLHOME/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
     fi
     echo "Moodle release: $mdlrelease"
-    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"  # !!! error/generalexceptionmessage !!!
-    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease" # !!! error/generalexceptionmessage !!!
+    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 fullname "Moodle $mdlrelease"   
+    sudo /usr/bin/$PHPVER $MOOSHCMD -n course-config-set course 1 shortname "Moodle $mdlrelease"  
 fi
 
 echo "Disable the maintenance mode..."
