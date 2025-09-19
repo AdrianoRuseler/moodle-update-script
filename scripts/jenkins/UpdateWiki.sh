@@ -95,6 +95,15 @@ if ! command -v git &> /dev/null; then
     exit 1
 fi
 
+# Check if composer is installed
+if ! command -v composer &> /dev/null; then
+    echo "Error: composer is not installed. Please install composer first."
+    exit 1
+else
+    echo "Composer version: $(composer --version)"
+
+fi
+
 
 echo ""
 echo "##------------ GET MEDIAWIKI -----------------##"
@@ -235,7 +244,8 @@ sudo chown -R www-data:www-data $LOCALSITEDIR
 
 echo "##------------------ Wiki core update ------------------------##"
 echo "Upgrading mediaiwki Core..."
-sudo -u www-data /usr/bin/php $LOCALSITEDIR/maintenance/update.php --quick
+#sudo -u www-data /usr/bin/php $LOCALSITEDIR/maintenance/update.php --quick
+sudo -u www-data /usr/bin/php $LOCALSITEDIR/maintenance/run.php update --quick
 if [[ $? -ne 0 ]]; then
 	echo "Error: Upgrading mediaiwki Core!"
 	if [ -d "$LOCALSITEDIR.$DAY.tmpbkp" ]; then # If exists
